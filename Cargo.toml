@@ -1,0 +1,35 @@
+[workspace]
+
+members = [
+    "crates/hypershell-components",
+]
+
+[workspace.package]
+rust-version    = "1.87"
+edition         = "2024"
+license         = "MIT"
+repository      = "https://github.com/contextgeneric/cgp"
+authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
+keywords        = ["cgp"]
+
+[workspace.dependencies]
+cgp                 = { version = "0.4.0" }
+
+[patch.crates-io]
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp-handler                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
