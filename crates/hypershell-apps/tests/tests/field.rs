@@ -26,8 +26,11 @@ async fn test_join_fields() -> Result<(), Error> {
                     Product![
                         StaticArg<symbol!("-la")>,
                         Join<
-                            UseField<symbol!("base_dir")>,
-                            StaticArg<symbol!("crates/hypershell-apps")>,
+                            Product![
+                                UseField<symbol!("base_dir")>,
+                                StaticArg<symbol!("crates")>,
+                                StaticArg<symbol!("hypershell-apps")>,
+                            ],
                         >,
                     ],
                 >,

@@ -33,14 +33,27 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, ArgA, ArgB> ArgExtractor<Context, Join<ArgA, ArgB>> for JoinExtractArgs
+pub struct JoinExtractArgs;
+
+#[cgp_provider]
+impl<Context, Arg, Args> ArgExtractor<Context, Join<Cons<Arg, Args>>> for JoinExtractArgs
 where
-    Context: CanExtractArg<ArgA> + CanExtractArg<ArgB> + HasCommandArgType<CommandArg = PathBuf>,
+    Context: CanExtractArg<Arg> + HasCommandArgType<CommandArg = PathBuf>,
+    Self: ArgExtractor<Context, Join<Args>>,
 {
-    fn extract_arg(context: &Context, _phantom: PhantomData<Join<ArgA, ArgB>>) -> PathBuf {
-        let arg_a = context.extract_arg(PhantomData::<ArgA>);
-        let arg_b = context.extract_arg(PhantomData::<ArgB>);
+    fn extract_arg(context: &Context, _phantom: PhantomData<Join<Cons<Arg, Args>>>) -> PathBuf {
+        let arg_a = context.extract_arg(PhantomData);
+        let arg_b = Self::extract_arg(context, PhantomData::<Join<Args>>);
         arg_a.join(arg_b)
+    }
+}
+
+#[cgp_provider]
+impl<Context> ArgExtractor<Context, Join<Nil>> for JoinExtractArgs
+where
+    Context: HasCommandArgType<CommandArg = PathBuf>,
+{
+    fn extract_arg(_context: &Context, _phantom: PhantomData<Join<Nil>>) -> PathBuf {
+        PathBuf::default()
     }
 }

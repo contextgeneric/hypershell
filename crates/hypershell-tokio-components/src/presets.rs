@@ -42,7 +42,7 @@ mod preset {
         ArgExtractorComponents {
             <Arg> StaticArg<Arg>: ExtractStaticArg,
             <Tag> UseField<Tag>: ExtractFieldArg,
-            <ArgA, ArgB> Join<ArgA, ArgB>: JoinExtractArgs,
+            <Args> Join<Args>: JoinExtractArgs,
         }
     }
 }
