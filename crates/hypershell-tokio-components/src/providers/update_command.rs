@@ -3,7 +3,7 @@ use std::ffi::OsStr;
 
 use cgp::prelude::*;
 use hypershell_components::components::CanExtractArg;
-use hypershell_components::dsl::WithArgs;
+use hypershell_components::dsl::{FieldArgs, WithArgs};
 use tokio::process::Command;
 
 use crate::components::{CommandUpdater, CommandUpdaterComponent};
@@ -36,5 +36,21 @@ impl<Context> CommandUpdater<Context, WithArgs<Nil>> for ExtractArgs {
         _phantom: PhantomData<WithArgs<Nil>>,
         _command: &mut Command,
     ) {
+    }
+}
+
+#[cgp_new_provider]
+impl<Context, Tag> CommandUpdater<Context, FieldArgs<Tag>> for ExtractFieldArgs
+where
+    Context: HasField<Tag>,
+    for<'a> &'a Context::Value: IntoIterator<Item: AsRef<OsStr>>,
+{
+    fn update_command(
+        context: &Context,
+        _phantom: PhantomData<FieldArgs<Tag>>,
+        command: &mut Command,
+    ) {
+        let args = context.get_field(PhantomData);
+        command.args(args);
     }
 }

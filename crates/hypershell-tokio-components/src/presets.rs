@@ -8,13 +8,15 @@ mod preset {
     use hypershell_components::components::{
         ArgExtractorComponent, CommandArgTypeProviderComponent,
     };
-    use hypershell_components::dsl::{FieldArg, JoinArgs, Pipe, SimpleExec, StaticArg, WithArgs};
+    use hypershell_components::dsl::{
+        FieldArg, FieldArgs, JoinArgs, Pipe, SimpleExec, StaticArg, WithArgs,
+    };
     use hypershell_components::providers::{
         ExtractFieldArg, ExtractStaticArg, JoinExtractArgs, RunPipe,
     };
 
     use crate::components::CommandUpdaterComponent;
-    use crate::providers::{ExtractArgs, RunSimpleExec};
+    use crate::providers::{ExtractArgs, ExtractFieldArgs, RunSimpleExec};
 
     cgp_preset! {
         HypershellTokioPreset {
@@ -49,6 +51,7 @@ mod preset {
     cgp_preset! {
         CommandUpdaterPreset {
             <Args> WithArgs<Args>: ExtractArgs,
+            <Tag> FieldArgs<Tag>: ExtractFieldArgs,
         }
     }
 }
