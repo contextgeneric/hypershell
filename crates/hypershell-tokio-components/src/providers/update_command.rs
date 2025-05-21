@@ -6,10 +6,10 @@ use tokio::process::Command;
 
 use crate::components::{CommandUpdater, CommandUpdaterComponent};
 
-pub struct AddStaticArgs;
+pub struct ExtractArgs;
 
 #[cgp_provider]
-impl<Context, Arg, Args> CommandUpdater<Context, Cons<Arg, Args>> for AddStaticArgs
+impl<Context, Arg, Args> CommandUpdater<Context, Cons<Arg, Args>> for ExtractArgs
 where
     Context: CanExtractArg<Arg>,
 {
@@ -24,6 +24,6 @@ where
 }
 
 #[cgp_provider]
-impl<Context> CommandUpdater<Context, Nil> for AddStaticArgs {
+impl<Context> CommandUpdater<Context, Nil> for ExtractArgs {
     fn update_command(_context: &Context, _phantom: PhantomData<Nil>, _command: &mut Command) {}
 }
