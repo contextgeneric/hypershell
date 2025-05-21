@@ -8,8 +8,10 @@ mod preset {
     use hypershell_components::components::{
         ArgExtractorComponent, CommandArgTypeProviderComponent,
     };
-    use hypershell_components::dsl::{Pipe, SimpleExec, StaticArg};
-    use hypershell_components::providers::{ExtractFieldArg, ExtractStaticArg, RunPipe};
+    use hypershell_components::dsl::{Join, Pipe, SimpleExec, StaticArg};
+    use hypershell_components::providers::{
+        ExtractFieldArg, ExtractStaticArg, JoinExtractArgs, RunPipe,
+    };
 
     use crate::components::CommandUpdaterComponent;
     use crate::providers::{ExtractArgs, RunSimpleExec};
@@ -40,6 +42,7 @@ mod preset {
         ArgExtractorComponents {
             <Arg> StaticArg<Arg>: ExtractStaticArg,
             <Tag> UseField<Tag>: ExtractFieldArg,
+            <ArgA, ArgB> Join<ArgA, ArgB>: JoinExtractArgs,
         }
     }
 }

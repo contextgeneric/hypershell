@@ -1,10 +1,11 @@
 use core::fmt::Display;
 use core::marker::PhantomData;
+use std::path::PathBuf;
 
 use cgp::prelude::*;
 
-use crate::components::{ArgExtractor, ArgExtractorComponent, HasCommandArgType};
-use crate::dsl::StaticArg;
+use crate::components::{ArgExtractor, ArgExtractorComponent, CanExtractArg, HasCommandArgType};
+use crate::dsl::{Join, StaticArg};
 
 #[cgp_new_provider]
 impl<Context, Arg> ArgExtractor<Context, StaticArg<Arg>> for ExtractStaticArg
@@ -29,5 +30,17 @@ where
 {
     fn extract_arg(context: &Context, _phantom: PhantomData<UseField<Tag>>) -> Context::CommandArg {
         context.get_field(PhantomData).to_string().into()
+    }
+}
+
+#[cgp_new_provider]
+impl<Context, ArgA, ArgB> ArgExtractor<Context, Join<ArgA, ArgB>> for JoinExtractArgs
+where
+    Context: CanExtractArg<ArgA> + CanExtractArg<ArgB> + HasCommandArgType<CommandArg = PathBuf>,
+{
+    fn extract_arg(context: &Context, _phantom: PhantomData<Join<ArgA, ArgB>>) -> PathBuf {
+        let arg_a = context.extract_arg(PhantomData::<ArgA>);
+        let arg_b = context.extract_arg(PhantomData::<ArgB>);
+        arg_a.join(arg_b)
     }
 }
