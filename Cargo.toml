@@ -1,7 +1,10 @@
 [workspace]
 
+resolver = "3"
+
 members = [
     "crates/hypershell-components",
+    "crates/hypershell-tokio-components",
 ]
 
 [workspace.package]
@@ -14,8 +17,13 @@ keywords        = ["cgp"]
 
 [workspace.dependencies]
 cgp                 = { version = "0.4.0" }
+tokio               = { version = "1.45.0" }
+
+hypershell-components   = { version = "0.4.0" }
 
 [patch.crates-io]
+hypershell-components   = { path = "./crates/hypershell-components" }
+
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
 cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
 cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
