@@ -1,6 +1,6 @@
 use cgp::extra::handler::HandlerComponent;
 use cgp::prelude::*;
-use hypershell_components::dsl::{SimpleExec, StaticArg};
+use hypershell_components::dsl::{SimpleExec, StaticArg, WithArgs};
 
 use crate::presets::HypershellAppPreset;
 
@@ -13,9 +13,9 @@ check_components! {
             (
                 SimpleExec<
                     StaticArg<symbol!("echo")>,
-                    Product! [
+                    WithArgs<Product! [
                         StaticArg<symbol!("hello")>
-                    ],
+                    ]>,
                 >,
                 Vec<u8>,
             )

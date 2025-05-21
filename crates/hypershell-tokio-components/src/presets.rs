@@ -8,7 +8,7 @@ mod preset {
     use hypershell_components::components::{
         ArgExtractorComponent, CommandArgTypeProviderComponent,
     };
-    use hypershell_components::dsl::{Join, Pipe, SimpleExec, StaticArg};
+    use hypershell_components::dsl::{FieldArg, JoinArgs, Pipe, SimpleExec, StaticArg, WithArgs};
     use hypershell_components::providers::{
         ExtractFieldArg, ExtractStaticArg, JoinExtractArgs, RunPipe,
     };
@@ -21,16 +21,16 @@ mod preset {
             CommandArgTypeProviderComponent:
                 UseType<PathBuf>,
             HandlerComponent:
-                UseDelegate<HandlerComponents::Provider>,
+                UseDelegate<HandlerPreset::Provider>,
             ArgExtractorComponent:
-                UseDelegate<ArgExtractorComponents::Provider>,
+                UseDelegate<ArgExtractorPreset::Provider>,
             CommandUpdaterComponent:
-                ExtractArgs,
+                UseDelegate<CommandUpdaterPreset::Provider>,
         }
     }
 
     cgp_preset! {
-        HandlerComponents {
+        HandlerPreset {
             <Handlers> Pipe<Handlers>:
                 RunPipe,
             <Path, Args> SimpleExec<Path, Args>:
@@ -39,10 +39,16 @@ mod preset {
     }
 
     cgp_preset! {
-        ArgExtractorComponents {
+        ArgExtractorPreset {
             <Arg> StaticArg<Arg>: ExtractStaticArg,
-            <Tag> UseField<Tag>: ExtractFieldArg,
-            <Args> Join<Args>: JoinExtractArgs,
+            <Tag> FieldArg<Tag>: ExtractFieldArg,
+            <Args> JoinArgs<Args>: JoinExtractArgs,
+        }
+    }
+
+    cgp_preset! {
+        CommandUpdaterPreset {
+            <Args> WithArgs<Args>: ExtractArgs,
         }
     }
 }

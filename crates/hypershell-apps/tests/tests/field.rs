@@ -4,7 +4,7 @@ use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
-use hypershell_components::dsl::{Join, SimpleExec, StaticArg};
+use hypershell_components::dsl::{FieldArg, JoinArgs, SimpleExec, StaticArg, WithArgs};
 
 #[cgp_context(TestAppComponents: HypershellAppPreset)]
 #[derive(HasField)]
@@ -23,16 +23,18 @@ async fn test_join_fields() -> Result<(), Error> {
             PhantomData::<
                 SimpleExec<
                     StaticArg<symbol!("ls")>,
-                    Product![
-                        StaticArg<symbol!("-la")>,
-                        Join<
-                            Product![
-                                UseField<symbol!("base_dir")>,
-                                StaticArg<symbol!("crates")>,
-                                StaticArg<symbol!("hypershell-apps")>,
-                            ],
-                        >,
-                    ],
+                    WithArgs<
+                        Product![
+                            StaticArg<symbol!("-la")>,
+                            JoinArgs<
+                                Product![
+                                    FieldArg<symbol!("base_dir")>,
+                                    StaticArg<symbol!("crates")>,
+                                    StaticArg<symbol!("hypershell-apps")>,
+                                ],
+                            >,
+                        ],
+                    >,
                 >,
             >,
             Vec::new(),

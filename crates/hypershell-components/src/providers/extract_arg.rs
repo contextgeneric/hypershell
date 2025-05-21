@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use cgp::prelude::*;
 
 use crate::components::{ArgExtractor, ArgExtractorComponent, CanExtractArg, HasCommandArgType};
-use crate::dsl::{Join, StaticArg};
+use crate::dsl::{FieldArg, JoinArgs, StaticArg};
 
 #[cgp_new_provider]
 impl<Context, Arg> ArgExtractor<Context, StaticArg<Arg>> for ExtractStaticArg
@@ -23,12 +23,12 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Tag> ArgExtractor<Context, UseField<Tag>> for ExtractFieldArg
+impl<Context, Tag> ArgExtractor<Context, FieldArg<Tag>> for ExtractFieldArg
 where
     Context: HasCommandArgType + HasField<Tag, Value: Display>,
     Context::CommandArg: From<String>,
 {
-    fn extract_arg(context: &Context, _phantom: PhantomData<UseField<Tag>>) -> Context::CommandArg {
+    fn extract_arg(context: &Context, _phantom: PhantomData<FieldArg<Tag>>) -> Context::CommandArg {
         context.get_field(PhantomData).to_string().into()
     }
 }
@@ -36,24 +36,24 @@ where
 pub struct JoinExtractArgs;
 
 #[cgp_provider]
-impl<Context, Arg, Args> ArgExtractor<Context, Join<Cons<Arg, Args>>> for JoinExtractArgs
+impl<Context, Arg, Args> ArgExtractor<Context, JoinArgs<Cons<Arg, Args>>> for JoinExtractArgs
 where
     Context: CanExtractArg<Arg> + HasCommandArgType<CommandArg = PathBuf>,
-    Self: ArgExtractor<Context, Join<Args>>,
+    Self: ArgExtractor<Context, JoinArgs<Args>>,
 {
-    fn extract_arg(context: &Context, _phantom: PhantomData<Join<Cons<Arg, Args>>>) -> PathBuf {
+    fn extract_arg(context: &Context, _phantom: PhantomData<JoinArgs<Cons<Arg, Args>>>) -> PathBuf {
         let arg_a = context.extract_arg(PhantomData);
-        let arg_b = Self::extract_arg(context, PhantomData::<Join<Args>>);
+        let arg_b = Self::extract_arg(context, PhantomData::<JoinArgs<Args>>);
         arg_a.join(arg_b)
     }
 }
 
 #[cgp_provider]
-impl<Context> ArgExtractor<Context, Join<Nil>> for JoinExtractArgs
+impl<Context> ArgExtractor<Context, JoinArgs<Nil>> for JoinExtractArgs
 where
     Context: HasCommandArgType<CommandArg = PathBuf>,
 {
-    fn extract_arg(_context: &Context, _phantom: PhantomData<Join<Nil>>) -> PathBuf {
+    fn extract_arg(_context: &Context, _phantom: PhantomData<JoinArgs<Nil>>) -> PathBuf {
         PathBuf::default()
     }
 }
