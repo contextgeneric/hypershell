@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use std::ffi::OsStr;
 use std::process::{Output, Stdio};
 
 use cgp::extra::handler::{Handler, HandlerComponent};
@@ -24,6 +25,7 @@ where
         + CanExtractArg<CommandPath>
         + CanUpdateCommand<Args>
         + for<'a> CanRaiseAsyncError<ExecCommandFailure<'a>>,
+    Context::CommandArg: AsRef<OsStr> + Send,
     CommandPath: Send,
     Args: Send,
 {

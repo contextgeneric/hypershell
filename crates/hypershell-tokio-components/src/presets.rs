@@ -1,9 +1,13 @@
 #[cgp::re_export_imports]
 mod preset {
+    use std::path::PathBuf;
+
     use cgp::core::component::UseDelegate;
     use cgp::extra::handler::HandlerComponent;
     use cgp::prelude::*;
-    use hypershell_components::components::ArgExtractorComponent;
+    use hypershell_components::components::{
+        ArgExtractorComponent, CommandArgTypeProviderComponent,
+    };
     use hypershell_components::dsl::{Pipe, SimpleExec, StaticArg};
     use hypershell_components::providers::{ExtractFieldArg, ExtractStaticArg, RunPipe};
 
@@ -12,6 +16,8 @@ mod preset {
 
     cgp_preset! {
         HypershellTokioPreset {
+            CommandArgTypeProviderComponent:
+                UseType<PathBuf>,
             HandlerComponent:
                 UseDelegate<HandlerComponents::Provider>,
             ArgExtractorComponent:

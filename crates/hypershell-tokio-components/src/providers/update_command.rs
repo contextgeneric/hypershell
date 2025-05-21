@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use std::ffi::OsStr;
 
 use cgp::prelude::*;
 use hypershell_components::components::CanExtractArg;
@@ -12,6 +13,7 @@ pub struct ExtractArgs;
 impl<Context, Arg, Args> CommandUpdater<Context, Cons<Arg, Args>> for ExtractArgs
 where
     Context: CanExtractArg<Arg>,
+    Context::CommandArg: AsRef<OsStr> + Send,
     Self: CommandUpdater<Context, Args>,
 {
     fn update_command(
