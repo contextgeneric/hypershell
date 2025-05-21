@@ -18,6 +18,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627"
 
 [[package]]
+name = "anyhow"
+version = "1.0.98"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e16d2d3311acee920a9eb8d33b8cbc1787ce4a264e85f964c2404b969bdcd487"
+
+[[package]]
 name = "backtrace"
 version = "0.3.75"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -47,7 +53,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "cgp"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-async",
  "cgp-core",
@@ -57,7 +63,7 @@ dependencies = [
 [[package]]
 name = "cgp-async"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-async-macro",
  "cgp-sync",
@@ -66,7 +72,7 @@ dependencies = [
 [[package]]
 name = "cgp-async-macro"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -76,12 +82,12 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 
 [[package]]
 name = "cgp-core"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -94,7 +100,7 @@ dependencies = [
 [[package]]
 name = "cgp-error"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -103,9 +109,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "cgp-error-anyhow"
+version = "0.4.0"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
+dependencies = [
+ "anyhow",
+ "cgp-core",
+]
+
+[[package]]
 name = "cgp-error-extra"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-core",
 ]
@@ -113,7 +128,7 @@ dependencies = [
 [[package]]
 name = "cgp-extra"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-error-extra",
  "cgp-handler",
@@ -125,7 +140,7 @@ dependencies = [
 [[package]]
 name = "cgp-field"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-component",
  "cgp-macro",
@@ -135,7 +150,7 @@ dependencies = [
 [[package]]
 name = "cgp-handler"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-core",
 ]
@@ -143,7 +158,7 @@ dependencies = [
 [[package]]
 name = "cgp-inner"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-component",
  "cgp-macro",
@@ -152,7 +167,7 @@ dependencies = [
 [[package]]
 name = "cgp-macro"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-macro-lib",
  "syn",
@@ -161,7 +176,7 @@ dependencies = [
 [[package]]
 name = "cgp-macro-lib"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "itertools",
  "prettyplease",
@@ -173,7 +188,7 @@ dependencies = [
 [[package]]
 name = "cgp-run"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -184,7 +199,7 @@ dependencies = [
 [[package]]
 name = "cgp-runtime"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-core",
 ]
@@ -192,7 +207,7 @@ dependencies = [
 [[package]]
 name = "cgp-sync"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-async-macro",
 ]
@@ -200,7 +215,7 @@ dependencies = [
 [[package]]
 name = "cgp-type"
 version = "0.4.0"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#cabeef1d2609eece3cc9698daf32f492500e34c1"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=handler#39a1c8e9d2643dee1ba1ae9651a5d73b1b9a3d7f"
 dependencies = [
  "cgp-component",
  "cgp-macro",
@@ -219,15 +234,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"
 
 [[package]]
+name = "hypershell-apps"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "cgp-error-anyhow",
+ "hypershell-components",
+ "hypershell-tokio-components",
+ "tokio",
+]
+
+[[package]]
 name = "hypershell-components"
-version = "0.4.0"
+version = "0.1.0"
 dependencies = [
  "cgp",
 ]
 
 [[package]]
 name = "hypershell-tokio-components"
-version = "0.4.0"
+version = "0.1.0"
 dependencies = [
  "cgp",
  "hypershell-components",
