@@ -17,4 +17,4 @@ hypershell-tokio-components     = { workspace = true }
 
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
-tokio                   = { workspace = true, features = [ "process", "io-util" ] }
+tokio                   = { workspace = true, features = [ "macros", "rt" ] }

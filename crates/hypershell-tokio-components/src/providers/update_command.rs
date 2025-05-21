@@ -12,6 +12,7 @@ pub struct ExtractArgs;
 impl<Context, Arg, Args> CommandUpdater<Context, Cons<Arg, Args>> for ExtractArgs
 where
     Context: CanExtractArg<Arg>,
+    Self: CommandUpdater<Context, Args>,
 {
     fn update_command(
         context: &Context,
@@ -20,6 +21,8 @@ where
     ) {
         let arg = context.extract_arg(PhantomData);
         command.arg(arg);
+
+        Self::update_command(context, PhantomData::<Args>, command);
     }
 }
 

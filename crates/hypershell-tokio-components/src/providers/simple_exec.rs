@@ -41,6 +41,8 @@ where
         context.update_command(PhantomData, &mut command);
 
         command.stdin(Stdio::piped());
+        command.stdout(Stdio::piped());
+        command.stderr(Stdio::piped());
 
         let mut child = command.spawn().map_err(|error| {
             Context::raise_error(ExecCommandFailure {
