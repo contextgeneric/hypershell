@@ -1,21 +1,11 @@
-use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::extra::handler::HandlerComponent;
 use cgp::prelude::*;
-use cgp_error_anyhow::{DebugAnyhowError, UseAnyhowError};
 use hypershell_components::dsl::{SimpleExec, StaticArg};
-use hypershell_tokio_components::presets::HypershellTokioPreset;
 
-#[cgp_context(HypershellAppComponents: HypershellTokioPreset)]
+use crate::presets::HypershellAppPreset;
+
+#[cgp_context(HypershellAppComponents: HypershellAppPreset)]
 pub struct HypershellApp;
-
-delegate_components! {
-    HypershellAppComponents {
-        ErrorTypeProviderComponent:
-            UseAnyhowError,
-        ErrorRaiserComponent:
-            DebugAnyhowError,
-    }
-}
 
 check_components! {
     CanUseHypershellApp for HypershellApp {
