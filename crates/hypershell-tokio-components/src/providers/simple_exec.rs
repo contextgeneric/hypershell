@@ -10,8 +10,7 @@ use tokio::process::Child;
 
 use crate::dsl::CoreExec;
 
-pub struct ExecOutputError<'a, Context> {
-    pub context: &'a Context,
+pub struct ExecOutputError {
     pub output: Output,
 }
 
@@ -20,7 +19,7 @@ impl<Context, CommandPath, Args> Handler<Context, SimpleExec<CommandPath, Args>,
     for RunSimpleExec
 where
     Context: CanHandle<CoreExec<CommandPath, Args>, (), Output = Child>
-        + for<'a> CanRaiseAsyncError<ExecOutputError<'a, Context>>
+        + for<'a> CanRaiseAsyncError<ExecOutputError>
         + CanWrapAsyncError<StdinPipeError>
         + CanWrapAsyncError<WaitWithOutputError>
         + CanRaiseAsyncError<std::io::Error>,
@@ -55,7 +54,7 @@ where
         if output.status.success() {
             Ok(output.stdout)
         } else {
-            Err(Context::raise_error(ExecOutputError { context, output }))
+            Err(Context::raise_error(ExecOutputError { output }))
         }
     }
 }
@@ -76,7 +75,7 @@ impl Debug for WaitWithOutputError {
     }
 }
 
-impl<'a, Context> Debug for ExecOutputError<'a, Context> {
+impl Debug for ExecOutputError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(
             f,
