@@ -2,13 +2,13 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 use std::process::Output;
 
-use cgp::extra::handler::{Handler, HandlerComponent};
+use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
 use hypershell_components::dsl::SimpleExec;
 use tokio::io::AsyncWriteExt;
 use tokio::process::Child;
 
-use crate::providers::CoreExec;
+use crate::dsl::CoreExec;
 
 pub struct SimpleExecFailure<'a, Context> {
     pub context: &'a Context,
@@ -24,11 +24,11 @@ pub struct ExecOutputError<'a, Context> {
 impl<Context, CommandPath, Args> Handler<Context, SimpleExec<CommandPath, Args>, Vec<u8>>
     for RunSimpleExec
 where
-    Context: for<'a> CanRaiseAsyncError<ExecOutputError<'a, Context>>
+    Context: CanHandle<CoreExec<CommandPath, Args>, (), Output = Child>
+        + for<'a> CanRaiseAsyncError<ExecOutputError<'a, Context>>
         + for<'a> CanRaiseAsyncError<SimpleExecFailure<'a, Context>>,
     CommandPath: Send,
     Args: Send,
-    CoreExec<CommandPath, Args>: Handler<Context, (), (), Output = Child>,
 {
     type Output = Vec<u8>;
 
@@ -37,7 +37,7 @@ where
         _tag: PhantomData<SimpleExec<CommandPath, Args>>,
         input: Vec<u8>,
     ) -> Result<Vec<u8>, Context::Error> {
-        let mut child = <CoreExec<CommandPath, Args>>::handle(context, PhantomData, ()).await?;
+        let mut child = context.handle(PhantomData, ()).await?;
 
         if let Some(mut stdin) = child.stdin.take() {
             stdin

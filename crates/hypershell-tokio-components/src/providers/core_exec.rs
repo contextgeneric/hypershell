@@ -9,6 +9,7 @@ use hypershell_components::components::CanExtractArg;
 use tokio::process::{Child, Command};
 
 use crate::components::CanUpdateCommand;
+use crate::dsl::CoreExec;
 
 pub struct SpawnCommandFailure<'a, Context> {
     pub context: &'a Context,
@@ -17,7 +18,7 @@ pub struct SpawnCommandFailure<'a, Context> {
 }
 
 #[cgp_new_provider]
-impl<Context, Code, CommandPath, Args> Handler<Context, Code, ()> for CoreExec<CommandPath, Args>
+impl<Context, CommandPath, Args> Handler<Context, CoreExec<CommandPath, Args>, ()> for RunCoreExec
 where
     Context: HasAsyncErrorType
         + CanExtractArg<CommandPath>
@@ -26,13 +27,12 @@ where
     Context::CommandArg: AsRef<OsStr> + Send,
     CommandPath: Send,
     Args: Send,
-    Code: Send,
 {
     type Output = Child;
 
     async fn handle(
         context: &Context,
-        _tag: PhantomData<Code>,
+        _tag: PhantomData<CoreExec<CommandPath, Args>>,
         _input: (),
     ) -> Result<Child, Context::Error> {
         let command_path = context.extract_arg(PhantomData);

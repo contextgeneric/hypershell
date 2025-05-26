@@ -16,7 +16,8 @@ mod preset {
     };
 
     use crate::components::CommandUpdaterComponent;
-    use crate::providers::{ExtractArgs, ExtractFieldArgs, RunSimpleExec};
+    use crate::dsl::CoreExec;
+    use crate::providers::{ExtractArgs, ExtractFieldArgs, RunCoreExec, RunSimpleExec};
 
     cgp_preset! {
         HypershellTokioPreset {
@@ -37,6 +38,8 @@ mod preset {
                 RunPipe,
             <Path, Args> SimpleExec<Path, Args>:
                 RunSimpleExec,
+            <Path, Args> CoreExec<Path, Args>:
+                RunCoreExec,
         }
     }
 
