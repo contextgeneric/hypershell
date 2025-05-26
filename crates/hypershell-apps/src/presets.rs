@@ -24,8 +24,10 @@ mod preset {
 
     cgp_preset! {
         HypershellErrorHandlers {
-            StdIoError: RaiseAnyhowError,
-            ExecOutputError: DebugAnyhowError,
+            StdIoError:
+                RaiseAnyhowError,
+            ExecOutputError:
+                DebugAnyhowError,
         }
     }
 }

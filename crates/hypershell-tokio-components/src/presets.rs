@@ -11,13 +11,13 @@ mod preset {
     use hypershell_components::dsl::{
         FieldArg, FieldArgs, JoinArgs, Pipe, SimpleExec, StaticArg, WithArgs,
     };
-    use hypershell_components::providers::{
-        ExtractFieldArg, ExtractStaticArg, JoinExtractArgs, RunPipe,
-    };
+    use hypershell_components::providers::{ExtractFieldArg, ExtractStaticArg, RunPipe};
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
-    use crate::providers::{ExtractArgs, ExtractFieldArgs, RunCoreExec, RunSimpleExec};
+    use crate::providers::{
+        ExtractArgs, ExtractFieldArgs, JoinExtractArgs, RunCoreExec, RunSimpleExec,
+    };
 
     cgp_preset! {
         HypershellTokioPreset {
