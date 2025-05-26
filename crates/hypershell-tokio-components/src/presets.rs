@@ -9,9 +9,9 @@ mod preset {
         ArgExtractorComponent, CommandArgTypeProviderComponent,
     };
     use hypershell_components::dsl::{
-        FieldArg, FieldArgs, JoinArgs, Pipe, SimpleExec, StaticArg, WithArgs,
+        FieldArg, FieldArgs, JoinArgs, Pipe, ReadFile, SimpleExec, StaticArg, WithArgs,
     };
-    use hypershell_components::providers::{ExtractFieldArg, ExtractStaticArg, RunPipe};
+    use hypershell_components::providers::{ExtractFieldArg, ExtractStaticArg, Run, RunPipe};
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
@@ -40,6 +40,8 @@ mod preset {
                 RunSimpleExec,
             <Path, Args> CoreExec<Path, Args>:
                 RunCoreExec,
+            <Path> ReadFile<Path>:
+                Run<SimpleExec<StaticArg<symbol!("cat")>, WithArgs<Product![Path]>>>,
         }
     }
 

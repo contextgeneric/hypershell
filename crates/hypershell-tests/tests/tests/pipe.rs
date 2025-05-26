@@ -4,7 +4,9 @@ use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
-use hypershell_components::dsl::{FieldArg, JoinArgs, Pipe, SimpleExec, StaticArg, WithArgs};
+use hypershell_components::dsl::{
+    FieldArg, JoinArgs, Pipe, ReadFile, SimpleExec, StaticArg, WithArgs,
+};
 
 #[tokio::test]
 async fn test_simple_pipe() -> Result<(), Error> {
@@ -16,16 +18,11 @@ async fn test_simple_pipe() -> Result<(), Error> {
 
     pub type Program = Pipe<
         Product![
-            SimpleExec<
-                StaticArg<symbol!("cat")>,
-                WithArgs<
+            ReadFile<
+                JoinArgs<
                     Product![
-                        JoinArgs<
-                            Product![
-                                FieldArg<symbol!("base_dir")>,
-                                StaticArg<symbol!("Cargo.toml")>,
-                            ],
-                        >,
+                        FieldArg<symbol!("base_dir")>,
+                        StaticArg<symbol!("Cargo.toml")>,
                     ],
                 >,
             >,
