@@ -15,4 +15,5 @@ description  = """
 hypershell-components   = { workspace = true }
 
 cgp                     = { workspace = true }
+itertools               = { workspace = true }
 tokio                   = { workspace = true, features = [ "process", "io-util" ] }

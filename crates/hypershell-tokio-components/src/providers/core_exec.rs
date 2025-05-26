@@ -1,21 +1,17 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 use std::ffi::OsStr;
+use std::io::ErrorKind;
 use std::process::Stdio;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 use hypershell_components::components::CanExtractArg;
+use itertools::Itertools;
 use tokio::process::{Child, Command};
 
 use crate::components::CanUpdateCommand;
 use crate::dsl::CoreExec;
-
-pub struct SpawnCommandFailure<'a, Context> {
-    pub context: &'a Context,
-    pub command: &'a Command,
-    pub error: std::io::Error,
-}
 
 #[cgp_new_provider]
 impl<Context, CommandPath, Args> Handler<Context, CoreExec<CommandPath, Args>, ()> for RunCoreExec
@@ -23,7 +19,9 @@ where
     Context: HasAsyncErrorType
         + CanExtractArg<CommandPath>
         + CanUpdateCommand<Args>
-        + for<'a> CanRaiseAsyncError<SpawnCommandFailure<'a, Context>>,
+        + CanRaiseAsyncError<std::io::Error>
+        + for<'a> CanWrapAsyncError<CommandNotFound<'a>>
+        + for<'a> CanWrapAsyncError<SpawnCommandFailure<'a>>,
     Context::CommandArg: AsRef<OsStr> + Send,
     CommandPath: Send,
     Args: Send,
@@ -45,20 +43,53 @@ where
         command.stdout(Stdio::piped());
         command.stderr(Stdio::piped());
 
-        let child = command.spawn().map_err(|error| {
-            Context::raise_error(SpawnCommandFailure {
-                context,
-                command: &command,
-                error,
-            })
+        let spawn_res = command.spawn();
+
+        let child = spawn_res.map_err(|e| {
+            let is_not_found = e.kind() == ErrorKind::NotFound;
+
+            let mut e = Context::raise_error(e);
+
+            if is_not_found {
+                e = Context::wrap_error(e, CommandNotFound { command: &command });
+            }
+
+            Context::wrap_error(e, SpawnCommandFailure { command: &command })
         })?;
 
         Ok(child)
     }
 }
 
-impl<'a, Context> Debug for SpawnCommandFailure<'a, Context> {
+pub struct SpawnCommandFailure<'a> {
+    pub command: &'a Command,
+}
+
+pub struct CommandNotFound<'a> {
+    pub command: &'a Command,
+}
+
+impl<'a> Debug for CommandNotFound<'a> {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(f, "error executing command: {}", self.error)
+        write!(
+            f,
+            "command not found: {}",
+            self.command.as_std().get_program().to_string_lossy(),
+        )
+    }
+}
+
+impl<'a> Debug for SpawnCommandFailure<'a> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(
+            f,
+            "error executing command: {} {}",
+            self.command.as_std().get_program().to_string_lossy(),
+            self.command
+                .as_std()
+                .get_args()
+                .map(|arg| arg.to_string_lossy())
+                .join(" "),
+        )
     }
 }

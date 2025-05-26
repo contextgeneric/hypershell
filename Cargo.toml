@@ -20,6 +20,7 @@ keywords        = ["cgp"]
 cgp                 = { version = "0.4.0" }
 cgp-error-anyhow    = { version = "0.4.0" }
 tokio               = { version = "1.45.0" }
+itertools           = { version = "0.14.0" }
 
 hypershell-components           = { version = "0.1.0" }
 hypershell-tokio-components     = { version = "0.1.0" }

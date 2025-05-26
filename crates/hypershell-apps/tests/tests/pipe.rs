@@ -17,7 +17,7 @@ async fn test_simple_pipe() -> Result<(), Error> {
     pub type Program = Pipe<
         Product![
             SimpleExec<
-                StaticArg<symbol!("cat")>,
+                StaticArg<symbol!("cats")>,
                 WithArgs<
                     Product![
                         JoinArgs<
