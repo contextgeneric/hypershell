@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 use core::marker::PhantomData;
 use std::ffi::OsStr;
-use std::process::{Output, Stdio};
+use std::process::Stdio;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
@@ -10,15 +10,10 @@ use tokio::process::{Child, Command};
 
 use crate::components::CanUpdateCommand;
 
-pub struct ExecCommandFailure<'a, Context> {
+pub struct SpawnCommandFailure<'a, Context> {
     pub context: &'a Context,
     pub command: &'a Command,
     pub error: std::io::Error,
-}
-
-pub struct ExecOutputError<'a, Context> {
-    pub context: &'a Context,
-    pub output: Output,
 }
 
 #[cgp_new_provider]
@@ -27,8 +22,7 @@ where
     Context: HasAsyncErrorType
         + CanExtractArg<CommandPath>
         + CanUpdateCommand<Args>
-        + for<'a> CanRaiseAsyncError<ExecOutputError<'a, Context>>
-        + for<'a> CanRaiseAsyncError<ExecCommandFailure<'a, Context>>,
+        + for<'a> CanRaiseAsyncError<SpawnCommandFailure<'a, Context>>,
     Context::CommandArg: AsRef<OsStr> + Send,
     CommandPath: Send,
     Args: Send,
@@ -52,7 +46,7 @@ where
         command.stderr(Stdio::piped());
 
         let child = command.spawn().map_err(|error| {
-            Context::raise_error(ExecCommandFailure {
+            Context::raise_error(SpawnCommandFailure {
                 context,
                 command: &command,
                 error,
@@ -63,18 +57,8 @@ where
     }
 }
 
-impl<'a, Context> Debug for ExecCommandFailure<'a, Context> {
+impl<'a, Context> Debug for SpawnCommandFailure<'a, Context> {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "error executing command: {}", self.error)
-    }
-}
-
-impl<'a, Context> Debug for ExecOutputError<'a, Context> {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(
-            f,
-            "child process exited with non-success code: {:?}",
-            self.output.status.code()
-        )
     }
 }
