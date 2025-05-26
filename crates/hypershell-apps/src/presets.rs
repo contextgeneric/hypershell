@@ -1,5 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
+    use core::str::Utf8Error;
     use std::io::Error as StdIoError;
 
     use cgp::core::component::UseDelegate;
@@ -24,7 +25,10 @@ mod preset {
 
     cgp_preset! {
         HypershellErrorHandlers {
-            StdIoError:
+            [
+                StdIoError,
+                Utf8Error,
+            ]:
                 RaiseAnyhowError,
             ExecOutputError:
                 DebugAnyhowError,

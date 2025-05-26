@@ -15,7 +15,7 @@ pub struct ExecOutputError {
 }
 
 #[cgp_new_provider]
-impl<Context, CommandPath, Args> Handler<Context, SimpleExec<CommandPath, Args>, Vec<u8>>
+impl<Context, CommandPath, Args, Input> Handler<Context, SimpleExec<CommandPath, Args>, Input>
     for RunSimpleExec
 where
     Context: CanHandle<CoreExec<CommandPath, Args>, (), Output = Child>
@@ -25,20 +25,23 @@ where
         + CanRaiseAsyncError<std::io::Error>,
     CommandPath: Send,
     Args: Send,
+    Input: Send + AsRef<[u8]>,
 {
     type Output = Vec<u8>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<SimpleExec<CommandPath, Args>>,
-        input: Vec<u8>,
+        input: Input,
     ) -> Result<Vec<u8>, Context::Error> {
         let mut child = context.handle(PhantomData, ()).await?;
 
-        if !input.is_empty() {
+        let input_bytes = input.as_ref();
+
+        if !input_bytes.is_empty() {
             if let Some(mut stdin) = child.stdin.take() {
                 stdin
-                    .write_all(&input)
+                    .write_all(&input_bytes)
                     .await
                     .map_err(Context::raise_error)
                     .map_err(|e| Context::wrap_error(e, StdinPipeError))?;

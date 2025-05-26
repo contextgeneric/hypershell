@@ -33,6 +33,6 @@ where
     Context: HasCommandArgType<CommandArg = PathBuf>,
 {
     fn extract_arg(_context: &Context, _phantom: PhantomData<JoinArgs<Nil>>) -> PathBuf {
-        "".into()
+        PathBuf::new()
     }
 }
