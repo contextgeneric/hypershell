@@ -22,7 +22,7 @@ where
         _phantom: PhantomData<WithArgs<Cons<Arg, Args>>>,
         command: &mut Command,
     ) {
-        let arg = context.extract_arg(PhantomData);
+        let arg = context.extract_command_arg(PhantomData);
         command.arg(arg);
 
         Self::update_command(context, PhantomData::<WithArgs<Args>>, command);

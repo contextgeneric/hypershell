@@ -15,9 +15,12 @@ where
     Context: CanExtractCommandArg<Arg> + HasCommandArgType<CommandArg = PathBuf>,
     Self: CommandArgExtractor<Context, JoinArgs<Args>>,
 {
-    fn extract_arg(context: &Context, _phantom: PhantomData<JoinArgs<Cons<Arg, Args>>>) -> PathBuf {
-        let arg_a = context.extract_arg(PhantomData);
-        let arg_b = Self::extract_arg(context, PhantomData::<JoinArgs<Args>>);
+    fn extract_command_arg(
+        context: &Context,
+        _phantom: PhantomData<JoinArgs<Cons<Arg, Args>>>,
+    ) -> PathBuf {
+        let arg_a = context.extract_command_arg(PhantomData);
+        let arg_b = Self::extract_command_arg(context, PhantomData::<JoinArgs<Args>>);
 
         if arg_b.as_os_str().is_empty() {
             arg_a
@@ -32,7 +35,7 @@ impl<Context> CommandArgExtractor<Context, JoinArgs<Nil>> for JoinExtractArgs
 where
     Context: HasCommandArgType<CommandArg = PathBuf>,
 {
-    fn extract_arg(_context: &Context, _phantom: PhantomData<JoinArgs<Nil>>) -> PathBuf {
+    fn extract_command_arg(_context: &Context, _phantom: PhantomData<JoinArgs<Nil>>) -> PathBuf {
         PathBuf::new()
     }
 }

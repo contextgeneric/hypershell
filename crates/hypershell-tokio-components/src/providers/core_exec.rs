@@ -33,7 +33,7 @@ where
         _tag: PhantomData<CoreExec<CommandPath, Args>>,
         _input: (),
     ) -> Result<Child, Context::Error> {
-        let command_path = context.extract_arg(PhantomData);
+        let command_path = context.extract_command_arg(PhantomData);
 
         let mut command = Command::new(&command_path);
 

@@ -6,14 +6,14 @@ mod preset {
     use cgp::extra::handler::HandlerComponent;
     use cgp::prelude::*;
     use hypershell_components::components::{
-        CommandArgExtractorComponent, CommandArgTypeProviderComponent,
+        CommandArgExtractorComponent, CommandArgTypeProviderComponent, StringArgExtractorComponent,
     };
     use hypershell_components::dsl::{
         BytesToString, FieldArg, FieldArgs, JoinArgs, Pipe, ReadFile, SimpleExec, StaticArg,
         WithArgs,
     };
     use hypershell_components::providers::{
-        DecodeUtf8Bytes, ExtractFieldArg, ExtractStaticArg, Run, RunPipe,
+        DecodeUtf8Bytes, ExtractFieldArg, ExtractStaticArg, ExtractStringCommandArg, Run, RunPipe,
     };
 
     use crate::components::CommandUpdaterComponent;
@@ -28,6 +28,8 @@ mod preset {
                 UseType<PathBuf>,
             HandlerComponent:
                 UseDelegate<HandlerPreset::Provider>,
+            StringArgExtractorComponent:
+                UseDelegate<StringArgExtractorPreset::Provider>,
             CommandArgExtractorComponent:
                 UseDelegate<CommandArgExtractorPreset::Provider>,
             CommandUpdaterComponent:
@@ -51,9 +53,18 @@ mod preset {
     }
 
     cgp_preset! {
-        CommandArgExtractorPreset {
+        StringArgExtractorPreset {
             <Arg> StaticArg<Arg>: ExtractStaticArg,
             <Tag> FieldArg<Tag>: ExtractFieldArg,
+        }
+    }
+
+    cgp_preset! {
+        CommandArgExtractorPreset {
+            [
+                <Arg> StaticArg<Arg>,
+                <Tag> FieldArg<Tag>,
+            ]: ExtractStringCommandArg,
             <Args> JoinArgs<Args>: JoinExtractArgs,
         }
     }
