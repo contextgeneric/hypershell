@@ -69,8 +69,9 @@ impl<'a, Context> Debug for ExecOutputError<'a, Context> {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(
             f,
-            "child process exited with non-success code: {:?}",
-            self.output.status.code()
+            "child process exited with non-success code {:?}, stderr: {}",
+            self.output.status.code(),
+            String::from_utf8_lossy(&self.output.stderr),
         )
     }
 }

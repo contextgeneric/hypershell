@@ -44,7 +44,12 @@ where
     fn extract_arg(context: &Context, _phantom: PhantomData<JoinArgs<Cons<Arg, Args>>>) -> PathBuf {
         let arg_a = context.extract_arg(PhantomData);
         let arg_b = Self::extract_arg(context, PhantomData::<JoinArgs<Args>>);
-        arg_a.join(arg_b)
+
+        if arg_b.as_os_str().is_empty() {
+            arg_a
+        } else {
+            arg_a.join(arg_b)
+        }
     }
 }
 
@@ -54,6 +59,6 @@ where
     Context: HasCommandArgType<CommandArg = PathBuf>,
 {
     fn extract_arg(_context: &Context, _phantom: PhantomData<JoinArgs<Nil>>) -> PathBuf {
-        PathBuf::default()
+        "".into()
     }
 }
