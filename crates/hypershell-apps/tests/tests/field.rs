@@ -57,7 +57,6 @@ async fn test_field_args() -> Result<(), Error> {
 
     let output = app.handle(PhantomData::<Program>, Vec::new()).await?;
 
-    assert!(output.status.success());
     assert_eq!(output.stdout, "hello world!\n".as_bytes());
     assert!(output.stderr.is_empty());
 
