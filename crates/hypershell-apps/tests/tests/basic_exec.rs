@@ -4,13 +4,13 @@ use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::contexts::HypershellApp;
-use hypershell_components::dsl::{SimpleExec, StaticArg, WithArgs};
+use hypershell_components::dsl::{SimpleExec, StaticArg, WithStaticArgs};
 
 #[tokio::test]
 async fn test_basic_exec() -> Result<(), Error> {
     pub type Program = SimpleExec<
         StaticArg<symbol!("echo")>,
-        WithArgs<Product![StaticArg<symbol!("hello")>, StaticArg<symbol!("world!")>]>,
+        WithStaticArgs<Product![symbol!("hello"), symbol!("world!")]>,
     >;
 
     let app = HypershellApp {};
