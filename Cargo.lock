@@ -241,7 +241,6 @@ dependencies = [
  "cgp-error-anyhow",
  "hypershell-components",
  "hypershell-tokio-components",
- "tokio",
 ]
 
 [[package]]
@@ -249,6 +248,18 @@ name = "hypershell-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+]
+
+[[package]]
+name = "hypershell-tests"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "cgp-error-anyhow",
+ "hypershell-apps",
+ "hypershell-components",
+ "hypershell-tokio-components",
+ "tokio",
 ]
 
 [[package]]
