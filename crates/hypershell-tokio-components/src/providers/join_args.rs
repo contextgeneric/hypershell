@@ -3,17 +3,17 @@ use std::path::PathBuf;
 
 use cgp::prelude::*;
 use hypershell_components::components::{
-    ArgExtractor, ArgExtractorComponent, CanExtractArg, HasCommandArgType,
+    CanExtractCommandArg, CommandArgExtractor, CommandArgExtractorComponent, HasCommandArgType,
 };
 use hypershell_components::dsl::JoinArgs;
 
 pub struct JoinExtractArgs;
 
 #[cgp_provider]
-impl<Context, Arg, Args> ArgExtractor<Context, JoinArgs<Cons<Arg, Args>>> for JoinExtractArgs
+impl<Context, Arg, Args> CommandArgExtractor<Context, JoinArgs<Cons<Arg, Args>>> for JoinExtractArgs
 where
-    Context: CanExtractArg<Arg> + HasCommandArgType<CommandArg = PathBuf>,
-    Self: ArgExtractor<Context, JoinArgs<Args>>,
+    Context: CanExtractCommandArg<Arg> + HasCommandArgType<CommandArg = PathBuf>,
+    Self: CommandArgExtractor<Context, JoinArgs<Args>>,
 {
     fn extract_arg(context: &Context, _phantom: PhantomData<JoinArgs<Cons<Arg, Args>>>) -> PathBuf {
         let arg_a = context.extract_arg(PhantomData);
@@ -28,7 +28,7 @@ where
 }
 
 #[cgp_provider]
-impl<Context> ArgExtractor<Context, JoinArgs<Nil>> for JoinExtractArgs
+impl<Context> CommandArgExtractor<Context, JoinArgs<Nil>> for JoinExtractArgs
 where
     Context: HasCommandArgType<CommandArg = PathBuf>,
 {

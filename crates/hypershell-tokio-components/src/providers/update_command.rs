@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 use std::ffi::OsStr;
 
 use cgp::prelude::*;
-use hypershell_components::components::CanExtractArg;
+use hypershell_components::components::CanExtractCommandArg;
 use hypershell_components::dsl::{FieldArgs, WithArgs};
 use tokio::process::Command;
 
@@ -13,7 +13,7 @@ pub struct ExtractArgs;
 #[cgp_provider]
 impl<Context, Arg, Args> CommandUpdater<Context, WithArgs<Cons<Arg, Args>>> for ExtractArgs
 where
-    Context: CanExtractArg<Arg>,
+    Context: CanExtractCommandArg<Arg>,
     Context::CommandArg: AsRef<OsStr> + Send,
     Self: CommandUpdater<Context, WithArgs<Args>>,
 {

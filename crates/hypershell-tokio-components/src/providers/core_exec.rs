@@ -6,7 +6,7 @@ use std::process::Stdio;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
-use hypershell_components::components::CanExtractArg;
+use hypershell_components::components::CanExtractCommandArg;
 use itertools::Itertools;
 use tokio::process::{Child, Command};
 
@@ -17,7 +17,7 @@ use crate::dsl::CoreExec;
 impl<Context, CommandPath, Args> Handler<Context, CoreExec<CommandPath, Args>, ()> for RunCoreExec
 where
     Context: HasAsyncErrorType
-        + CanExtractArg<CommandPath>
+        + CanExtractCommandArg<CommandPath>
         + CanUpdateCommand<Args>
         + CanRaiseAsyncError<std::io::Error>
         + for<'a> CanWrapAsyncError<CommandNotFound<'a>>

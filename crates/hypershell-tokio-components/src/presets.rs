@@ -6,7 +6,7 @@ mod preset {
     use cgp::extra::handler::HandlerComponent;
     use cgp::prelude::*;
     use hypershell_components::components::{
-        ArgExtractorComponent, CommandArgTypeProviderComponent,
+        CommandArgExtractorComponent, CommandArgTypeProviderComponent,
     };
     use hypershell_components::dsl::{
         BytesToString, FieldArg, FieldArgs, JoinArgs, Pipe, ReadFile, SimpleExec, StaticArg,
@@ -28,8 +28,8 @@ mod preset {
                 UseType<PathBuf>,
             HandlerComponent:
                 UseDelegate<HandlerPreset::Provider>,
-            ArgExtractorComponent:
-                UseDelegate<ArgExtractorPreset::Provider>,
+            CommandArgExtractorComponent:
+                UseDelegate<CommandArgExtractorPreset::Provider>,
             CommandUpdaterComponent:
                 UseDelegate<CommandUpdaterPreset::Provider>,
         }
@@ -51,7 +51,7 @@ mod preset {
     }
 
     cgp_preset! {
-        ArgExtractorPreset {
+        CommandArgExtractorPreset {
             <Arg> StaticArg<Arg>: ExtractStaticArg,
             <Tag> FieldArg<Tag>: ExtractFieldArg,
             <Args> JoinArgs<Args>: JoinExtractArgs,

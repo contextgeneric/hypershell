@@ -4,11 +4,11 @@ use core::marker::PhantomData;
 
 use cgp::prelude::*;
 
-use crate::components::{ArgExtractor, ArgExtractorComponent, HasCommandArgType};
+use crate::components::{CommandArgExtractor, CommandArgExtractorComponent, HasCommandArgType};
 use crate::dsl::{FieldArg, StaticArg};
 
 #[cgp_new_provider]
-impl<Context, Arg> ArgExtractor<Context, StaticArg<Arg>> for ExtractStaticArg
+impl<Context, Arg> CommandArgExtractor<Context, StaticArg<Arg>> for ExtractStaticArg
 where
     Context: HasCommandArgType,
     Context::CommandArg: From<String>,
@@ -23,7 +23,7 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Tag> ArgExtractor<Context, FieldArg<Tag>> for ExtractFieldArg
+impl<Context, Tag> CommandArgExtractor<Context, FieldArg<Tag>> for ExtractFieldArg
 where
     Context: HasCommandArgType + HasField<Tag, Value: Display>,
     Context::CommandArg: From<String>,
