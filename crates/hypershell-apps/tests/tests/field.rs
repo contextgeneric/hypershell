@@ -36,7 +36,7 @@ async fn test_join_fields() -> Result<(), Error> {
 
     let output = app.handle(PhantomData::<Program>, Vec::new()).await?;
 
-    println!("output: {}", String::from_utf8(output.stdout).unwrap());
+    println!("output: {}", String::from_utf8(output).unwrap());
 
     Ok(())
 }
@@ -57,8 +57,7 @@ async fn test_field_args() -> Result<(), Error> {
 
     let output = app.handle(PhantomData::<Program>, Vec::new()).await?;
 
-    assert_eq!(output.stdout, "hello world!\n".as_bytes());
-    assert!(output.stderr.is_empty());
+    assert_eq!(output, "hello world!\n".as_bytes());
 
     Ok(())
 }

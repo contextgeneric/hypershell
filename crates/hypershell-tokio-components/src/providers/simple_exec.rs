@@ -11,7 +11,6 @@ use tokio::io::AsyncWriteExt;
 use tokio::process::Command;
 
 use crate::components::CanUpdateCommand;
-use crate::types::SimpleExecOutput;
 
 pub struct ExecCommandFailure<'a, Context> {
     pub context: &'a Context,
@@ -37,13 +36,13 @@ where
     CommandPath: Send,
     Args: Send,
 {
-    type Output = SimpleExecOutput;
+    type Output = Vec<u8>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<SimpleExec<CommandPath, Args>>,
         input: Vec<u8>,
-    ) -> Result<SimpleExecOutput, Context::Error> {
+    ) -> Result<Vec<u8>, Context::Error> {
         let command_path = context.extract_arg(PhantomData);
 
         let mut command = Command::new(&command_path);
@@ -81,7 +80,7 @@ where
         })?;
 
         if output.status.success() {
-            Ok(output.into())
+            Ok(output.stdout)
         } else {
             Err(Context::raise_error(ExecOutputError { context, output }))
         }

@@ -17,8 +17,7 @@ async fn test_basic_exec() -> Result<(), Error> {
 
     let output = app.handle(PhantomData::<Program>, Vec::new()).await?;
 
-    assert_eq!(output.stdout, "hello world!\n".as_bytes());
-    assert!(output.stderr.is_empty());
+    assert_eq!(output, "hello world!\n".as_bytes());
 
     Ok(())
 }
