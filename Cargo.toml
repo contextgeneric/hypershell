@@ -5,6 +5,7 @@ resolver = "3"
 members = [
     "crates/hypershell-apps",
     "crates/hypershell-components",
+    "crates/hypershell-reqwest-components",
     "crates/hypershell-tokio-components",
     "crates/hypershell-tests",
 ]
@@ -20,16 +21,19 @@ keywords        = ["cgp"]
 [workspace.dependencies]
 cgp                 = { version = "0.4.0" }
 cgp-error-anyhow    = { version = "0.4.0" }
+reqwest             = { version = "0.12.15" }
 tokio               = { version = "1.45.0" }
 itertools           = { version = "0.14.0" }
 
 hypershell-apps                 = { version = "0.1.0" }
 hypershell-components           = { version = "0.1.0" }
+hypershell-reqwest-components   = { version = "0.1.0" }
 hypershell-tokio-components     = { version = "0.1.0" }
 
 [patch.crates-io]
 hypershell-apps                 = { path = "./crates/hypershell-apps" }
 hypershell-components           = { path = "./crates/hypershell-components" }
+hypershell-reqwest-components   = { path = "./crates/hypershell-reqwest-components" }
 hypershell-tokio-components     = { path = "./crates/hypershell-tokio-components" }
 
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
