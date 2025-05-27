@@ -1,6 +1,8 @@
 use cgp::extra::handler::HandlerComponent;
 use cgp::prelude::*;
-use hypershell_components::dsl::{SimpleExec, StaticArg, WithArgs};
+use hypershell_components::dsl::{
+    GetMethod, SimpleExec, SimpleHttpRequest, StaticArg, WithArgs, WithHeaders,
+};
 
 use crate::presets::HypershellAppPreset;
 
@@ -18,7 +20,15 @@ check_components! {
                     ]>,
                 >,
                 Vec<u8>,
-            )
+            ),
+            // (
+            //     SimpleHttpRequest<
+            //         GetMethod,
+            //         StaticArg<symbol!("http://example.org")>,
+            //         WithHeaders<Nil>,
+            //     >,
+            //     Vec<u8>,
+            // ),
         ]
     }
 }

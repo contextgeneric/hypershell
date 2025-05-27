@@ -63,6 +63,20 @@ where
 }
 
 #[cgp_new_provider]
+impl<Context, Tag> UrlArgExtractor<Context, FieldArg<Tag>> for ExtractUrlFieldArg
+where
+    Context: HasUrlType + HasErrorType + HasField<Tag, Value = Context::Url>,
+    Context::Url: Clone,
+{
+    fn extract_url_arg(
+        context: &Context,
+        _phantom: PhantomData<FieldArg<Tag>>,
+    ) -> Result<Context::Url, Context::Error> {
+        Ok(context.get_field(PhantomData).clone())
+    }
+}
+
+#[cgp_new_provider]
 impl<Context, Tag> MethodArgExtractor<Context, FieldArg<Tag>> for ExtractMethodFieldArg
 where
     Context: HasHttpMethodType + HasField<Tag, Value = Context::HttpMethod>,
