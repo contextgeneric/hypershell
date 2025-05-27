@@ -8,6 +8,6 @@ pub trait CanUpdateRequestBuilder<Args>: HasErrorType {
     fn update_request_builder(
         &self,
         _phantom: PhantomData<Args>,
-        builder: &mut RequestBuilder,
-    ) -> Result<(), Self::Error>;
+        builder: RequestBuilder,
+    ) -> Result<RequestBuilder, Self::Error>;
 }
