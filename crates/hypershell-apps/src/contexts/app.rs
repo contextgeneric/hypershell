@@ -1,5 +1,6 @@
 use cgp::extra::handler::HandlerComponent;
 use cgp::prelude::*;
+use hypershell_components::components::{StringArgExtractorComponent, UrlArgExtractorComponent};
 use hypershell_components::dsl::{
     GetMethod, SimpleExec, SimpleHttpRequest, StaticArg, WithArgs, WithHeaders,
 };
@@ -29,6 +30,11 @@ check_components! {
             //     >,
             //     Vec<u8>,
             // ),
-        ]
+        ],
+        [
+            UrlArgExtractorComponent,
+            StringArgExtractorComponent,
+        ]:
+            StaticArg<symbol!("http://example.org")>,
     }
 }

@@ -4,12 +4,12 @@ mod preset {
     use cgp::extra::handler::HandlerComponent;
     use cgp::prelude::{cgp_preset, *};
     use hypershell_components::components::{
-        HttpMethodTypeProviderComponent, MethodArgExtractorComponent,
+        HttpMethodTypeProviderComponent, MethodArgExtractorComponent, UrlTypeProviderComponent,
     };
     use hypershell_components::dsl::{
         GetMethod, Header, PostMethod, SimpleHttpRequest, WithHeaders,
     };
-    use reqwest::Method;
+    use reqwest::{Method, Url};
 
     use crate::components::RequestBuilderUpdaterComponent;
     use crate::providers::{
@@ -22,6 +22,8 @@ mod preset {
                 ReqwestHandlerPreset::Provider,
             HttpMethodTypeProviderComponent:
                 UseType<Method>,
+            UrlTypeProviderComponent:
+                UseType<Url>,
             MethodArgExtractorComponent:
                 MethodArgExtractorPreset::Provider,
             RequestBuilderUpdaterComponent:
