@@ -26,9 +26,9 @@ mod preset {
             HandlerComponent:
                 TokioHandlerPreset::Provider,
             CommandArgExtractorComponent:
-                UseDelegate<CommandArgExtractorPreset::Provider>,
+                CommandArgExtractorPreset::Provider,
             CommandUpdaterComponent:
-                UseDelegate<CommandUpdaterPreset::Provider>,
+                CommandUpdaterPreset::Provider,
         }
     }
 
@@ -45,6 +45,7 @@ mod preset {
     }
 
     cgp_preset! {
+        #[wrap_provider(UseDelegate)]
         CommandArgExtractorPreset {
             [
                 <Arg> StaticArg<Arg>,
@@ -55,6 +56,7 @@ mod preset {
     }
 
     cgp_preset! {
+        #[wrap_provider(UseDelegate)]
         CommandUpdaterPreset {
             <Args> WithArgs<Args>: ExtractArgs,
             <Tag> FieldArgs<Tag>: ExtractFieldArgs,

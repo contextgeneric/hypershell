@@ -19,7 +19,7 @@ mod preset {
             ErrorTypeProviderComponent:
                 UseAnyhowError,
             ErrorRaiserComponent:
-                UseDelegate<HypershellErrorHandlers::Provider>,
+                AppErrorHandlers::Provider,
             ErrorWrapperComponent:
                 DebugAnyhowError,
             override HandlerComponent:
@@ -28,7 +28,8 @@ mod preset {
     }
 
     cgp_preset! {
-        HypershellErrorHandlers {
+        #[wrap_provider(UseDelegate)]
+        AppErrorHandlers {
             [
                 StdIoError,
                 Utf8Error,

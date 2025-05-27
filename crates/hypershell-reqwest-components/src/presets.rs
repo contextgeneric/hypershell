@@ -11,13 +11,14 @@ mod preset {
     cgp_preset! {
         HypershellReqwestPreset {
             MethodArgExtractorComponent:
-                UseDelegate<MethodArgExtractorPreset::Provider>,
+                MethodArgExtractorPreset::Provider,
             RequestBuilderUpdaterComponent:
-                UseDelegate<RequestBuilderUpdaterPreset::Provider>,
+                RequestBuilderUpdaterPreset::Provider,
         }
     }
 
     cgp_preset! {
+        #[wrap_provider(UseDelegate)]
         MethodArgExtractorPreset {
             [
                 GetMethod,
@@ -28,6 +29,7 @@ mod preset {
     }
 
     cgp_preset! {
+        #[wrap_provider(UseDelegate)]
         RequestBuilderUpdaterPreset {
             <Args> WithHeaders<Args>:
                 UpdateRequestHeaders,
