@@ -2,12 +2,14 @@ use alloc::borrow::Cow;
 use alloc::string::{String, ToString};
 use core::fmt::Display;
 use core::marker::PhantomData;
+use core::str::FromStr;
 
 use cgp::prelude::*;
 
 use crate::components::{
     CanExtractStringArg, CommandArgExtractor, CommandArgExtractorComponent, HasCommandArgType,
-    StringArgExtractor, StringArgExtractorComponent,
+    HasUrlType, StringArgExtractor, StringArgExtractorComponent, UrlArgExtractor,
+    UrlArgExtractorComponent,
 };
 use crate::dsl::{FieldArg, StaticArg};
 
@@ -19,6 +21,21 @@ where
 {
     fn extract_command_arg(context: &Context, phantom: PhantomData<Arg>) -> Context::CommandArg {
         context.extract_string_arg(phantom).into_owned().into()
+    }
+}
+
+#[cgp_new_provider]
+impl<Context, Arg> UrlArgExtractor<Context, Arg> for ExtractStringUrlArg
+where
+    Context: HasUrlType + CanExtractStringArg<Arg> + CanRaiseError<<Context::Url as FromStr>::Err>,
+    Context::Url: FromStr,
+{
+    fn extract_url_arg(
+        context: &Context,
+        phantom: PhantomData<Arg>,
+    ) -> Result<Context::Url, Context::Error> {
+        let url_str = context.extract_string_arg(phantom);
+        url_str.parse().map_err(Context::raise_error)
     }
 }
 
