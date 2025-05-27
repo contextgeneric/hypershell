@@ -9,11 +9,13 @@ mod preset {
     };
     use cgp::prelude::*;
     use cgp_error_anyhow::{DebugAnyhowError, RaiseAnyhowError, UseAnyhowError};
+    use hypershell_components::presets::HypershellBasePreset;
     use hypershell_tokio_components::presets::HypershellTokioPreset;
     use hypershell_tokio_components::providers::ExecOutputError;
+    use reqwest::Error as ReqwestError;
 
     cgp_preset! {
-        HypershellAppPreset: HypershellTokioPreset {
+        HypershellAppPreset: HypershellBasePreset + HypershellTokioPreset {
             ErrorTypeProviderComponent:
                 UseAnyhowError,
             ErrorRaiserComponent:
@@ -28,6 +30,7 @@ mod preset {
             [
                 StdIoError,
                 Utf8Error,
+                ReqwestError,
             ]:
                 RaiseAnyhowError,
             ExecOutputError:

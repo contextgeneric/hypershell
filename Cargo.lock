@@ -568,6 +568,7 @@ dependencies = [
  "hypershell-components",
  "hypershell-reqwest-components",
  "hypershell-tokio-components",
+ "reqwest",
 ]
 
 [[package]]

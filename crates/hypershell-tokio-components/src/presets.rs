@@ -6,14 +6,14 @@ mod preset {
     use cgp::extra::handler::HandlerComponent;
     use cgp::prelude::*;
     use hypershell_components::components::{
-        CommandArgExtractorComponent, CommandArgTypeProviderComponent, StringArgExtractorComponent,
+        CommandArgExtractorComponent, CommandArgTypeProviderComponent,
     };
     use hypershell_components::dsl::{
         BytesToString, FieldArg, FieldArgs, JoinArgs, Pipe, ReadFile, SimpleExec, StaticArg,
         WithArgs,
     };
     use hypershell_components::providers::{
-        DecodeUtf8Bytes, ExtractFieldArg, ExtractStaticArg, ExtractStringCommandArg, Run, RunPipe,
+        DecodeUtf8Bytes, ExtractStringCommandArg, Run, RunPipe,
     };
 
     use crate::components::CommandUpdaterComponent;
@@ -28,8 +28,6 @@ mod preset {
                 UseType<PathBuf>,
             HandlerComponent:
                 UseDelegate<HandlerPreset::Provider>,
-            StringArgExtractorComponent:
-                UseDelegate<StringArgExtractorPreset::Provider>,
             CommandArgExtractorComponent:
                 UseDelegate<CommandArgExtractorPreset::Provider>,
             CommandUpdaterComponent:
@@ -49,13 +47,6 @@ mod preset {
                 RunCoreExec,
             <Path> ReadFile<Path>:
                 Run<SimpleExec<StaticArg<symbol!("cat")>, WithArgs<Product![Path]>>>,
-        }
-    }
-
-    cgp_preset! {
-        StringArgExtractorPreset {
-            <Arg> StaticArg<Arg>: ExtractStaticArg,
-            <Tag> FieldArg<Tag>: ExtractFieldArg,
         }
     }
 

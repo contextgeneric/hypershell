@@ -16,5 +16,6 @@ hypershell-components           = { workspace = true }
 hypershell-reqwest-components   = { workspace = true }
 hypershell-tokio-components     = { workspace = true }
 
+reqwest                 = { workspace = true }
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
