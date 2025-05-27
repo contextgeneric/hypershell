@@ -8,8 +8,8 @@ use cgp::prelude::*;
 
 use crate::components::{
     CanExtractStringArg, CommandArgExtractor, CommandArgExtractorComponent, HasCommandArgType,
-    HasUrlType, StringArgExtractor, StringArgExtractorComponent, UrlArgExtractor,
-    UrlArgExtractorComponent,
+    HasHttpMethodType, HasUrlType, MethodArgExtractor, MethodArgExtractorComponent,
+    StringArgExtractor, StringArgExtractorComponent, UrlArgExtractor, UrlArgExtractorComponent,
 };
 use crate::dsl::{FieldArg, StaticArg};
 
@@ -59,5 +59,19 @@ where
 {
     fn extract_string_arg(context: &Context, _phantom: PhantomData<FieldArg<Tag>>) -> Cow<'_, str> {
         context.get_field(PhantomData).to_string().into()
+    }
+}
+
+#[cgp_new_provider]
+impl<Context, Tag> MethodArgExtractor<Context, FieldArg<Tag>> for ExtractMethodFieldArg
+where
+    Context: HasHttpMethodType + HasField<Tag, Value = Context::HttpMethod>,
+    Context::HttpMethod: Clone,
+{
+    fn extract_method_arg(
+        context: &Context,
+        _phantom: PhantomData<FieldArg<Tag>>,
+    ) -> Context::HttpMethod {
+        context.get_field(PhantomData).clone()
     }
 }
