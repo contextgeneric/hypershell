@@ -3,5 +3,5 @@ use reqwest::Client;
 
 #[cgp_getter]
 pub trait HasReqwestClient {
-    fn reqwuest_client(&self) -> &Client;
+    fn request_client(&self) -> &Client;
 }
