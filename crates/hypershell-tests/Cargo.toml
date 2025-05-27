@@ -18,4 +18,5 @@ hypershell-tokio-components     = { workspace = true }
 
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
+reqwest                 = { workspace = true }
 tokio                   = { workspace = true, features = [ "macros", "rt" ] }
