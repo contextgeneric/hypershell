@@ -9,8 +9,8 @@ mod preset {
     };
     use cgp::prelude::*;
     use cgp_error_anyhow::{DebugAnyhowError, RaiseAnyhowError, UseAnyhowError};
-    use hypershell_components::presets::HypershellBasePreset;
-    use hypershell_tokio_components::presets::HypershellTokioPreset;
+    use hypershell_components::presets::{BaseHandlerPreset, HypershellBasePreset};
+    use hypershell_tokio_components::presets::{HypershellTokioPreset, TokioHandlerPreset};
     use hypershell_tokio_components::providers::ExecOutputError;
     use reqwest::Error as ReqwestError;
 
@@ -22,6 +22,8 @@ mod preset {
                 UseDelegate<HypershellErrorHandlers::Provider>,
             ErrorWrapperComponent:
                 DebugAnyhowError,
+            override HandlerComponent:
+                AppHandlerPreset::Provider,
         }
     }
 
@@ -35,6 +37,13 @@ mod preset {
                 RaiseAnyhowError,
             ExecOutputError:
                 DebugAnyhowError,
+        }
+    }
+
+    cgp_preset! {
+        #[wrap_provider(UseDelegate)]
+        AppHandlerPreset: BaseHandlerPreset + TokioHandlerPreset {
+
         }
     }
 }

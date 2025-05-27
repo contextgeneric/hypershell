@@ -9,12 +9,9 @@ mod preset {
         CommandArgExtractorComponent, CommandArgTypeProviderComponent,
     };
     use hypershell_components::dsl::{
-        BytesToString, FieldArg, FieldArgs, JoinArgs, Pipe, ReadFile, SimpleExec, StaticArg,
-        WithArgs,
+        FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg, WithArgs,
     };
-    use hypershell_components::providers::{
-        DecodeUtf8Bytes, ExtractStringCommandArg, Run, RunPipe,
-    };
+    use hypershell_components::providers::{ExtractStringCommandArg, Run};
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
@@ -27,7 +24,7 @@ mod preset {
             CommandArgTypeProviderComponent:
                 UseType<PathBuf>,
             HandlerComponent:
-                UseDelegate<HandlerPreset::Provider>,
+                TokioHandlerPreset::Provider,
             CommandArgExtractorComponent:
                 UseDelegate<CommandArgExtractorPreset::Provider>,
             CommandUpdaterComponent:
@@ -36,11 +33,8 @@ mod preset {
     }
 
     cgp_preset! {
-        HandlerPreset {
-            BytesToString:
-                DecodeUtf8Bytes,
-            <Handlers> Pipe<Handlers>:
-                RunPipe,
+        #[wrap_provider(UseDelegate)]
+        TokioHandlerPreset {
             <Path, Args> SimpleExec<Path, Args>:
                 RunSimpleExec,
             <Path, Args> CoreExec<Path, Args>:
