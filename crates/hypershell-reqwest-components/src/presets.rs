@@ -1,19 +1,39 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::core::component::UseDelegate;
+    use cgp::extra::handler::HandlerComponent;
     use cgp::prelude::{cgp_preset, *};
-    use hypershell_components::components::MethodArgExtractorComponent;
-    use hypershell_components::dsl::{GetMethod, Header, PostMethod, WithHeaders};
+    use hypershell_components::components::{
+        HttpMethodTypeProviderComponent, MethodArgExtractorComponent,
+    };
+    use hypershell_components::dsl::{
+        GetMethod, Header, PostMethod, SimpleHttpRequest, WithHeaders,
+    };
+    use reqwest::Method;
 
     use crate::components::RequestBuilderUpdaterComponent;
-    use crate::providers::{ExtractReqwestMethod, UpdateRequestHeader, UpdateRequestHeaders};
+    use crate::providers::{
+        ExtractReqwestMethod, HandleSimpleHttpRequest, UpdateRequestHeader, UpdateRequestHeaders,
+    };
 
     cgp_preset! {
         HypershellReqwestPreset {
+            HandlerComponent:
+                ReqwestHandlerPreset::Provider,
+            HttpMethodTypeProviderComponent:
+                UseType<Method>,
             MethodArgExtractorComponent:
                 MethodArgExtractorPreset::Provider,
             RequestBuilderUpdaterComponent:
                 RequestBuilderUpdaterPreset::Provider,
+        }
+    }
+
+    cgp_preset! {
+        #[wrap_provider(UseDelegate)]
+        ReqwestHandlerPreset {
+            <Method, Url, Headers> SimpleHttpRequest<Method, Url, Headers>:
+                HandleSimpleHttpRequest,
         }
     }
 
