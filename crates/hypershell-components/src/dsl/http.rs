@@ -6,6 +6,10 @@ pub struct GetMethod;
 
 pub struct PostMethod;
 
+pub struct PutMethod;
+
+pub struct DeleteMethod;
+
 pub struct WithHeaders<Headers>(pub PhantomData<Headers>);
 
 pub struct Header<Key, Value>(pub PhantomData<(Key, Value)>);

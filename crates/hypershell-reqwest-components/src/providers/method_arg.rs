@@ -4,7 +4,7 @@ use cgp::prelude::*;
 use hypershell_components::components::{
     HasHttpMethodType, MethodArgExtractor, MethodArgExtractorComponent,
 };
-use hypershell_components::dsl::{GetMethod, PostMethod};
+use hypershell_components::dsl::{DeleteMethod, GetMethod, PostMethod, PutMethod};
 use reqwest::Method;
 
 pub struct ExtractReqwestMethod;
@@ -26,5 +26,25 @@ where
 {
     fn extract_method_arg(_context: &Context, _phantom: PhantomData<PostMethod>) -> Method {
         Method::POST
+    }
+}
+
+#[cgp_provider]
+impl<Context> MethodArgExtractor<Context, PutMethod> for ExtractReqwestMethod
+where
+    Context: HasHttpMethodType<HttpMethod = Method>,
+{
+    fn extract_method_arg(_context: &Context, _phantom: PhantomData<PutMethod>) -> Method {
+        Method::PUT
+    }
+}
+
+#[cgp_provider]
+impl<Context> MethodArgExtractor<Context, DeleteMethod> for ExtractReqwestMethod
+where
+    Context: HasHttpMethodType<HttpMethod = Method>,
+{
+    fn extract_method_arg(_context: &Context, _phantom: PhantomData<DeleteMethod>) -> Method {
+        Method::DELETE
     }
 }
