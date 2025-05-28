@@ -22,6 +22,7 @@ mod preset {
     use hypershell_tokio_components::providers::ExecOutputError;
     use reqwest::Error as ReqwestError;
     use reqwest::header::{InvalidHeaderName, InvalidHeaderValue};
+    use serde_json::Error as JsonError;
     use url::ParseError;
 
     cgp_preset! {
@@ -56,6 +57,7 @@ mod preset {
                 ParseError,
                 InvalidHeaderName,
                 InvalidHeaderValue,
+                JsonError,
             ]:
                 RaiseAnyhowError,
             [

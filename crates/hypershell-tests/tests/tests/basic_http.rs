@@ -5,8 +5,8 @@ use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    BytesToJson, BytesToString, FieldArg, GetMethod, Header, JoinArgs, Pipe, SimpleHttpRequest,
-    StaticArg, UrlEncodeArg, WithHeaders,
+    BytesToJson, FieldArg, GetMethod, Header, JoinArgs, Pipe, SimpleHttpRequest, StaticArg,
+    UrlEncodeArg, WithHeaders,
 };
 use reqwest::Client;
 use serde::Deserialize;
@@ -32,8 +32,7 @@ async fn test_basic_http_request() -> Result<(), Error> {
                     >
                 ]>,
             >,
-            BytesToString,
-            // BytesToJson<Vec<Issue>>,
+            BytesToJson<Vec<Issue>>,
         ],
     >;
 
@@ -55,12 +54,12 @@ async fn test_basic_http_request() -> Result<(), Error> {
 
     let response = app.handle(PhantomData::<Program>, Vec::new()).await?;
 
-    println!("HTTP response: {response}");
+    println!("HTTP response: {response:#?}");
 
     Ok(())
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Issue {
     pub id: u64,
     pub state: String,
