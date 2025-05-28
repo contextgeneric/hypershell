@@ -3,9 +3,9 @@ mod preset {
     use cgp::core::component::UseDelegate;
     use cgp::extra::handler::HandlerComponent;
     use cgp::prelude::*;
-    use hypershell_components::dsl::BytesToJson;
+    use hypershell_components::dsl::{DecodeJson, EncodeJson};
 
-    use crate::providers::HandleDecodeJson;
+    use crate::providers::{HandleDecodeJson, HandleEncodeJson};
 
     cgp_preset! {
         HypershellJsonPreset {
@@ -17,8 +17,10 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
         JsonHandlerPreset {
-            <Value> BytesToJson<Value>:
+            <Value> DecodeJson<Value>:
                 HandleDecodeJson,
+            EncodeJson:
+                HandleEncodeJson,
         }
     }
 }

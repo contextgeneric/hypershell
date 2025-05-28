@@ -3,13 +3,14 @@ use core::marker::PhantomData;
 use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
+use hypershell_apps::contexts::HttpApp;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    BytesToJson, FieldArg, GetMethod, Header, JoinArgs, Pipe, SimpleHttpRequest, StaticArg,
-    UrlEncodeArg, WithHeaders,
+    DecodeJson, EncodeJson, FieldArg, GetMethod, Header, JoinArgs, Pipe, PostMethod,
+    SimpleHttpRequest, StaticArg, UrlEncodeArg, WithHeaders,
 };
 use reqwest::Client;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[tokio::test]
 async fn test_basic_http_request() -> Result<(), Error> {
@@ -32,7 +33,7 @@ async fn test_basic_http_request() -> Result<(), Error> {
                     >
                 ]>,
             >,
-            BytesToJson<Vec<Issue>>,
+            DecodeJson<Vec<Issue>>,
         ],
     >;
 
@@ -45,6 +46,14 @@ async fn test_basic_http_request() -> Result<(), Error> {
         pub github_repo: String,
     }
 
+    #[derive(Debug, Deserialize)]
+    #[allow(dead_code)]
+    pub struct Issue {
+        pub id: u64,
+        pub state: String,
+        pub title: String,
+    }
+
     let app = TestApp {
         http_client: Client::new(),
         base_url: "https://api.github.com".to_owned(),
@@ -54,14 +63,54 @@ async fn test_basic_http_request() -> Result<(), Error> {
 
     let response = app.handle(PhantomData::<Program>, Vec::new()).await?;
 
-    println!("HTTP response: {response:#?}");
+    println!("List of GitHub issues: {response:#?}");
 
     Ok(())
 }
 
-#[derive(Debug, Deserialize)]
-pub struct Issue {
-    pub id: u64,
-    pub state: String,
-    pub title: String,
+#[tokio::test]
+async fn test_post_http_request() -> Result<(), Error> {
+    pub type Program = Pipe<
+        Product![
+            EncodeJson,
+            SimpleHttpRequest<
+                PostMethod,
+                StaticArg<symbol!("https://play.rust-lang.org/meta/gist")>,
+                WithHeaders<Product![
+                    Header<
+                        StaticArg<symbol!("Content-Type")>,
+                        StaticArg<symbol!("application/json")>,
+                    >
+                ]>,
+            >,
+            DecodeJson<Response>
+        ],
+    >;
+
+    #[derive(Serialize)]
+    pub struct Input {
+        pub code: String,
+    }
+
+    #[derive(Debug, Deserialize)]
+    #[allow(dead_code)]
+    pub struct Response {
+        pub id: String,
+        pub url: String,
+        pub code: String,
+    }
+
+    let app = HttpApp {
+        http_client: Client::new(),
+    };
+
+    let input = Input {
+        code: "fn main() { println!(\"Hello, world!\"); }".to_owned(),
+    };
+
+    let output = app.handle(PhantomData::<Program>, input).await?;
+
+    println!("response: {output:#?}");
+
+    Ok(())
 }
