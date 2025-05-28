@@ -3,16 +3,27 @@ use core::marker::PhantomData;
 use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
-use hypershell_apps::contexts::HttpApp;
+use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    BytesToString, GetMethod, Header, Pipe, SimpleHttpRequest, StaticArg, WithHeaders,
+    BytesToString, FieldArg, GetMethod, Header, JoinArgs, Pipe, SimpleHttpRequest, StaticArg,
+    WithHeaders,
 };
 use reqwest::Client;
 
 #[tokio::test]
 async fn test_basic_http_request() -> Result<(), Error> {
-    let app = HttpApp {
+    #[cgp_context(TestAppComponents: HypershellAppPreset)]
+    #[derive(HasField)]
+    pub struct TestApp {
+        pub http_client: Client,
+        pub github_org: String,
+        pub github_repo: String,
+    }
+
+    let app = TestApp {
         http_client: Client::new(),
+        github_org: "contextgeneric".to_owned(),
+        github_repo: "cgp".to_owned(),
     };
 
     let response = app
@@ -22,7 +33,13 @@ async fn test_basic_http_request() -> Result<(), Error> {
                     Product![
                         SimpleHttpRequest<
                             GetMethod,
-                            StaticArg<symbol!("https://api.github.com/repos/contextgeneric/cgp/issues")>,
+                            JoinArgs<Product![
+                                StaticArg<symbol!("https://api.github.com/repos/")>,
+                                FieldArg<symbol!("github_org")>,
+                                StaticArg<symbol!("/")>,
+                                FieldArg<symbol!("github_repo")>,
+                                StaticArg<symbol!("/issues")>,
+                            ]>,
                             WithHeaders<Product![
                                 Header<
                                     StaticArg<symbol!("User-Agent")>,

@@ -2,7 +2,7 @@ use cgp::extra::handler::HandlerComponent;
 use cgp::prelude::*;
 use hypershell_components::components::{StringArgExtractorComponent, UrlArgExtractorComponent};
 use hypershell_components::dsl::{
-    GetMethod, Header, SimpleExec, SimpleHttpRequest, StaticArg, WithArgs, WithHeaders,
+    GetMethod, Header, JoinArgs, SimpleExec, SimpleHttpRequest, StaticArg, WithArgs, WithHeaders,
 };
 use hypershell_reqwest_components::components::RequestBuilderUpdaterComponent;
 use reqwest::Client;
@@ -40,7 +40,12 @@ check_components! {
             UrlArgExtractorComponent,
             StringArgExtractorComponent,
         ]:
-            StaticArg<symbol!("http://example.org")>,
+            [
+                StaticArg<symbol!("http://example.org")>,
+                JoinArgs<Product![
+                    StaticArg<symbol!("http://example.org")>
+                ]>,
+            ],
         RequestBuilderUpdaterComponent:
             Header<
                 StaticArg<symbol!("User-Agent")>,
