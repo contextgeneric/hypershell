@@ -9,14 +9,15 @@ mod preset {
         CommandArgExtractorComponent, CommandArgTypeProviderComponent,
     };
     use hypershell_components::dsl::{
-        FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg, WithArgs,
+        FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg, StreamingExec, WithArgs,
     };
     use hypershell_components::providers::{ExtractStringCommandArg, Run};
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
     use crate::providers::{
-        ExtractArgs, ExtractFieldArgs, JoinExtractArgs, RunCoreExec, RunSimpleExec,
+        ExtractArgs, ExtractFieldArgs, HandleCoreExec, HandleSimpleExec, HandleStreamingExec,
+        JoinExtractArgs,
     };
 
     cgp_preset! {
@@ -36,9 +37,11 @@ mod preset {
         #[wrap_provider(UseDelegate)]
         TokioHandlerPreset {
             <Path, Args> SimpleExec<Path, Args>:
-                RunSimpleExec,
+                HandleSimpleExec,
+            <Path, Args> StreamingExec<Path, Args>:
+                HandleStreamingExec,
             <Path, Args> CoreExec<Path, Args>:
-                RunCoreExec,
+                HandleCoreExec,
             <Path> ReadFile<Path>:
                 Run<SimpleExec<StaticArg<symbol!("cat")>, WithArgs<Product![Path]>>>,
         }

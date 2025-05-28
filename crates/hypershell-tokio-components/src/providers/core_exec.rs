@@ -14,7 +14,8 @@ use crate::components::CanUpdateCommand;
 use crate::dsl::CoreExec;
 
 #[cgp_new_provider]
-impl<Context, CommandPath, Args> Handler<Context, CoreExec<CommandPath, Args>, ()> for RunCoreExec
+impl<Context, CommandPath, Args> Handler<Context, CoreExec<CommandPath, Args>, ()>
+    for HandleCoreExec
 where
     Context: HasAsyncErrorType
         + CanExtractCommandArg<CommandPath>
