@@ -5,7 +5,8 @@ use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    BytesToString, FieldArg, JoinArgs, Pipe, ReadFile, SimpleExec, StaticArg, WithArgs,
+    BytesToString, FieldArg, JoinArgs, Pipe, ReadFile, SimpleExec, StaticArg, StreamToBytes,
+    WithArgs,
 };
 
 #[tokio::test]
@@ -26,6 +27,7 @@ async fn test_simple_pipe() -> Result<(), Error> {
                     ],
                 >,
             >,
+            StreamToBytes,
             SimpleExec<StaticArg<symbol!("wc")>, WithArgs<Product![StaticArg<symbol!("-l")>,]>>,
             BytesToString,
         ],
@@ -35,7 +37,7 @@ async fn test_simple_pipe() -> Result<(), Error> {
         base_dir: "../..".to_owned(),
     };
 
-    let output = app.handle(PhantomData::<Program>, Vec::new()).await?;
+    let output = app.handle(PhantomData::<Program>, ()).await?;
 
     println!("output: {}", output);
 
