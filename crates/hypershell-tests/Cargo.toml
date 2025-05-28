@@ -18,6 +18,8 @@ hypershell-tokio-components     = { workspace = true }
 
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
+futures                 = { workspace = true }
 reqwest                 = { workspace = true }
 serde                   = { workspace = true, features = [ "derive" ] }
-tokio                   = { workspace = true, features = [ "macros", "rt" ] }
+tokio                   = { workspace = true, features = [ "macros", "rt", "io-std" ] }
+tokio-util              = { workspace = true, features = [ "compat" ] }

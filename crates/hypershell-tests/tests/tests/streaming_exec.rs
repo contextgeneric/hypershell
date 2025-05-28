@@ -3,11 +3,13 @@ use core::marker::PhantomData;
 use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
+use futures::io::{Cursor, copy};
 use hypershell_apps::contexts::CliApp;
-use hypershell_components::dsl::{SimpleExec, StaticArg, StreamingExec, WithStaticArgs};
+use hypershell_components::dsl::{StaticArg, StreamingExec, WithStaticArgs};
+use tokio_util::compat::TokioAsyncWriteCompatExt;
 
 #[tokio::test]
-async fn test_basic_exec() -> Result<(), Error> {
+async fn test_basic_streaming_exec() -> Result<(), Error> {
     pub type Program = StreamingExec<
         StaticArg<symbol!("echo")>,
         WithStaticArgs<Product![symbol!("hello"), symbol!("world!")]>,
@@ -15,9 +17,13 @@ async fn test_basic_exec() -> Result<(), Error> {
 
     let app = CliApp {};
 
-    // let output = app.handle(PhantomData::<Program>, Vec::new()).await?;
+    let input = Cursor::new(Vec::new());
 
-    // assert_eq!(output, "hello world!\n".as_bytes());
+    let output = app.handle(PhantomData::<Program>, input).await?;
+
+    let mut stdout = tokio::io::stdout().compat_write();
+
+    copy(output, &mut stdout).await?;
 
     Ok(())
 }

@@ -657,12 +657,14 @@ version = "0.1.0"
 dependencies = [
  "cgp",
  "cgp-error-anyhow",
+ "futures",
  "hypershell-apps",
  "hypershell-components",
  "hypershell-tokio-components",
  "reqwest",
  "serde",
  "tokio",
+ "tokio-util",
 ]
 
 [[package]]
