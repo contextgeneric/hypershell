@@ -12,6 +12,7 @@ mod preset {
     use hypershell_components::presets::{
         BaseHandlerPreset, BaseStringArgExtractorPreset, HypershellBasePreset,
     };
+    use hypershell_json_components::presets::{HypershellJsonPreset, JsonHandlerPreset};
     use hypershell_reqwest_components::components::ReqwestClientGetterComponent;
     use hypershell_reqwest_components::presets::{
         HypershellReqwestPreset, ReqwestHandlerPreset, ReqwestStringArgExtractorPreset,
@@ -24,7 +25,12 @@ mod preset {
     use url::ParseError;
 
     cgp_preset! {
-        HypershellAppPreset: HypershellBasePreset + HypershellTokioPreset + HypershellReqwestPreset {
+        HypershellAppPreset:
+            HypershellBasePreset
+            + HypershellTokioPreset
+            + HypershellReqwestPreset
+            + HypershellJsonPreset
+        {
             ErrorTypeProviderComponent:
                 UseAnyhowError,
             ErrorRaiserComponent:
@@ -62,15 +68,19 @@ mod preset {
 
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
-        AppHandlerPreset: BaseHandlerPreset + TokioHandlerPreset + ReqwestHandlerPreset {
-
-        }
+        AppHandlerPreset:
+            BaseHandlerPreset
+            + TokioHandlerPreset
+            + ReqwestHandlerPreset
+            + JsonHandlerPreset
+        { }
     }
 
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
-        AppStringArgExtractorPreset: BaseStringArgExtractorPreset + ReqwestStringArgExtractorPreset {
-
-        }
+        AppStringArgExtractorPreset:
+            BaseStringArgExtractorPreset
+            + ReqwestStringArgExtractorPreset
+        { }
     }
 }

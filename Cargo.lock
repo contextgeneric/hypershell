@@ -566,9 +566,11 @@ dependencies = [
  "cgp",
  "cgp-error-anyhow",
  "hypershell-components",
+ "hypershell-json-components",
  "hypershell-reqwest-components",
  "hypershell-tokio-components",
  "reqwest",
+ "serde_json",
  "url",
 ]
 
@@ -577,6 +579,16 @@ name = "hypershell-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+]
+
+[[package]]
+name = "hypershell-json-components"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "hypershell-components",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -599,6 +611,7 @@ dependencies = [
  "hypershell-components",
  "hypershell-tokio-components",
  "reqwest",
+ "serde",
  "tokio",
 ]
 

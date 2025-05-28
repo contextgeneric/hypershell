@@ -13,10 +13,12 @@ description  = """
 
 [dependencies]
 hypershell-components           = { workspace = true }
+hypershell-json-components      = { workspace = true }
 hypershell-reqwest-components   = { workspace = true }
 hypershell-tokio-components     = { workspace = true }
 
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
 reqwest                 = { workspace = true }
+serde_json              = { workspace = true }
 url                     = { workspace = true }

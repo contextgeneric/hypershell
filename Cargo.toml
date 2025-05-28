@@ -5,6 +5,7 @@ resolver = "3"
 members = [
     "crates/hypershell-apps",
     "crates/hypershell-components",
+    "crates/hypershell-json-components",
     "crates/hypershell-reqwest-components",
     "crates/hypershell-tokio-components",
     "crates/hypershell-tests",
@@ -22,18 +23,22 @@ keywords        = ["cgp"]
 cgp                 = { version = "0.4.0" }
 cgp-error-anyhow    = { version = "0.4.0" }
 reqwest             = { version = "0.12.15" }
+serde               = { version = "1.0.219", default-features = false }
+serde_json          = { version = "1.0.140", default-features = false }
 tokio               = { version = "1.45.0" }
 itertools           = { version = "0.14.0" }
 url                 = { version = "2.5.4" }
 
 hypershell-apps                 = { version = "0.1.0" }
 hypershell-components           = { version = "0.1.0" }
+hypershell-json-components      = { version = "0.1.0" }
 hypershell-reqwest-components   = { version = "0.1.0" }
 hypershell-tokio-components     = { version = "0.1.0" }
 
 [patch.crates-io]
 hypershell-apps                 = { path = "./crates/hypershell-apps" }
 hypershell-components           = { path = "./crates/hypershell-components" }
+hypershell-json-components      = { path = "./crates/hypershell-json-components" }
 hypershell-reqwest-components   = { path = "./crates/hypershell-reqwest-components" }
 hypershell-tokio-components     = { path = "./crates/hypershell-tokio-components" }
 
