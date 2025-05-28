@@ -586,6 +586,7 @@ dependencies = [
  "cgp",
  "hypershell-components",
  "reqwest",
+ "url",
 ]
 
 [[package]]

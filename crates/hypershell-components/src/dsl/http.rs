@@ -9,3 +9,5 @@ pub struct PostMethod;
 pub struct WithHeaders<Headers>(pub PhantomData<Headers>);
 
 pub struct Header<Key, Value>(pub PhantomData<(Key, Value)>);
+
+pub struct UrlEncodeArg<Arg>(pub PhantomData<Arg>);

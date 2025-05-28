@@ -16,3 +16,4 @@ hypershell-components   = { workspace = true }
 
 cgp                     = { workspace = true }
 reqwest                 = { workspace = true }
+url                     = { workspace = true }

@@ -6,7 +6,7 @@ use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
     BytesToString, FieldArg, GetMethod, Header, JoinArgs, Pipe, SimpleHttpRequest, StaticArg,
-    WithHeaders,
+    UrlEncodeArg, WithHeaders,
 };
 use reqwest::Client;
 
@@ -35,9 +35,9 @@ async fn test_basic_http_request() -> Result<(), Error> {
                             GetMethod,
                             JoinArgs<Product![
                                 StaticArg<symbol!("https://api.github.com/repos/")>,
-                                FieldArg<symbol!("github_org")>,
+                                UrlEncodeArg<FieldArg<symbol!("github_org")>>,
                                 StaticArg<symbol!("/")>,
-                                FieldArg<symbol!("github_repo")>,
+                                UrlEncodeArg<FieldArg<symbol!("github_repo")>>,
                                 StaticArg<symbol!("/issues")>,
                             ]>,
                             WithHeaders<Product![

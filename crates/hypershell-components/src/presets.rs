@@ -16,7 +16,7 @@ mod preset {
             HandlerComponent:
                 BaseHandlerPreset::Provider,
             StringArgExtractorComponent:
-                StringArgExtractorPreset::Provider,
+                BaseStringArgExtractorPreset::Provider,
             UrlArgExtractorComponent:
                 UrlArgExtractorPreset::Provider,
         }
@@ -24,7 +24,7 @@ mod preset {
 
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
-        StringArgExtractorPreset {
+        BaseStringArgExtractorPreset {
             <Arg> StaticArg<Arg>: ExtractStaticArg,
             <Tag> FieldArg<Tag>: ExtractFieldArg,
             <Args> JoinArgs<Args>: JoinStringArgs,

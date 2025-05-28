@@ -4,10 +4,11 @@ mod preset {
     use cgp::extra::handler::HandlerComponent;
     use cgp::prelude::{cgp_preset, *};
     use hypershell_components::components::{
-        HttpMethodTypeProviderComponent, MethodArgExtractorComponent, UrlTypeProviderComponent,
+        HttpMethodTypeProviderComponent, MethodArgExtractorComponent, StringArgExtractorComponent,
+        UrlTypeProviderComponent,
     };
     use hypershell_components::dsl::{
-        GetMethod, Header, PostMethod, SimpleHttpRequest, WithHeaders,
+        GetMethod, Header, PostMethod, SimpleHttpRequest, UrlEncodeArg, WithHeaders,
     };
     use reqwest::{Method, Url};
 
@@ -15,7 +16,7 @@ mod preset {
     use crate::dsl::CoreHttpRequest;
     use crate::providers::{
         ExtractReqwestMethod, HandleCoreHttpRequest, HandleSimpleHttpRequest, UpdateRequestHeader,
-        UpdateRequestHeaders,
+        UpdateRequestHeaders, UrlEncodeStringArg,
     };
 
     cgp_preset! {
@@ -26,6 +27,8 @@ mod preset {
                 UseType<Method>,
             UrlTypeProviderComponent:
                 UseType<Url>,
+            StringArgExtractorComponent:
+                ReqwestStringArgExtractorPreset::Provider,
             MethodArgExtractorComponent:
                 MethodArgExtractorPreset::Provider,
             RequestBuilderUpdaterComponent:
@@ -51,6 +54,14 @@ mod preset {
                 PostMethod,
             ]:
                 ExtractReqwestMethod,
+        }
+    }
+
+    cgp_preset! {
+        #[wrap_provider(UseDelegate)]
+        ReqwestStringArgExtractorPreset {
+            <Arg> UrlEncodeArg<Arg>:
+                UrlEncodeStringArg,
         }
     }
 

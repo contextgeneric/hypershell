@@ -9,9 +9,13 @@ mod preset {
     };
     use cgp::prelude::*;
     use cgp_error_anyhow::{DebugAnyhowError, RaiseAnyhowError, UseAnyhowError};
-    use hypershell_components::presets::{BaseHandlerPreset, HypershellBasePreset};
+    use hypershell_components::presets::{
+        BaseHandlerPreset, BaseStringArgExtractorPreset, HypershellBasePreset,
+    };
     use hypershell_reqwest_components::components::ReqwestClientGetterComponent;
-    use hypershell_reqwest_components::presets::{HypershellReqwestPreset, ReqwestHandlerPreset};
+    use hypershell_reqwest_components::presets::{
+        HypershellReqwestPreset, ReqwestHandlerPreset, ReqwestStringArgExtractorPreset,
+    };
     use hypershell_reqwest_components::providers::ErrorResponse;
     use hypershell_tokio_components::presets::{HypershellTokioPreset, TokioHandlerPreset};
     use hypershell_tokio_components::providers::ExecOutputError;
@@ -29,6 +33,8 @@ mod preset {
                 DebugAnyhowError,
             ReqwestClientGetterComponent:
                 UseField<symbol!("http_client")>,
+            override StringArgExtractorComponent:
+                AppStringArgExtractorPreset::Provider,
             override HandlerComponent:
                 AppHandlerPreset::Provider,
         }
@@ -57,6 +63,13 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
         AppHandlerPreset: BaseHandlerPreset + TokioHandlerPreset + ReqwestHandlerPreset {
+
+        }
+    }
+
+    cgp_preset! {
+        #[wrap_provider(UseDelegate)]
+        AppStringArgExtractorPreset: BaseStringArgExtractorPreset + ReqwestStringArgExtractorPreset {
 
         }
     }
