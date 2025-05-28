@@ -2,8 +2,9 @@ use cgp::extra::handler::HandlerComponent;
 use cgp::prelude::*;
 use hypershell_components::components::{StringArgExtractorComponent, UrlArgExtractorComponent};
 use hypershell_components::dsl::{
-    GetMethod, SimpleExec, SimpleHttpRequest, StaticArg, WithArgs, WithHeaders,
+    GetMethod, Header, SimpleExec, SimpleHttpRequest, StaticArg, WithArgs, WithHeaders,
 };
+use hypershell_reqwest_components::components::RequestBuilderUpdaterComponent;
 use reqwest::Client;
 
 use crate::presets::HypershellAppPreset;
@@ -40,5 +41,10 @@ check_components! {
             StringArgExtractorComponent,
         ]:
             StaticArg<symbol!("http://example.org")>,
+        RequestBuilderUpdaterComponent:
+            Header<
+                StaticArg<symbol!("User-Agent")>,
+                StaticArg<symbol!("curl/8.5.0")>,
+            >,
     }
 }

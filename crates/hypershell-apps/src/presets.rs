@@ -16,6 +16,7 @@ mod preset {
     use hypershell_tokio_components::presets::{HypershellTokioPreset, TokioHandlerPreset};
     use hypershell_tokio_components::providers::ExecOutputError;
     use reqwest::Error as ReqwestError;
+    use reqwest::header::{InvalidHeaderName, InvalidHeaderValue};
     use url::ParseError;
 
     cgp_preset! {
@@ -41,6 +42,8 @@ mod preset {
                 Utf8Error,
                 ReqwestError,
                 ParseError,
+                InvalidHeaderName,
+                InvalidHeaderValue,
             ]:
                 RaiseAnyhowError,
             [
