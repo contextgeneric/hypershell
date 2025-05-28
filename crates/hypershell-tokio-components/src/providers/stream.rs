@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
-use tokio::io::{AsyncRead, AsyncReadExt};
+use futures::{AsyncRead, AsyncReadExt};
 
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for HandleStreamToBytes
@@ -23,6 +23,7 @@ where
             .read_to_end(&mut output)
             .await
             .map_err(Context::raise_error)?;
+
         Ok(output)
     }
 }

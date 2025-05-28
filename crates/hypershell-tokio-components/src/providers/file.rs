@@ -4,10 +4,11 @@ use std::path::Path;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
+use futures::AsyncRead;
 use hypershell_components::components::CanExtractCommandArg;
 use hypershell_components::dsl::ReadFile;
 use tokio::fs::File;
-use tokio::io::AsyncRead;
+use tokio_util::compat::TokioAsyncReadCompatExt;
 
 #[cgp_new_provider]
 impl<Context, PathArg> Handler<Context, ReadFile<PathArg>, ()> for HandleReadFile
@@ -29,6 +30,6 @@ where
             .await
             .map_err(Context::raise_error)?;
 
-        Ok(Box::pin(file))
+        Ok(Box::pin(file.compat()))
     }
 }

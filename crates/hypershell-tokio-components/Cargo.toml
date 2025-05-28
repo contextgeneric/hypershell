@@ -16,4 +16,6 @@ hypershell-components   = { workspace = true }
 
 cgp                     = { workspace = true }
 itertools               = { workspace = true }
+futures                 = { workspace = true }
 tokio                   = { workspace = true, features = [ "process", "io-util", "fs" ] }
+tokio-util              = { workspace = true, features = [ "compat" ] }
