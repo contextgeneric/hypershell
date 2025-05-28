@@ -29,16 +29,16 @@ where
         _tag: PhantomData<StreamingExec<CommandPath, Args>>,
         mut input: Input,
     ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
-        let child = context.handle(PhantomData, ()).await?;
+        let mut child = context.handle(PhantomData, ()).await?;
 
-        if let Some(stdin) = child.stdin {
+        if let Some(stdin) = child.stdin.take() {
             let mut stdin = stdin.compat_write();
             spawn(async move {
                 let _ = copy(&mut input, &mut stdin).await;
             });
         }
 
-        let output: Pin<Box<dyn AsyncRead + Send>> = match child.stdout {
+        let output: Pin<Box<dyn AsyncRead + Send>> = match child.stdout.take() {
             Some(stdout) => Box::pin(stdout.compat()),
             None => Box::pin(empty()),
         };
