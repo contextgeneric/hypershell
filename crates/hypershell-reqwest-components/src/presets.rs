@@ -12,8 +12,10 @@ mod preset {
     use reqwest::{Method, Url};
 
     use crate::components::RequestBuilderUpdaterComponent;
+    use crate::dsl::CoreHttpRequest;
     use crate::providers::{
-        ExtractReqwestMethod, HandleSimpleHttpRequest, UpdateRequestHeader, UpdateRequestHeaders,
+        ExtractReqwestMethod, HandleCoreHttpRequest, HandleSimpleHttpRequest, UpdateRequestHeader,
+        UpdateRequestHeaders,
     };
 
     cgp_preset! {
@@ -36,6 +38,8 @@ mod preset {
         ReqwestHandlerPreset {
             <Method, Url, Headers> SimpleHttpRequest<Method, Url, Headers>:
                 HandleSimpleHttpRequest,
+            <Method, Url, Headers> CoreHttpRequest<Method, Url, Headers>:
+                HandleCoreHttpRequest,
         }
     }
 
