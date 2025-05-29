@@ -6,6 +6,7 @@ mod file;
 mod http;
 mod json;
 mod pipe;
+mod r#use;
 
 pub use arg::*;
 pub use args::*;
@@ -15,3 +16,4 @@ pub use file::*;
 pub use http::*;
 pub use json::*;
 pub use pipe::*;
+pub use r#use::*;

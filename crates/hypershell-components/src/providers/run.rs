@@ -4,7 +4,7 @@ use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
 
 #[cgp_new_provider]
-impl<Context, OutCode, InCode, Input> Handler<Context, OutCode, Input> for Run<InCode>
+impl<Context, OutCode, InCode, Input> Handler<Context, OutCode, Input> for Call<InCode>
 where
     Context: CanHandle<InCode, Input>,
     InCode: Send,
