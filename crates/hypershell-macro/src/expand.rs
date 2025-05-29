@@ -1,32 +1,31 @@
 use core::iter::Peekable;
 
-use proc_macro2::{Delimiter, Group, Ident, Literal, Punct, TokenStream, TokenTree};
+use proc_macro2::{Delimiter, Ident, Literal, Punct, TokenStream, TokenTree};
 use quote::{ToTokens, quote};
 
-pub fn expand_and_pipe(tokens: TokenStream) -> TokenStream {
-    token_streams_to_pipe(expand(tokens.into_iter().peekable()))
+pub fn expand_and_pipe(tokens: ExtendedTokenStream) -> TokenStream {
+    token_streams_to_pipe(expand(tokens.stream.into_iter().peekable()))
 }
 
-pub fn expand(mut tokens: Peekable<impl Iterator<Item = TokenTree>>) -> Vec<TokenStream> {
+pub fn expand(mut tokens: Peekable<impl Iterator<Item = ExtendedTokenTree>>) -> Vec<TokenStream> {
     let mut out = TokenStream::new();
 
     loop {
         match tokens.next() {
             Some(token) => match token {
-                TokenTree::Literal(literal) => out.extend(quote! {
+                ExtendedTokenTree::Literal(literal) => out.extend(quote! {
                     symbol!( #literal )
                 }),
-                TokenTree::Group(group) => {
-                    let in_expanded = expand_and_pipe(group.stream());
-                    let new_group = Group::new(group.delimiter(), in_expanded);
-                    out.extend(new_group.to_token_stream());
+                ExtendedTokenTree::Group(group) => {
+                    let in_expanded = expand_and_pipe(group.body);
+                    out.extend(expand_grouped(&group.delim, in_expanded));
                 }
-                TokenTree::Ident(ident) => {
+                ExtendedTokenTree::Ident(ident) => {
                     out.extend(quote! { #ident });
 
-                    if let Some(TokenTree::Group(group)) = tokens.peek() {
-                        if group.delimiter() == Delimiter::Bracket {
-                            let in_expanded = expand_and_pipe(group.stream());
+                    if let Some(ExtendedTokenTree::Group(group)) = tokens.peek() {
+                        if &group.delim == &ExtendedDelimiter::Base(Delimiter::Bracket) {
+                            let in_expanded = expand_and_pipe(group.body.clone());
 
                             out.extend(quote! {
                                 < Product![ #in_expanded ] >
@@ -36,7 +35,7 @@ pub fn expand(mut tokens: Peekable<impl Iterator<Item = TokenTree>>) -> Vec<Toke
                         }
                     }
                 }
-                TokenTree::Punct(punct) => {
+                ExtendedTokenTree::Punct(punct) => {
                     if punct.as_char() == '|' {
                         let mut expanded = expand(tokens);
                         expanded.insert(0, out);
@@ -70,10 +69,12 @@ pub fn token_streams_to_pipe(mut token_streams: Vec<TokenStream>) -> TokenStream
     }
 }
 
+#[derive(Clone)]
 pub struct ExtendedTokenStream {
     pub stream: Vec<ExtendedTokenTree>,
 }
 
+#[derive(Clone)]
 pub enum ExtendedTokenTree {
     Ident(Ident),
     Punct(Punct),
@@ -81,11 +82,13 @@ pub enum ExtendedTokenTree {
     Group(ExtendedGroup),
 }
 
+#[derive(Clone)]
 pub struct ExtendedGroup {
     pub delim: ExtendedDelimiter,
     pub body: ExtendedTokenStream,
 }
 
+#[derive(Eq, PartialEq, Clone)]
 pub enum ExtendedDelimiter {
     Base(Delimiter),
     AngleBracket,
@@ -93,26 +96,28 @@ pub enum ExtendedDelimiter {
 
 impl ToTokens for ExtendedGroup {
     fn to_tokens(&self, out: &mut TokenStream) {
-        let body = &self.body;
+        out.extend(expand_grouped(&self.delim, self.body.to_token_stream()));
+    }
+}
 
-        match self.delim {
-            ExtendedDelimiter::Base(delim) => match delim {
-                Delimiter::Brace => {
-                    out.extend(quote! { { #body } });
-                }
-                Delimiter::Bracket => {
-                    out.extend(quote! { { #body } });
-                }
-                Delimiter::Parenthesis => {
-                    out.extend(quote! { #body });
-                }
-                Delimiter::None => {
-                    out.extend(quote! { #body });
-                }
-            },
-            ExtendedDelimiter::AngleBracket => {
-                out.extend(quote! { < #body > });
+pub fn expand_grouped(delim: &ExtendedDelimiter, body: TokenStream) -> TokenStream {
+    match delim {
+        ExtendedDelimiter::Base(delim) => match delim {
+            Delimiter::Brace => {
+                quote! { { #body } }
             }
+            Delimiter::Bracket => {
+                quote! { { #body } }
+            }
+            Delimiter::Parenthesis => {
+                quote! { #body }
+            }
+            Delimiter::None => {
+                quote! { #body }
+            }
+        },
+        ExtendedDelimiter::AngleBracket => {
+            quote! { < #body > }
         }
     }
 }
@@ -173,7 +178,7 @@ pub fn process_extended_token_tree(
                 }
             },
             None => {
-                if !is_inner {
+                if is_inner {
                     panic!("mismatch > at the end of token stream")
                 }
 

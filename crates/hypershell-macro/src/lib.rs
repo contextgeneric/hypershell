@@ -5,5 +5,7 @@ mod expand;
 
 #[proc_macro]
 pub fn hypershell(body: TokenStream) -> TokenStream {
-    expand::expand_and_pipe(TokenStream2::from(body)).into()
+    let stream =
+        expand::process_extended_token_tree(&mut TokenStream2::from(body).into_iter(), false);
+    expand::expand_and_pipe(expand::ExtendedTokenStream { stream }).into()
 }
