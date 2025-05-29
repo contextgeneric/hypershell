@@ -5,6 +5,7 @@ use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{FieldArg, FieldArgs, JoinArgs, SimpleExec, StaticArg, WithArgs};
+use hypershell_macro::hypershell;
 
 #[tokio::test]
 async fn test_join_fields() -> Result<(), Error> {
@@ -14,21 +15,19 @@ async fn test_join_fields() -> Result<(), Error> {
         pub base_dir: String,
     }
 
-    pub type Program = SimpleExec<
-        StaticArg<symbol!("ls")>,
-        WithArgs<
-            Product![
-                StaticArg<symbol!("-la")>,
-                JoinArgs<
-                    Product![
-                        FieldArg<symbol!("base_dir")>,
-                        StaticArg<symbol!("crates")>,
-                        StaticArg<symbol!("hypershell-apps")>,
-                    ],
-                >,
-            ],
-        >,
-    >;
+    pub type Program = hypershell! {
+        SimpleExec<
+            StaticArg<"ls">,
+            WithArgs[
+                StaticArg<"-la">,
+                JoinArgs [
+                    FieldArg<"base_dir">,
+                    StaticArg<"crates">,
+                    StaticArg<"hypershell-apps">,
+                ],
+            ]
+        >
+    };
 
     let app = TestApp {
         base_dir: "../..".to_owned(),

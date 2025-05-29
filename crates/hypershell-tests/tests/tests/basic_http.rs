@@ -16,27 +16,24 @@ use serde::{Deserialize, Serialize};
 #[tokio::test]
 async fn test_basic_http_request() -> Result<(), Error> {
     pub type Program = hypershell! {
-        Pipe<Product![
-            SimpleHttpRequest<
-                GetMethod,
-                JoinArgs [
-                    FieldArg<"base_url">,
-                    StaticArg<"/repos/">,
-                    UrlEncodeArg<FieldArg<"github_org">>,
-                    StaticArg<"/">,
-                    UrlEncodeArg<FieldArg<"github_repo">>,
-                    StaticArg<"/issues">,
-                ],
-                WithHeaders [
-                    Header<
-                        StaticArg<"User-Agent">,
-                        StaticArg<"hypershell">,
-                    >
-                ],
-            >,
-            // |
-            DecodeJson<Vec<Issue>>,
-        ]>
+        SimpleHttpRequest<
+            GetMethod,
+            JoinArgs [
+                FieldArg<"base_url">,
+                StaticArg<"/repos/">,
+                UrlEncodeArg<FieldArg<"github_org">>,
+                StaticArg<"/">,
+                UrlEncodeArg<FieldArg<"github_repo">>,
+                StaticArg<"/issues">,
+            ],
+            WithHeaders [
+                Header<
+                    StaticArg<"User-Agent">,
+                    StaticArg<"hypershell">,
+                >
+            ],
+        >
+        | DecodeJson<Vec<Issue>>
     };
 
     #[cgp_context(TestAppComponents: HypershellAppPreset)]
@@ -72,22 +69,20 @@ async fn test_basic_http_request() -> Result<(), Error> {
 
 #[tokio::test]
 async fn test_post_http_request() -> Result<(), Error> {
-    pub type Program = Pipe<
-        Product![
-            EncodeJson,
-            SimpleHttpRequest<
+    pub type Program = hypershell! {
+        EncodeJson
+        |   SimpleHttpRequest<
                 PostMethod,
-                StaticArg<symbol!("https://play.rust-lang.org/meta/gist")>,
-                WithHeaders<Product![
+                StaticArg<"https://play.rust-lang.org/meta/gist">,
+                WithHeaders [
                     Header<
-                        StaticArg<symbol!("Content-Type")>,
-                        StaticArg<symbol!("application/json")>,
+                        StaticArg<"Content-Type">,
+                        StaticArg<"application/json">,
                     >
-                ]>,
-            >,
-            DecodeJson<Response>
-        ],
-    >;
+                ],
+            >
+        |   DecodeJson<Response>
+    };
 
     #[derive(Serialize)]
     pub struct Input {

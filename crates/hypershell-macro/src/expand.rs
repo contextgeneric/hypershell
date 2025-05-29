@@ -110,7 +110,7 @@ pub fn expand_grouped(delim: &ExtendedDelimiter, body: TokenStream) -> TokenStre
                 quote! { { #body } }
             }
             Delimiter::Parenthesis => {
-                quote! { #body }
+                quote! { ( #body ) }
             }
             Delimiter::None => {
                 quote! { #body }

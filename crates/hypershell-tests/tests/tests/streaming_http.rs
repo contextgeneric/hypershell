@@ -8,34 +8,33 @@ use hypershell_components::dsl::{
     FieldArg, GetMethod, Pipe, StaticArg, StreamToStdout, StreamingExec, StreamingHttpRequest,
     WithArgs, WithHeaders,
 };
+use hypershell_macro::hypershell;
 use reqwest::Client;
 
 #[tokio::test]
 async fn test_streaming_http_request() -> Result<(), Error> {
-    pub type Program = Pipe<
-        Product![
-            StreamingHttpRequest<
-                GetMethod,
-                StaticArg<symbol!("https://nixos.org/manual/nixpkgs/unstable/")>,
-                WithHeaders<Nil>,
-            >,
-            StreamingExec<
-                StaticArg<symbol!("tr")>,
+    pub type Program = hypershell! {
+        StreamingHttpRequest<
+            GetMethod,
+            StaticArg<"https://nixos.org/manual/nixpkgs/unstable/">,
+            WithHeaders<Nil>,
+        >
+        |   StreamingExec<
+                StaticArg<"tr">,
                 WithArgs<Product![
-                    StaticArg<symbol!("[:lower:]")>,
-                    StaticArg<symbol!("[:upper:]")>,
+                    StaticArg<"[:lower:]">,
+                    StaticArg<"[:upper:]">,
                 ]>,
-            >,
-            StreamingExec<
-                StaticArg<symbol!("grep")>,
+            >
+        |   StreamingExec<
+                StaticArg<"grep">,
                 WithArgs<Product![
-                    StaticArg<symbol!("-i")>,
-                    FieldArg<symbol!("keyword")>,
+                    StaticArg<"-i">,
+                    FieldArg<"keyword">,
                 ]>,
-            >,
-            StreamToStdout,
-        ],
-    >;
+            >
+        | StreamToStdout
+    };
 
     #[cgp_context(TestAppComponents: HypershellAppPreset)]
     #[derive(HasField)]
