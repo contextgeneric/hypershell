@@ -5,3 +5,5 @@ pub struct StreamToString;
 pub struct BytesToString;
 
 pub struct BytesToStream;
+
+pub struct StreamToLines;

@@ -1,0 +1,28 @@
+use core::marker::PhantomData;
+
+use cgp::extra::handler::{Handler, HandlerComponent};
+use cgp::prelude::*;
+use futures::{AsyncRead, Stream};
+use hypershell_components::dsl::StreamToLines;
+use tokio_util::codec::{FramedRead, LinesCodec, LinesCodecError};
+use tokio_util::compat::FuturesAsyncReadCompatExt;
+
+#[cgp_new_provider]
+impl<Context, Input> Handler<Context, StreamToLines, Input> for HandleStreamToLines
+where
+    Context: HasAsyncErrorType,
+    Input: Send + AsyncRead + Unpin + 'static,
+{
+    type Output = Box<dyn Stream<Item = Result<String, LinesCodecError>> + Send>;
+
+    async fn handle(
+        _context: &Context,
+        _tag: PhantomData<StreamToLines>,
+        input: Input,
+    ) -> Result<Box<dyn Stream<Item = Result<String, LinesCodecError>> + Send>, Context::Error>
+    {
+        let stream = FramedRead::new(input.compat(), LinesCodec::new());
+
+        Ok(Box::new(stream))
+    }
+}
