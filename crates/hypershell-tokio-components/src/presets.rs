@@ -9,16 +9,16 @@ mod preset {
         CommandArgExtractorComponent, CommandArgTypeProviderComponent,
     };
     use hypershell_components::dsl::{
-        FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg, StreamToBytes,
-        StreamingExec, WithArgs,
+        BytesToStream, FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg,
+        StreamToBytes, StreamToString, StreamingExec, WithArgs,
     };
     use hypershell_components::providers::ExtractStringCommandArg;
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
     use crate::providers::{
-        ExtractArgs, ExtractFieldArgs, HandleCoreExec, HandleReadFile, HandleSimpleExec,
-        HandleStreamToBytes, HandleStreamingExec, JoinExtractArgs,
+        ConvertStream, ExtractArgs, ExtractFieldArgs, HandleCoreExec, HandleReadFile,
+        HandleSimpleExec, HandleStreamingExec, JoinExtractArgs,
     };
 
     cgp_preset! {
@@ -45,8 +45,12 @@ mod preset {
                 HandleCoreExec,
             <Path> ReadFile<Path>:
                 HandleReadFile,
-            StreamToBytes:
-                HandleStreamToBytes,
+            [
+                StreamToBytes,
+                StreamToString,
+                BytesToStream,
+            ]:
+                ConvertStream,
         }
     }
 

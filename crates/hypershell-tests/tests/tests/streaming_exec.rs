@@ -3,10 +3,10 @@ use core::marker::PhantomData;
 use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
-use futures::io::{AsyncReadExt, Cursor, copy};
+use futures::io::{AsyncReadExt, copy};
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    FieldArg, Pipe, StaticArg, StreamingExec, WithArgs, WithStaticArgs,
+    BytesToStream, FieldArg, Pipe, StaticArg, StreamingExec, WithArgs, WithStaticArgs,
 };
 use tokio_util::compat::TokioAsyncWriteCompatExt;
 
@@ -14,6 +14,7 @@ use tokio_util::compat::TokioAsyncWriteCompatExt;
 async fn test_basic_streaming_exec() -> Result<(), Error> {
     pub type Program = Pipe<
         Product![
+            BytesToStream,
             StreamingExec<
                 StaticArg<symbol!("nix-shell")>,
                 WithStaticArgs<
@@ -42,9 +43,7 @@ async fn test_basic_streaming_exec() -> Result<(), Error> {
         keyword: "love".to_owned(),
     };
 
-    let input = Cursor::new(Vec::new());
-
-    let output = app.handle(PhantomData::<Program>, input).await?;
+    let output = app.handle(PhantomData::<Program>, Vec::new()).await?;
 
     let output = output.take(102400);
 
