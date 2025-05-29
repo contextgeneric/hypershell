@@ -8,15 +8,16 @@ mod preset {
         UrlTypeProviderComponent,
     };
     use hypershell_components::dsl::{
-        GetMethod, Header, PostMethod, SimpleHttpRequest, UrlEncodeArg, WithHeaders,
+        GetMethod, Header, PostMethod, SimpleHttpRequest, StreamingHttpRequest, UrlEncodeArg,
+        WithHeaders,
     };
     use reqwest::{Method, Url};
 
     use crate::components::RequestBuilderUpdaterComponent;
     use crate::dsl::CoreHttpRequest;
     use crate::providers::{
-        ExtractReqwestMethod, HandleCoreHttpRequest, HandleSimpleHttpRequest, UpdateRequestHeader,
-        UpdateRequestHeaders, UrlEncodeStringArg,
+        ExtractReqwestMethod, HandleCoreHttpRequest, HandleSimpleHttpRequest,
+        HandleStreamingHttpRequest, UpdateRequestHeader, UpdateRequestHeaders, UrlEncodeStringArg,
     };
 
     cgp_preset! {
@@ -41,6 +42,8 @@ mod preset {
         ReqwestHandlerPreset {
             <Method, Url, Headers> SimpleHttpRequest<Method, Url, Headers>:
                 HandleSimpleHttpRequest,
+            <Method, Url, Headers> StreamingHttpRequest<Method, Url, Headers>:
+                HandleStreamingHttpRequest,
             <Method, Url, Headers> CoreHttpRequest<Method, Url, Headers>:
                 HandleCoreHttpRequest,
         }

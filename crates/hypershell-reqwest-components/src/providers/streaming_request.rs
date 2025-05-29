@@ -1,21 +1,20 @@
 use core::marker::PhantomData;
+use core::pin::Pin;
+use std::io::ErrorKind;
 
 use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
-use hypershell_components::dsl::SimpleHttpRequest;
+use futures::{AsyncRead, TryStreamExt};
+use hypershell_components::dsl::StreamingHttpRequest;
 use reqwest::Response;
 
 use crate::dsl::CoreHttpRequest;
-
-#[derive(Debug)]
-pub struct ErrorResponse {
-    pub response: Response,
-}
+use crate::providers::ErrorResponse;
 
 #[cgp_new_provider]
 impl<Context, MethodArg, UrlArg, Headers, Input>
-    Handler<Context, SimpleHttpRequest<MethodArg, UrlArg, Headers>, Input>
-    for HandleSimpleHttpRequest
+    Handler<Context, StreamingHttpRequest<MethodArg, UrlArg, Headers>, Input>
+    for HandleStreamingHttpRequest
 where
     Context: CanHandle<CoreHttpRequest<MethodArg, UrlArg, Headers>, Input, Output = Response>
         + CanRaiseAsyncError<reqwest::Error>
@@ -25,13 +24,13 @@ where
     Headers: Send,
     Input: Send,
 {
-    type Output = Vec<u8>;
+    type Output = Pin<Box<dyn AsyncRead + Send>>;
 
     async fn handle(
         context: &Context,
-        _tag: PhantomData<SimpleHttpRequest<MethodArg, UrlArg, Headers>>,
+        _tag: PhantomData<StreamingHttpRequest<MethodArg, UrlArg, Headers>>,
         body: Input,
-    ) -> Result<Vec<u8>, Context::Error> {
+    ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
         let response = context.handle(PhantomData, body).await?;
 
         let status_code = response.status();
@@ -40,8 +39,11 @@ where
             return Err(Context::raise_error(ErrorResponse { response }));
         }
 
-        let response_body = response.bytes().await.map_err(Context::raise_error)?;
+        let response_stream = response
+            .bytes_stream()
+            .map_err(|e| std::io::Error::new(ErrorKind::Other, e))
+            .into_async_read();
 
-        Ok(response_body.into())
+        Ok(Box::pin(response_stream))
     }
 }

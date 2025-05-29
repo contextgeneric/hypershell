@@ -15,5 +15,6 @@ description  = """
 hypershell-components   = { workspace = true }
 
 cgp                     = { workspace = true }
-reqwest                 = { workspace = true }
+reqwest                 = { workspace = true, features = [ "stream" ] }
 url                     = { workspace = true }
+futures                 = { workspace = true }

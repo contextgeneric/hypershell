@@ -2,6 +2,8 @@ use core::marker::PhantomData;
 
 pub struct SimpleHttpRequest<Method, Url, Params>(pub PhantomData<(Method, Url, Params)>);
 
+pub struct StreamingHttpRequest<Method, Url, Params>(pub PhantomData<(Method, Url, Params)>);
+
 pub struct GetMethod;
 
 pub struct PostMethod;
