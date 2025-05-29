@@ -10,7 +10,7 @@ mod preset {
     };
     use hypershell_components::dsl::{
         BytesToStream, FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg,
-        StreamToBytes, StreamToString, StreamingExec, WithArgs,
+        StreamToBytes, StreamToStdout, StreamToString, StreamingExec, WithArgs,
     };
     use hypershell_components::providers::ExtractStringCommandArg;
 
@@ -18,7 +18,7 @@ mod preset {
     use crate::dsl::CoreExec;
     use crate::providers::{
         ConvertStream, ExtractArgs, ExtractFieldArgs, HandleCoreExec, HandleReadFile,
-        HandleSimpleExec, HandleStreamingExec, JoinExtractArgs,
+        HandleSimpleExec, HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs,
     };
 
     cgp_preset! {
@@ -51,6 +51,8 @@ mod preset {
                 BytesToStream,
             ]:
                 ConvertStream,
+            StreamToStdout:
+                HandleStreamToStdout,
         }
     }
 

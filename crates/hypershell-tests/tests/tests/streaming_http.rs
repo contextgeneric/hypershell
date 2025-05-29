@@ -3,14 +3,12 @@ use core::marker::PhantomData;
 use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
-use futures::io::copy;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    FieldArg, GetMethod, Pipe, StaticArg, StreamingExec, StreamingHttpRequest, WithArgs,
-    WithHeaders,
+    FieldArg, GetMethod, Pipe, StaticArg, StreamToStdout, StreamingExec, StreamingHttpRequest,
+    WithArgs, WithHeaders,
 };
 use reqwest::Client;
-use tokio_util::compat::TokioAsyncWriteCompatExt;
 
 #[tokio::test]
 async fn test_streaming_http_request() -> Result<(), Error> {
@@ -22,9 +20,20 @@ async fn test_streaming_http_request() -> Result<(), Error> {
                 WithHeaders<Nil>,
             >,
             StreamingExec<
+                StaticArg<symbol!("tr")>,
+                WithArgs<Product![
+                    StaticArg<symbol!("[:lower:]")>,
+                    StaticArg<symbol!("[:upper:]")>,
+                ]>,
+            >,
+            StreamingExec<
                 StaticArg<symbol!("grep")>,
-                WithArgs<Product![FieldArg<symbol!("keyword")>]>,
-            >
+                WithArgs<Product![
+                    StaticArg<symbol!("-i")>,
+                    FieldArg<symbol!("keyword")>,
+                ]>,
+            >,
+            StreamToStdout,
         ],
     >;
 
@@ -40,11 +49,7 @@ async fn test_streaming_http_request() -> Result<(), Error> {
         keyword: "Nix".to_owned(),
     };
 
-    let output = app.handle(PhantomData::<Program>, Vec::new()).await?;
-
-    let mut stdout = tokio::io::stdout().compat_write();
-
-    copy(output, &mut stdout).await?;
+    app.handle(PhantomData::<Program>, Vec::new()).await?;
 
     Ok(())
 }
