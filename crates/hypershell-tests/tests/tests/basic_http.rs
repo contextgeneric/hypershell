@@ -9,33 +9,35 @@ use hypershell_components::dsl::{
     DecodeJson, EncodeJson, FieldArg, GetMethod, Header, JoinArgs, Pipe, PostMethod,
     SimpleHttpRequest, StaticArg, UrlEncodeArg, WithHeaders,
 };
+use hypershell_macro::hypershell;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
 #[tokio::test]
 async fn test_basic_http_request() -> Result<(), Error> {
-    pub type Program = Pipe<
-        Product![
+    pub type Program = hypershell! {
+        Pipe<Product![
             SimpleHttpRequest<
                 GetMethod,
-                JoinArgs<Product![
-                    FieldArg<symbol!("base_url")>,
-                    StaticArg<symbol!("/repos/")>,
-                    UrlEncodeArg<FieldArg<symbol!("github_org")>>,
-                    StaticArg<symbol!("/")>,
-                    UrlEncodeArg<FieldArg<symbol!("github_repo")>>,
-                    StaticArg<symbol!("/issues")>,
-                ]>,
-                WithHeaders<Product![
+                JoinArgs [
+                    FieldArg<"base_url">,
+                    StaticArg<"/repos/">,
+                    UrlEncodeArg<FieldArg<"github_org">>,
+                    StaticArg<"/">,
+                    UrlEncodeArg<FieldArg<"github_repo">>,
+                    StaticArg<"/issues">,
+                ],
+                WithHeaders [
                     Header<
-                        StaticArg<symbol!("User-Agent")>,
-                        StaticArg<symbol!("hypershell")>,
+                        StaticArg<"User-Agent">,
+                        StaticArg<"hypershell">,
                     >
-                ]>,
+                ],
             >,
+            // |
             DecodeJson<Vec<Issue>>,
-        ],
-    >;
+        ]>
+    };
 
     #[cgp_context(TestAppComponents: HypershellAppPreset)]
     #[derive(HasField)]
