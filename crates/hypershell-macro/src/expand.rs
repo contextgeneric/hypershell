@@ -1,9 +1,13 @@
+use core::iter::Peekable;
+
 use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
 use quote::{ToTokens, quote};
 
-pub fn expand(tokens: impl Iterator<Item = TokenTree>) -> Vec<TokenStream> {
-    let mut tokens = tokens.peekable();
+pub fn expand_and_pipe(tokens: TokenStream) -> TokenStream {
+    token_streams_to_pipe(expand(tokens.into_iter().peekable()))
+}
 
+pub fn expand(mut tokens: Peekable<impl Iterator<Item = TokenTree>>) -> Vec<TokenStream> {
     let mut out = TokenStream::new();
 
     loop {
@@ -13,14 +17,14 @@ pub fn expand(tokens: impl Iterator<Item = TokenTree>) -> Vec<TokenStream> {
                     symbol!( #literal )
                 }),
                 TokenTree::Group(group) => {
-                    let in_expanded = expand_and_pipe(group.stream().into_iter());
+                    let in_expanded = expand_and_pipe(group.stream());
                     let new_group = Group::new(group.delimiter(), in_expanded);
                     out.extend(new_group.to_token_stream());
                 }
                 TokenTree::Ident(ident) => {
                     if let Some(TokenTree::Group(group)) = tokens.peek() {
                         if group.delimiter() == Delimiter::Bracket {
-                            let in_expanded = expand_and_pipe(group.stream().into_iter());
+                            let in_expanded = expand_and_pipe(group.stream());
 
                             out.extend(quote! {
                                 #ident < Product![ #in_expanded ] >
@@ -41,10 +45,6 @@ pub fn expand(tokens: impl Iterator<Item = TokenTree>) -> Vec<TokenStream> {
             None => return vec![out],
         }
     }
-}
-
-pub fn expand_and_pipe(tokens: impl Iterator<Item = TokenTree>) -> TokenStream {
-    token_streams_to_pipe(expand(tokens))
 }
 
 pub fn token_streams_to_pipe(mut token_streams: Vec<TokenStream>) -> TokenStream {

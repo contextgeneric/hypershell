@@ -12,6 +12,7 @@ keywords     = { workspace = true }
 hypershell-apps                 = { workspace = true }
 hypershell-components           = { workspace = true }
 hypershell-tokio-components     = { workspace = true }
+hypershell-macro                = { workspace = true }
 
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }

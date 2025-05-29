@@ -670,6 +670,7 @@ dependencies = [
  "futures",
  "hypershell-apps",
  "hypershell-components",
+ "hypershell-macro",
  "hypershell-tokio-components",
  "reqwest",
  "serde",
