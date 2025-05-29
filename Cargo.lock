@@ -642,6 +642,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "hypershell-macro"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+]
+
+[[package]]
 name = "hypershell-reqwest-components"
 version = "0.1.0"
 dependencies = [

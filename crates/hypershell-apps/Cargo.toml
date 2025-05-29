@@ -7,9 +7,6 @@ repository   = { workspace = true }
 authors      = { workspace = true }
 rust-version = { workspace = true }
 keywords     = { workspace = true }
-description  = """
-    Context-generic programming runner component
-"""
 
 [dependencies]
 hypershell-components           = { workspace = true }

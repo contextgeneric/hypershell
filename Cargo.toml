@@ -8,6 +8,7 @@ members = [
     "crates/hypershell-json-components",
     "crates/hypershell-reqwest-components",
     "crates/hypershell-tokio-components",
+    "crates/hypershell-macro",
     "crates/hypershell-tests",
 ]
 
@@ -36,6 +37,7 @@ hypershell-components           = { version = "0.1.0" }
 hypershell-json-components      = { version = "0.1.0" }
 hypershell-reqwest-components   = { version = "0.1.0" }
 hypershell-tokio-components     = { version = "0.1.0" }
+hypershell-macro                = { version = "0.1.0" }
 
 [patch.crates-io]
 hypershell-apps                 = { path = "./crates/hypershell-apps" }
@@ -43,6 +45,7 @@ hypershell-components           = { path = "./crates/hypershell-components" }
 hypershell-json-components      = { path = "./crates/hypershell-json-components" }
 hypershell-reqwest-components   = { path = "./crates/hypershell-reqwest-components" }
 hypershell-tokio-components     = { path = "./crates/hypershell-tokio-components" }
+hypershell-macro                = { path = "./crates/hypershell-macro" }
 
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
 cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
