@@ -70,16 +70,70 @@ pub fn token_streams_to_pipe(mut token_streams: Vec<TokenStream>) -> TokenStream
     }
 }
 
+pub struct ExtendedTokenStream {
+    pub stream: Vec<ExtendedTokenTree>,
+}
+
 pub enum ExtendedTokenTree {
     Ident(Ident),
     Punct(Punct),
     Literal(Literal),
-    Group(ExtendedDelimiter, Vec<ExtendedTokenTree>),
+    Group(ExtendedGroup),
+}
+
+pub struct ExtendedGroup {
+    pub delim: ExtendedDelimiter,
+    pub body: ExtendedTokenStream,
 }
 
 pub enum ExtendedDelimiter {
     Base(Delimiter),
     AngleBracket,
+}
+
+impl ToTokens for ExtendedGroup {
+    fn to_tokens(&self, out: &mut TokenStream) {
+        let body = &self.body;
+
+        match self.delim {
+            ExtendedDelimiter::Base(delim) => match delim {
+                Delimiter::Brace => {
+                    out.extend(quote! { { #body } });
+                }
+                Delimiter::Bracket => {
+                    out.extend(quote! { { #body } });
+                }
+                Delimiter::Parenthesis => {
+                    out.extend(quote! { #body });
+                }
+                Delimiter::None => {
+                    out.extend(quote! { #body });
+                }
+            },
+            ExtendedDelimiter::AngleBracket => {
+                out.extend(quote! { < #body > });
+            }
+        }
+    }
+}
+
+impl ToTokens for ExtendedTokenTree {
+    fn to_tokens(&self, out: &mut TokenStream) {
+        match self {
+            Self::Ident(ident) => ident.to_tokens(out),
+            Self::Punct(punct) => punct.to_tokens(out),
+            Self::Literal(literal) => literal.to_tokens(out),
+            Self::Group(group) => group.to_tokens(out),
+        }
+    }
+}
+
+impl ToTokens for ExtendedTokenStream {
+    fn to_tokens(&self, out: &mut TokenStream) {
+        for token in self.stream.iter() {
+            token.to_tokens(out)
+        }
+    }
 }
 
 pub fn process_extended_token_tree(
@@ -93,11 +147,11 @@ pub fn process_extended_token_tree(
             Some(token) => match token {
                 TokenTree::Punct(punct) => {
                     if punct.as_char() == '<' {
-                        let inner = process_extended_token_tree(tokens, true);
-                        out.push(ExtendedTokenTree::Group(
-                            ExtendedDelimiter::AngleBracket,
-                            inner,
-                        ));
+                        let body = process_extended_token_tree(tokens, true);
+                        out.push(ExtendedTokenTree::Group(ExtendedGroup {
+                            delim: ExtendedDelimiter::AngleBracket,
+                            body: ExtendedTokenStream { stream: body },
+                        }));
                     } else if punct.as_char() == '>' {
                         return out;
                     } else {
@@ -105,11 +159,11 @@ pub fn process_extended_token_tree(
                     }
                 }
                 TokenTree::Group(group) => {
-                    let inner = process_extended_token_tree(&mut group.stream().into_iter(), false);
-                    out.push(ExtendedTokenTree::Group(
-                        ExtendedDelimiter::Base(group.delimiter()),
-                        inner,
-                    ));
+                    let body = process_extended_token_tree(&mut group.stream().into_iter(), false);
+                    out.push(ExtendedTokenTree::Group(ExtendedGroup {
+                        delim: ExtendedDelimiter::Base(group.delimiter()),
+                        body: ExtendedTokenStream { stream: body },
+                    }));
                 }
                 TokenTree::Ident(ident) => {
                     out.push(ExtendedTokenTree::Ident(ident));
