@@ -49,21 +49,21 @@ hypershell-reqwest-components   = { path = "./crates/hypershell-reqwest-componen
 hypershell-tokio-components     = { path = "./crates/hypershell-tokio-components" }
 hypershell-macro                = { path = "./crates/hypershell-macro" }
 
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-handler                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
-cgp-error-anyhow            = { git = "https://github.com/contextgeneric/cgp.git", branch = "handler" }
+cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-handler                 = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error-anyhow            = { git = "https://github.com/contextgeneric/cgp.git" }

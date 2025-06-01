@@ -6,7 +6,7 @@ use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
     FieldArg, GetMethod, Pipe, StaticArg, StreamToStdout, StreamingExec, StreamingHttpRequest,
-    WithArgs, WithHeaders,
+    WithArgs, WithHeaders, WithStaticArgs,
 };
 use hypershell_macro::hypershell;
 use reqwest::Client;
@@ -14,24 +14,24 @@ use reqwest::Client;
 #[tokio::test]
 async fn test_streaming_http_request() -> Result<(), Error> {
     pub type Program = hypershell! {
-        StreamingHttpRequest<
-            GetMethod,
-            StaticArg<"https://nixos.org/manual/nixpkgs/unstable/">,
-            WithHeaders<Nil>,
-        >
+            StreamingHttpRequest<
+                GetMethod,
+                StaticArg<"https://nixos.org/manual/nixpkgs/unstable/">,
+                WithHeaders<Nil>,
+            >
         |   StreamingExec<
                 StaticArg<"tr">,
-                WithArgs<Product![
-                    StaticArg<"[:lower:]">,
-                    StaticArg<"[:upper:]">,
-                ]>,
+                WithStaticArgs [
+                    "[:lower:]",
+                    "[:upper:]",
+                ],
             >
         |   StreamingExec<
                 StaticArg<"grep">,
-                WithArgs<Product![
+                WithArgs [
                     StaticArg<"-i">,
                     FieldArg<"keyword">,
-                ]>,
+                ],
             >
         | StreamToStdout
     };
