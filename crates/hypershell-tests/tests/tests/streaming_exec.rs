@@ -1,19 +1,23 @@
 use core::marker::PhantomData;
+use core::pin::Pin;
 
 use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
+use futures::AsyncRead;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
     BytesToStream, FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WebSocket, WithArgs,
+    WithStaticArgs,
 };
 use hypershell_macro::hypershell;
+use tokio::io::simplex;
+use tokio_util::compat::TokioAsyncReadCompatExt;
 
 #[tokio::test]
 async fn test_basic_streaming_exec() -> Result<(), Error> {
     pub type Program = hypershell! {
-            BytesToStream
-        |   WebSocket<
+            WebSocket<
                 StaticArg<"wss://jetstream1.us-west.bsky.network/subscribe">,
                 (),
             >
@@ -26,10 +30,10 @@ async fn test_basic_streaming_exec() -> Result<(), Error> {
             //         "websocat -nU wss://jetstream1.us-west.bsky.network/subscribe",
             //     ],
             // >
-        // |   StreamingExec<
-        //         StaticArg<"grep">,
-        //         WithArgs [ FieldArg<"keyword"> ],
-        //     >
+        |   StreamingExec<
+                StaticArg<"grep">,
+                WithArgs [ FieldArg<"keyword"> ],
+            >
         |   StreamToStdout
     };
 
@@ -43,7 +47,10 @@ async fn test_basic_streaming_exec() -> Result<(), Error> {
         keyword: "love".to_owned(),
     };
 
-    app.handle(PhantomData::<Program>, Vec::new()).await?;
+    let (read, _write) = simplex(102400);
+    let input: Pin<Box<dyn AsyncRead + Send>> = Box::pin(read.compat());
+
+    app.handle(PhantomData::<Program>, input).await?;
 
     Ok(())
 }

@@ -11,6 +11,7 @@ use tokio::spawn;
 use tokio_tungstenite::tungstenite::Message;
 use tokio_tungstenite::tungstenite::client::IntoClientRequest;
 use tokio_tungstenite::{connect_async, tungstenite};
+use tokio_util::bytes::Bytes;
 use tokio_util::compat::FuturesAsyncReadCompatExt;
 use tokio_util::io::ReaderStream;
 
@@ -51,6 +52,10 @@ where
         let output = reader
             .map_err(|e| std::io::Error::new(ErrorKind::Other, e))
             .filter_map(async |res| match res {
+                Ok(Message::Text(data)) => {
+                    let text = format!("{}\n", data.as_str());
+                    Some(Ok(Bytes::from(text)))
+                }
                 Ok(message) => Some(Ok(message.into_data())),
                 Err(e) => Some(Err(std::io::Error::new(ErrorKind::Other, e))),
             })
