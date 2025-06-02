@@ -4,18 +4,10 @@ use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 use tokio::process::Command;
 
-#[cgp_component(CommandUpdater)]
+#[cgp_component {
+    provider: CommandUpdater,
+    use_delegate: Args,
+}]
 pub trait CanUpdateCommand<Args> {
     fn update_command(&self, _phantom: PhantomData<Args>, command: &mut Command);
-}
-
-#[cgp_provider]
-impl<Context, Args, Components, Delegate> CommandUpdater<Context, Args> for UseDelegate<Components>
-where
-    Components: DelegateComponent<Args, Delegate = Delegate>,
-    Delegate: CommandUpdater<Context, Args>,
-{
-    fn update_command(context: &Context, phantom: PhantomData<Args>, command: &mut Command) {
-        Delegate::update_command(context, phantom, command);
-    }
 }
