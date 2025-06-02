@@ -4,9 +4,10 @@ use std::io::ErrorKind;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
-use futures::{AsyncRead, StreamExt, TryStreamExt};
+use futures::{StreamExt, TryStreamExt};
 use hypershell_components::components::CanExtractStringArg;
 use hypershell_components::dsl::WebSocket;
+use tokio::io::AsyncRead;
 use tokio::spawn;
 use tokio_tungstenite::tungstenite::Message;
 use tokio_tungstenite::tungstenite::client::IntoClientRequest;
@@ -31,7 +32,7 @@ where
         _tag: PhantomData<WebSocket<UrlArg, Headers>>,
         input: Input,
     ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
-        let input = ReaderStream::new(input.compat());
+        let input = ReaderStream::new(input);
 
         let url = context
             .extract_string_arg(PhantomData)
@@ -59,7 +60,8 @@ where
                 Ok(message) => Some(Ok(message.into_data())),
                 Err(e) => Some(Err(std::io::Error::new(ErrorKind::Other, e))),
             })
-            .into_async_read();
+            .into_async_read()
+            .compat();
 
         Ok(Box::pin(output))
     }

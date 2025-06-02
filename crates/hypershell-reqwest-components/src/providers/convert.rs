@@ -2,9 +2,8 @@ use core::marker::PhantomData;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
-use futures::AsyncRead;
 use reqwest::Body;
-use tokio_util::compat::FuturesAsyncReadCompatExt;
+use tokio::io::AsyncRead;
 use tokio_util::io::ReaderStream;
 
 #[cgp_new_provider]
@@ -21,7 +20,7 @@ where
         _tag: PhantomData<Code>,
         input: Input,
     ) -> Result<Body, Context::Error> {
-        let stream = ReaderStream::new(input.compat());
+        let stream = ReaderStream::new(input);
         let body = Body::wrap_stream(stream);
         Ok(body)
     }

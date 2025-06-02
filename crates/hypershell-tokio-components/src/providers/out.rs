@@ -2,10 +2,8 @@ use core::marker::PhantomData;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
-use futures::AsyncRead;
-use futures::io::copy;
 use hypershell_components::dsl::StreamToStdout;
-use tokio_util::compat::TokioAsyncWriteCompatExt;
+use tokio::io::{AsyncRead, copy};
 
 #[cgp_new_provider]
 impl<Context, Input> Handler<Context, StreamToStdout, Input> for HandleStreamToStdout
@@ -18,11 +16,11 @@ where
     async fn handle(
         _context: &Context,
         _tag: PhantomData<StreamToStdout>,
-        input: Input,
+        mut input: Input,
     ) -> Result<(), Context::Error> {
-        let mut stdout = tokio::io::stdout().compat_write();
+        let mut stdout = tokio::io::stdout();
 
-        copy(input, &mut stdout)
+        copy(&mut input, &mut stdout)
             .await
             .map_err(Context::raise_error)?;
 

@@ -3,12 +3,10 @@ use core::pin::Pin;
 
 use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
-use futures::AsyncRead;
-use futures::io::{copy, empty};
 use hypershell_components::dsl::StreamingExec;
+use tokio::io::{AsyncRead, copy, empty};
 use tokio::process::Child;
 use tokio::spawn;
-use tokio_util::compat::{TokioAsyncReadCompatExt, TokioAsyncWriteCompatExt};
 
 use crate::dsl::CoreExec;
 
@@ -31,15 +29,14 @@ where
     ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
         let mut child = context.handle(PhantomData, ()).await?;
 
-        if let Some(stdin) = child.stdin.take() {
-            let mut stdin = stdin.compat_write();
+        if let Some(mut stdin) = child.stdin.take() {
             spawn(async move {
                 let _ = copy(&mut input, &mut stdin).await;
             });
         }
 
         let output: Pin<Box<dyn AsyncRead + Send>> = match child.stdout.take() {
-            Some(stdout) => Box::pin(stdout.compat()),
+            Some(stdout) => Box::pin(stdout),
             None => Box::pin(empty()),
         };
 

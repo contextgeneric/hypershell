@@ -4,14 +4,12 @@ use core::pin::Pin;
 use cgp::extra::handler::CanHandle;
 use cgp::prelude::*;
 use cgp_error_anyhow::Error;
-use futures::AsyncRead;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
     FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WebSocket, WithArgs,
 };
 use hypershell_macro::hypershell;
-use tokio::io::simplex;
-use tokio_util::compat::TokioAsyncReadCompatExt;
+use tokio::io::{AsyncRead, simplex};
 
 #[tokio::test]
 async fn test_basic_streaming_exec() -> Result<(), Error> {
@@ -38,7 +36,7 @@ async fn test_basic_streaming_exec() -> Result<(), Error> {
     };
 
     let (read, _write) = simplex(102400);
-    let input: Pin<Box<dyn AsyncRead + Send>> = Box::pin(read.compat());
+    let input: Pin<Box<dyn AsyncRead + Send>> = Box::pin(read);
 
     app.handle(PhantomData::<Program>, input).await?;
 

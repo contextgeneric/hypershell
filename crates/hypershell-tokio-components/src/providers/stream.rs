@@ -3,16 +3,16 @@ use core::pin::Pin;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
+use futures::AsyncRead;
 use futures::io::Cursor;
-use futures::{AsyncRead, AsyncReadExt};
-use tokio::io::AsyncRead as TokioAsyncRead;
+use tokio::io::{AsyncRead as TokioAsyncRead, AsyncReadExt as _};
 use tokio_util::compat::{FuturesAsyncReadCompatExt, TokioAsyncReadCompatExt};
 
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToBytes
 where
     Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + AsyncRead + Unpin,
+    Input: Send + TokioAsyncRead + Unpin,
     Code: Send,
 {
     type Output = Vec<u8>;
@@ -37,7 +37,7 @@ where
 impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToString
 where
     Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + AsyncRead + Unpin,
+    Input: Send + TokioAsyncRead + Unpin,
     Code: Send,
 {
     type Output = String;
@@ -65,14 +65,14 @@ where
     Input: Send + AsRef<[u8]> + Unpin + 'static,
     Code: Send,
 {
-    type Output = Pin<Box<dyn AsyncRead + Send>>;
+    type Output = Pin<Box<dyn TokioAsyncRead + Send>>;
 
     async fn handle(
         _context: &Context,
         _tag: PhantomData<Code>,
         input: Input,
-    ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
-        Ok(Box::pin(Cursor::new(input)))
+    ) -> Result<Pin<Box<dyn TokioAsyncRead + Send>>, Context::Error> {
+        Ok(Box::pin(Cursor::new(input).compat()))
     }
 }
 

@@ -4,9 +4,11 @@ use std::io::ErrorKind;
 
 use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
-use futures::{AsyncRead, TryStreamExt};
+use futures::TryStreamExt;
 use hypershell_components::dsl::StreamingHttpRequest;
 use reqwest::Response;
+use tokio::io::AsyncRead;
+use tokio_util::compat::FuturesAsyncReadCompatExt;
 
 use crate::dsl::CoreHttpRequest;
 use crate::providers::ErrorResponse;
@@ -44,6 +46,6 @@ where
             .map_err(|e| std::io::Error::new(ErrorKind::Other, e))
             .into_async_read();
 
-        Ok(Box::pin(response_stream))
+        Ok(Box::pin(response_stream.compat()))
     }
 }
