@@ -749,8 +749,11 @@ name = "hypershell-tungstenite-components"
 version = "0.1.0"
 dependencies = [
  "cgp",
+ "futures",
  "hypershell-components",
+ "tokio",
  "tokio-tungstenite",
+ "tokio-util",
 ]
 
 [[package]]
