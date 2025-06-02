@@ -673,8 +673,10 @@ dependencies = [
  "hypershell-json-components",
  "hypershell-reqwest-components",
  "hypershell-tokio-components",
+ "hypershell-tungstenite-components",
  "reqwest",
  "serde_json",
+ "tokio-tungstenite",
  "url",
 ]
 
@@ -1564,7 +1566,9 @@ checksum = "7a9daff607c6d2bf6c16fd681ccb7eecc83e4e2cdc1ca067ffaadfca5de7f084"
 dependencies = [
  "futures-util",
  "log",
+ "native-tls",
  "tokio",
+ "tokio-native-tls",
  "tungstenite",
 ]
 
@@ -1645,6 +1649,7 @@ dependencies = [
  "http",
  "httparse",
  "log",
+ "native-tls",
  "rand",
  "sha1",
  "thiserror",

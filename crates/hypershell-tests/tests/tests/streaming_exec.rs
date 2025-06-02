@@ -5,25 +5,30 @@ use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WithArgs, WithStaticArgs,
+    BytesToStream, FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WebSocket, WithArgs,
 };
 use hypershell_macro::hypershell;
 
 #[tokio::test]
 async fn test_basic_streaming_exec() -> Result<(), Error> {
     pub type Program = hypershell! {
-            StreamingExec<
-                StaticArg<"nix-shell">,
-                WithStaticArgs [
-                    "-p",
-                    "websocat",
-                    "--run",
-                    "websocat -nU wss://jetstream1.us-west.bsky.network/subscribe",
-                ],
+            BytesToStream
+        |   WebSocket<
+                StaticArg<"wss://jetstream1.us-west.bsky.network/subscribe">,
+                (),
             >
+            // StreamingExec<
+            //     StaticArg<"nix-shell">,
+            //     WithStaticArgs [
+            //         "-p",
+            //         "websocat",
+            //         "--run",
+            //         "websocat -nU wss://jetstream1.us-west.bsky.network/subscribe",
+            //     ],
+            // >
         |   StreamingExec<
                 StaticArg<"grep">,
-                WithArgs[ FieldArg<"keyword"> ],
+                WithArgs [ FieldArg<"keyword"> ],
             >
         |   StreamToStdout
     };

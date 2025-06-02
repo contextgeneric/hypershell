@@ -4,7 +4,7 @@ pub struct SimpleHttpRequest<Method, Url, Params>(pub PhantomData<(Method, Url, 
 
 pub struct StreamingHttpRequest<Method, Url, Params>(pub PhantomData<(Method, Url, Params)>);
 
-pub struct Websocket<Url, Params>(pub PhantomData<(Url, Params)>);
+pub struct WebSocket<Url, Params>(pub PhantomData<(Url, Params)>);
 
 pub struct GetMethod;
 
