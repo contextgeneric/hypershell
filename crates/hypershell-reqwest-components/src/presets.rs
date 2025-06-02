@@ -16,6 +16,7 @@ mod preset {
         WithHeaders,
     };
     use reqwest::{Method, Url};
+    use tokio::io::AsyncRead as TokioAsyncRead;
 
     use crate::components::RequestBuilderUpdaterComponent;
     use crate::dsl::CoreHttpRequest;
@@ -87,6 +88,11 @@ mod preset {
         #[wrap_provider(UseInputDelegate)]
         StreamingHttpHandlers {
             Pin<Box<dyn AsyncRead + Send>>:
+                PipeHandlers<Product![
+                    StreamToBody,
+                    HandleStreamingHttpRequest,
+                ]>,
+            Pin<Box<dyn TokioAsyncRead + Send>>:
                 PipeHandlers<Product![
                     StreamToBody,
                     HandleStreamingHttpRequest,
