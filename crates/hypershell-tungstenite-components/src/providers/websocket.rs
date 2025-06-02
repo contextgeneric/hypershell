@@ -4,7 +4,7 @@ use std::io::ErrorKind;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
-use futures::{StreamExt, TryStreamExt};
+use futures::{AsyncRead as FutAsyncRead, StreamExt, TryStreamExt};
 use hypershell_components::components::CanExtractStringArg;
 use hypershell_components::dsl::WebSocket;
 use tokio::io::AsyncRead;
@@ -13,7 +13,6 @@ use tokio_tungstenite::tungstenite::Message;
 use tokio_tungstenite::tungstenite::client::IntoClientRequest;
 use tokio_tungstenite::{connect_async, tungstenite};
 use tokio_util::bytes::Bytes;
-use tokio_util::compat::FuturesAsyncReadCompatExt;
 use tokio_util::io::ReaderStream;
 
 #[cgp_new_provider]
@@ -25,13 +24,13 @@ where
     Headers: Send,
     Input: Send + AsyncRead + Unpin + 'static,
 {
-    type Output = Pin<Box<dyn AsyncRead + Send>>;
+    type Output = Pin<Box<dyn FutAsyncRead + Send>>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<WebSocket<UrlArg, Headers>>,
         input: Input,
-    ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
+    ) -> Result<Pin<Box<dyn FutAsyncRead + Send>>, Context::Error> {
         let input = ReaderStream::new(input);
 
         let url = context
@@ -60,8 +59,7 @@ where
                 Ok(message) => Some(Ok(message.into_data())),
                 Err(e) => Some(Err(std::io::Error::new(ErrorKind::Other, e))),
             })
-            .into_async_read()
-            .compat();
+            .into_async_read();
 
         Ok(Box::pin(output))
     }

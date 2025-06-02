@@ -8,6 +8,7 @@ mod preset {
     use futures::AsyncRead;
     use hypershell_components::dsl::{BytesToStream, WebSocket};
     use hypershell_components::providers::Call;
+    use hypershell_tokio_components::providers::FuturesToTokioStream;
     use tokio::io::AsyncRead as TokioAsyncRead;
 
     use crate::providers::HandleWebsocket;
@@ -24,7 +25,10 @@ mod preset {
         #[wrap_provider(UseInputDelegate)]
         WebSocketHandlers {
             Pin<Box<dyn AsyncRead + Send>>:
-                HandleWebsocket,
+                PipeHandlers<Product![
+                    FuturesToTokioStream,
+                    HandleWebsocket,
+                ]>,
             Pin<Box<dyn TokioAsyncRead + Send>>:
                 HandleWebsocket,
             Vec<u8>:

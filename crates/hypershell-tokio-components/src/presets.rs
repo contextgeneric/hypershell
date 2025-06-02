@@ -22,8 +22,8 @@ mod preset {
     use crate::dsl::CoreExec;
     use crate::providers::{
         ConvertBytesToStream, ConvertStreamToBytes, ConvertStreamToString, ExtractArgs,
-        ExtractFieldArgs, HandleCoreExec, HandleReadFile, HandleSimpleExec, HandleStreamToStdout,
-        HandleStreamingExec, JoinExtractArgs,
+        ExtractFieldArgs, FuturesToTokioStream, HandleCoreExec, HandleReadFile, HandleSimpleExec,
+        HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs,
     };
 
     cgp_preset! {
@@ -85,7 +85,10 @@ mod preset {
         #[wrap_provider(UseInputDelegate)]
         StreamingExecHandlers {
             Pin<Box<dyn AsyncRead + Send>>:
-                HandleStreamingExec,
+                PipeHandlers<Product![
+                    FuturesToTokioStream,
+                    HandleStreamingExec,
+                ]>,
             Pin<Box<dyn TokioAsyncRead + Send>>:
                 HandleStreamingExec,
             Vec<u8>:

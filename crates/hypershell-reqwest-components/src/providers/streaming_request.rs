@@ -4,11 +4,9 @@ use std::io::ErrorKind;
 
 use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
-use futures::TryStreamExt;
+use futures::{AsyncRead as FutAsyncRead, TryStreamExt};
 use hypershell_components::dsl::StreamingHttpRequest;
 use reqwest::Response;
-use tokio::io::AsyncRead;
-use tokio_util::compat::FuturesAsyncReadCompatExt;
 
 use crate::dsl::CoreHttpRequest;
 use crate::providers::ErrorResponse;
@@ -26,13 +24,13 @@ where
     Headers: Send,
     Input: Send,
 {
-    type Output = Pin<Box<dyn AsyncRead + Send>>;
+    type Output = Pin<Box<dyn FutAsyncRead + Send>>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<StreamingHttpRequest<MethodArg, UrlArg, Headers>>,
         body: Input,
-    ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
+    ) -> Result<Pin<Box<dyn FutAsyncRead + Send>>, Context::Error> {
         let response = context.handle(PhantomData, body).await?;
 
         let status_code = response.status();
@@ -46,6 +44,6 @@ where
             .map_err(|e| std::io::Error::new(ErrorKind::Other, e))
             .into_async_read();
 
-        Ok(Box::pin(response_stream.compat()))
+        Ok(Box::pin(response_stream))
     }
 }
