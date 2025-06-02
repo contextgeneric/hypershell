@@ -8,6 +8,7 @@ members = [
     "crates/hypershell-json-components",
     "crates/hypershell-reqwest-components",
     "crates/hypershell-tokio-components",
+    "crates/hypershell-tungstenite-components",
     "crates/hypershell-macro",
     "crates/hypershell-tests",
 ]
@@ -31,23 +32,26 @@ reqwest             = { version = "0.12.15" }
 serde               = { version = "1.0.219", default-features = false }
 serde_json          = { version = "1.0.140", default-features = false }
 tokio               = { version = "1.45.0" }
+tokio-tungstenite   = { version = "0.26.2" }
 tokio-util          = { version = "0.7.15" }
 url                 = { version = "2.5.4" }
 
-hypershell-apps                 = { version = "0.1.0" }
-hypershell-components           = { version = "0.1.0" }
-hypershell-json-components      = { version = "0.1.0" }
-hypershell-reqwest-components   = { version = "0.1.0" }
-hypershell-tokio-components     = { version = "0.1.0" }
-hypershell-macro                = { version = "0.1.0" }
+hypershell-apps                     = { version = "0.1.0" }
+hypershell-components               = { version = "0.1.0" }
+hypershell-json-components          = { version = "0.1.0" }
+hypershell-reqwest-components       = { version = "0.1.0" }
+hypershell-tokio-components         = { version = "0.1.0" }
+hypershell-tungstenite-components   = { version = "0.1.0" }
+hypershell-macro                    = { version = "0.1.0" }
 
 [patch.crates-io]
-hypershell-apps                 = { path = "./crates/hypershell-apps" }
-hypershell-components           = { path = "./crates/hypershell-components" }
-hypershell-json-components      = { path = "./crates/hypershell-json-components" }
-hypershell-reqwest-components   = { path = "./crates/hypershell-reqwest-components" }
-hypershell-tokio-components     = { path = "./crates/hypershell-tokio-components" }
-hypershell-macro                = { path = "./crates/hypershell-macro" }
+hypershell-apps                     = { path = "./crates/hypershell-apps" }
+hypershell-components               = { path = "./crates/hypershell-components" }
+hypershell-json-components          = { path = "./crates/hypershell-json-components" }
+hypershell-reqwest-components       = { path = "./crates/hypershell-reqwest-components" }
+hypershell-tokio-components         = { path = "./crates/hypershell-tokio-components" }
+hypershell-tungstenite-components   = { path = "./crates/hypershell-tungstenite-components" }
+hypershell-macro                    = { path = "./crates/hypershell-macro" }
 
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
