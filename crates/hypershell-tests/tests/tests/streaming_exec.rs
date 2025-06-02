@@ -7,29 +7,26 @@ use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
     FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WithArgs, WithStaticArgs,
 };
+use hypershell_macro::hypershell;
 
 #[tokio::test]
 async fn test_basic_streaming_exec() -> Result<(), Error> {
-    pub type Program = Pipe<
-        Product![
+    pub type Program = hypershell! {
             StreamingExec<
-                StaticArg<symbol!("nix-shell")>,
-                WithStaticArgs<
-                    Product![
-                        symbol!("-p"),
-                        symbol!("websocat"),
-                        symbol!("--run"),
-                        symbol!("websocat -nU wss://jetstream1.us-west.bsky.network/subscribe"),
-                    ],
-                >,
-            >,
-            StreamingExec<
-                StaticArg<symbol!("grep")>,
-                WithArgs<Product![FieldArg<symbol!("keyword")>]>,
-            >,
-            StreamToStdout,
-        ],
-    >;
+                StaticArg<"nix-shell">,
+                WithStaticArgs [
+                    "-p",
+                    "websocat",
+                    "--run",
+                    "websocat -nU wss://jetstream1.us-west.bsky.network/subscribe",
+                ],
+            >
+        |   StreamingExec<
+                StaticArg<"grep">,
+                WithArgs[ FieldArg<"keyword"> ],
+            >
+        |   StreamToStdout
+    };
 
     #[cgp_context(TestAppComponents: HypershellAppPreset)]
     #[derive(HasField)]
