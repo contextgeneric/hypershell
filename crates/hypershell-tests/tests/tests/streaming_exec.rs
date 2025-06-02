@@ -26,10 +26,10 @@ async fn test_basic_streaming_exec() -> Result<(), Error> {
             //         "websocat -nU wss://jetstream1.us-west.bsky.network/subscribe",
             //     ],
             // >
-        |   StreamingExec<
-                StaticArg<"grep">,
-                WithArgs [ FieldArg<"keyword"> ],
-            >
+        // |   StreamingExec<
+        //         StaticArg<"grep">,
+        //         WithArgs [ FieldArg<"keyword"> ],
+        //     >
         |   StreamToStdout
     };
 

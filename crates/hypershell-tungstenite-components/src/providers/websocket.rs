@@ -7,9 +7,12 @@ use cgp::prelude::*;
 use futures::{AsyncRead, StreamExt, TryStreamExt};
 use hypershell_components::components::CanExtractStringArg;
 use hypershell_components::dsl::WebSocket;
+use tokio::spawn;
+use tokio_tungstenite::tungstenite::Message;
 use tokio_tungstenite::tungstenite::client::IntoClientRequest;
 use tokio_tungstenite::{connect_async, tungstenite};
 use tokio_util::compat::FuturesAsyncReadCompatExt;
+use tokio_util::io::ReaderStream;
 
 #[cgp_new_provider]
 impl<Context, UrlArg, Headers, Input> Handler<Context, WebSocket<UrlArg, Headers>, Input>
@@ -18,7 +21,7 @@ where
     Context: CanExtractStringArg<UrlArg> + CanRaiseAsyncError<tungstenite::Error>,
     UrlArg: Send,
     Headers: Send,
-    Input: Send + AsyncRead + Unpin,
+    Input: Send + AsyncRead + Unpin + 'static,
 {
     type Output = Pin<Box<dyn AsyncRead + Send>>;
 
@@ -27,7 +30,7 @@ where
         _tag: PhantomData<WebSocket<UrlArg, Headers>>,
         input: Input,
     ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
-        let _input = input.compat();
+        let input = ReaderStream::new(input.compat());
 
         let url = context
             .extract_string_arg(PhantomData)
@@ -35,11 +38,15 @@ where
             .map_err(Context::raise_error)?;
 
         let (websocket, _) = connect_async(url).await.unwrap();
-        let (_writer, reader) = websocket.split();
+        let (writer, reader) = websocket.split();
 
-        // spawn(async move {
-        //     let _ = copy(&mut input, &mut writer).await;
-        // });
+        spawn(async move {
+            let _ = input
+                .map_ok(|data| Message::Binary(data))
+                .map_err(|e| tungstenite::Error::from(e))
+                .forward(writer)
+                .await;
+        });
 
         let output = reader
             .map_err(|e| std::io::Error::new(ErrorKind::Other, e))
