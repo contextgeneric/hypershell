@@ -6,7 +6,7 @@ use reqwest::RequestBuilder;
 
 #[cgp_component {
     provider: RequestBuilderUpdater,
-    use_delegate: Args,
+    derive_delegate: UseDelegate<Args>,
 }]
 pub trait CanUpdateRequestBuilder<Args>: HasErrorType {
     fn update_request_builder(

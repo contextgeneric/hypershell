@@ -10,7 +10,7 @@ pub trait HasCommandArgType {
 
 #[cgp_component {
     provider: CommandArgExtractor,
-    use_delegate: Arg,
+    derive_delegate: UseDelegate<Arg>,
 }]
 pub trait CanExtractCommandArg<Arg>: HasCommandArgType {
     fn extract_command_arg(&self, _phantom: PhantomData<Arg>) -> Self::CommandArg;

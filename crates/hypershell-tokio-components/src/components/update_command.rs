@@ -6,7 +6,7 @@ use tokio::process::Command;
 
 #[cgp_component {
     provider: CommandUpdater,
-    use_delegate: Args,
+    derive_delegate: UseDelegate<Args>,
 }]
 pub trait CanUpdateCommand<Args> {
     fn update_command(&self, _phantom: PhantomData<Args>, command: &mut Command);

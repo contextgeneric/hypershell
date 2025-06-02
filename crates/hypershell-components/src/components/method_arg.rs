@@ -10,7 +10,7 @@ pub trait HasHttpMethodType {
 
 #[cgp_component {
     provider: MethodArgExtractor,
-    use_delegate: Arg,
+    derive_delegate: UseDelegate<Arg>,
 }]
 pub trait CanExtractMethodArg<Arg>: HasHttpMethodType {
     fn extract_method_arg(&self, _phantom: PhantomData<Arg>) -> Self::HttpMethod;

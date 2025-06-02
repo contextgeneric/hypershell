@@ -6,7 +6,7 @@ use cgp::prelude::*;
 
 #[cgp_component {
     provider: StringArgExtractor,
-    use_delegate: Arg,
+    derive_delegate: UseDelegate<Arg>,
 }]
 pub trait CanExtractStringArg<Arg> {
     fn extract_string_arg(&self, _phantom: PhantomData<Arg>) -> Cow<'_, str>;
