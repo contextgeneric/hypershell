@@ -1,3 +1,4 @@
+mod convert;
 mod core_request;
 mod headers;
 mod method_arg;
@@ -5,6 +6,7 @@ mod simple_request;
 mod streaming_request;
 mod url_encode;
 
+pub use convert::*;
 pub use core_request::*;
 pub use headers::*;
 pub use method_arg::*;

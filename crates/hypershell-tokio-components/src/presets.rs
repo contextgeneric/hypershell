@@ -15,7 +15,7 @@ mod preset {
         BytesToStream, FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg,
         StreamToBytes, StreamToStdout, StreamToString, StreamingExec, WithArgs,
     };
-    use hypershell_components::providers::ExtractStringCommandArg;
+    use hypershell_components::providers::{Call, ExtractStringCommandArg};
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
@@ -67,7 +67,8 @@ mod preset {
                 <Arg> StaticArg<Arg>,
                 <Tag> FieldArg<Tag>,
             ]: ExtractStringCommandArg,
-            <Args> JoinArgs<Args>: JoinExtractArgs,
+            <Args> JoinArgs<Args>:
+                JoinExtractArgs,
         }
     }
 
@@ -86,7 +87,7 @@ mod preset {
                 HandleStreamingExec,
             Vec<u8>:
                 PipeHandlers<Product![
-                    ConvertBytesToStream,
+                    Call<BytesToStream>,
                     HandleStreamingExec,
                 ]>,
         }

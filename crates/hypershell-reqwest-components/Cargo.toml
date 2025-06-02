@@ -12,6 +12,8 @@ keywords     = { workspace = true }
 hypershell-components   = { workspace = true }
 
 cgp                     = { workspace = true }
-reqwest                 = { workspace = true, features = [ "stream" ] }
-url                     = { workspace = true }
 futures                 = { workspace = true }
+reqwest                 = { workspace = true, features = [ "stream" ] }
+tokio                   = { workspace = true }
+tokio-util              = { workspace = true, features = [ "compat" ] }
+url                     = { workspace = true }

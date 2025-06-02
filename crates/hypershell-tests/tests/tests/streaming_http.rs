@@ -5,8 +5,8 @@ use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    FieldArg, GetMethod, Pipe, StaticArg, StreamToStdout, StreamingExec, StreamingHttpRequest,
-    WithArgs, WithHeaders, WithStaticArgs,
+    BytesToStream, FieldArg, GetMethod, Pipe, StaticArg, StreamToStdout, StreamingExec,
+    StreamingHttpRequest, WithArgs, WithHeaders, WithStaticArgs,
 };
 use hypershell_macro::hypershell;
 use reqwest::Client;
@@ -14,7 +14,8 @@ use reqwest::Client;
 #[tokio::test]
 async fn test_streaming_http_request() -> Result<(), Error> {
     pub type Program = hypershell! {
-            StreamingHttpRequest<
+        BytesToStream
+        |   StreamingHttpRequest<
                 GetMethod,
                 StaticArg<"https://nixos.org/manual/nixpkgs/unstable/">,
                 WithHeaders<Nil>,
@@ -48,7 +49,7 @@ async fn test_streaming_http_request() -> Result<(), Error> {
         keyword: "Nix".to_owned(),
     };
 
-    app.handle(PhantomData::<Program>, Vec::new()).await?;
+    app.handle(PhantomData::<Program>, <Vec<u8>>::new()).await?;
 
     Ok(())
 }

@@ -1,8 +1,12 @@
 #[cgp::re_export_imports]
 mod preset {
+    use core::pin::Pin;
+    use std::vec::Vec;
+
     use cgp::core::component::UseDelegate;
-    use cgp::extra::handler::HandlerComponent;
+    use cgp::extra::handler::{HandlerComponent, PipeHandlers, UseInputDelegate};
     use cgp::prelude::{cgp_preset, *};
+    use futures::AsyncRead;
     use hypershell_components::components::{
         HttpMethodTypeProviderComponent, MethodArgExtractorComponent, StringArgExtractorComponent,
         UrlTypeProviderComponent,
@@ -17,7 +21,8 @@ mod preset {
     use crate::dsl::CoreHttpRequest;
     use crate::providers::{
         ExtractReqwestMethod, HandleCoreHttpRequest, HandleSimpleHttpRequest,
-        HandleStreamingHttpRequest, UpdateRequestHeader, UpdateRequestHeaders, UrlEncodeStringArg,
+        HandleStreamingHttpRequest, StreamToBody, UpdateRequestHeader, UpdateRequestHeaders,
+        UrlEncodeStringArg,
     };
 
     cgp_preset! {
@@ -43,7 +48,7 @@ mod preset {
             <Method, Url, Headers> SimpleHttpRequest<Method, Url, Headers>:
                 HandleSimpleHttpRequest,
             <Method, Url, Headers> StreamingHttpRequest<Method, Url, Headers>:
-                HandleStreamingHttpRequest,
+                StreamingHttpHandlers::Provider,
             <Method, Url, Headers> CoreHttpRequest<Method, Url, Headers>:
                 HandleCoreHttpRequest,
         }
@@ -75,6 +80,19 @@ mod preset {
                 UpdateRequestHeaders,
             <Key, Value> Header<Key, Value>:
                 UpdateRequestHeader,
+        }
+    }
+
+    cgp_preset! {
+        #[wrap_provider(UseInputDelegate)]
+        StreamingHttpHandlers {
+            Pin<Box<dyn AsyncRead + Send>>:
+                PipeHandlers<Product![
+                    StreamToBody,
+                    HandleStreamingHttpRequest,
+                ]>,
+            Vec<u8>:
+                HandleStreamingHttpRequest,
         }
     }
 }

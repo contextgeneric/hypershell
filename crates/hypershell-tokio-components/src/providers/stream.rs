@@ -5,19 +5,19 @@ use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 use futures::io::Cursor;
 use futures::{AsyncRead, AsyncReadExt};
-use hypershell_components::dsl::{StreamToBytes, StreamToString};
 
 #[cgp_new_provider]
-impl<Context, Input> Handler<Context, StreamToBytes, Input> for ConvertStreamToBytes
+impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToBytes
 where
     Context: CanRaiseAsyncError<std::io::Error>,
     Input: Send + AsyncRead + Unpin,
+    Code: Send,
 {
     type Output = Vec<u8>;
 
     async fn handle(
         _context: &Context,
-        _tag: PhantomData<StreamToBytes>,
+        _tag: PhantomData<Code>,
         mut input: Input,
     ) -> Result<Vec<u8>, Context::Error> {
         let mut output = Vec::new();
@@ -32,16 +32,17 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Input> Handler<Context, StreamToString, Input> for ConvertStreamToString
+impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToString
 where
     Context: CanRaiseAsyncError<std::io::Error>,
     Input: Send + AsyncRead + Unpin,
+    Code: Send,
 {
     type Output = String;
 
     async fn handle(
         _context: &Context,
-        _tag: PhantomData<StreamToString>,
+        _tag: PhantomData<Code>,
         mut input: Input,
     ) -> Result<String, Context::Error> {
         let mut output = String::new();

@@ -714,6 +714,8 @@ dependencies = [
  "futures",
  "hypershell-components",
  "reqwest",
+ "tokio",
+ "tokio-util",
  "url",
 ]
 
