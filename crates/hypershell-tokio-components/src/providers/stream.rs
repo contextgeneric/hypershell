@@ -1,4 +1,5 @@
 use core::marker::PhantomData;
+use core::pin::Pin;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
@@ -60,15 +61,15 @@ where
 impl<Context, Input> Handler<Context, BytesToStream, Input> for ConvertStream
 where
     Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + AsRef<[u8]> + Unpin,
+    Input: Send + AsRef<[u8]> + Unpin + 'static,
 {
-    type Output = Cursor<Input>;
+    type Output = Pin<Box<dyn AsyncRead + Send>>;
 
     async fn handle(
         _context: &Context,
         _tag: PhantomData<BytesToStream>,
         input: Input,
-    ) -> Result<Cursor<Input>, Context::Error> {
-        Ok(Cursor::new(input))
+    ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
+        Ok(Box::pin(Cursor::new(input)))
     }
 }

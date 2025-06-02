@@ -1,10 +1,12 @@
 #[cgp::re_export_imports]
 mod preset {
+    use core::pin::Pin;
     use std::path::PathBuf;
 
     use cgp::core::component::UseDelegate;
-    use cgp::extra::handler::HandlerComponent;
-    use cgp::prelude::*;
+    use cgp::extra::handler::{HandlerComponent, UseInputDelegate};
+    use cgp::prelude::{cgp_preset, *};
+    use futures::AsyncRead;
     use hypershell_components::components::{
         CommandArgExtractorComponent, CommandArgTypeProviderComponent,
     };
@@ -40,7 +42,7 @@ mod preset {
             <Path, Args> SimpleExec<Path, Args>:
                 HandleSimpleExec,
             <Path, Args> StreamingExec<Path, Args>:
-                HandleStreamingExec,
+                StreamingExecHandlers::Provider,
             <Path, Args> CoreExec<Path, Args>:
                 HandleCoreExec,
             <Path> ReadFile<Path>:
@@ -72,6 +74,14 @@ mod preset {
         CommandUpdaterPreset {
             <Args> WithArgs<Args>: ExtractArgs,
             <Tag> FieldArgs<Tag>: ExtractFieldArgs,
+        }
+    }
+
+    cgp_preset! {
+        #[wrap_provider(UseInputDelegate)]
+        StreamingExecHandlers {
+            Pin<Box<dyn AsyncRead + Send>>:
+                HandleStreamingExec,
         }
     }
 }
