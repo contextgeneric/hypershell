@@ -5,12 +5,10 @@ use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 use futures::io::Cursor;
 use futures::{AsyncRead, AsyncReadExt};
-use hypershell_components::dsl::{BytesToStream, StreamToBytes, StreamToString};
+use hypershell_components::dsl::{StreamToBytes, StreamToString};
 
-pub struct ConvertStream;
-
-#[cgp_provider]
-impl<Context, Input> Handler<Context, StreamToBytes, Input> for ConvertStream
+#[cgp_new_provider]
+impl<Context, Input> Handler<Context, StreamToBytes, Input> for ConvertStreamToBytes
 where
     Context: CanRaiseAsyncError<std::io::Error>,
     Input: Send + AsyncRead + Unpin,
@@ -33,8 +31,8 @@ where
     }
 }
 
-#[cgp_provider]
-impl<Context, Input> Handler<Context, StreamToString, Input> for ConvertStream
+#[cgp_new_provider]
+impl<Context, Input> Handler<Context, StreamToString, Input> for ConvertStreamToString
 where
     Context: CanRaiseAsyncError<std::io::Error>,
     Input: Send + AsyncRead + Unpin,
@@ -57,17 +55,18 @@ where
     }
 }
 
-#[cgp_provider]
-impl<Context, Input> Handler<Context, BytesToStream, Input> for ConvertStream
+#[cgp_new_provider]
+impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertBytesToStream
 where
     Context: CanRaiseAsyncError<std::io::Error>,
     Input: Send + AsRef<[u8]> + Unpin + 'static,
+    Code: Send,
 {
     type Output = Pin<Box<dyn AsyncRead + Send>>;
 
     async fn handle(
         _context: &Context,
-        _tag: PhantomData<BytesToStream>,
+        _tag: PhantomData<Code>,
         input: Input,
     ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
         Ok(Box::pin(Cursor::new(input)))

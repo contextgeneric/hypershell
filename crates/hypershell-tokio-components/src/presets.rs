@@ -2,9 +2,10 @@
 mod preset {
     use core::pin::Pin;
     use std::path::PathBuf;
+    use std::vec::Vec;
 
     use cgp::core::component::UseDelegate;
-    use cgp::extra::handler::{HandlerComponent, UseInputDelegate};
+    use cgp::extra::handler::{HandlerComponent, PipeHandlers, UseInputDelegate};
     use cgp::prelude::{cgp_preset, *};
     use futures::AsyncRead;
     use hypershell_components::components::{
@@ -19,8 +20,9 @@ mod preset {
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
     use crate::providers::{
-        ConvertStream, ExtractArgs, ExtractFieldArgs, HandleCoreExec, HandleReadFile,
-        HandleSimpleExec, HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs,
+        ConvertBytesToStream, ConvertStreamToBytes, ConvertStreamToString, ExtractArgs,
+        ExtractFieldArgs, HandleCoreExec, HandleReadFile, HandleSimpleExec, HandleStreamToStdout,
+        HandleStreamingExec, JoinExtractArgs,
     };
 
     cgp_preset! {
@@ -47,12 +49,12 @@ mod preset {
                 HandleCoreExec,
             <Path> ReadFile<Path>:
                 HandleReadFile,
-            [
-                StreamToBytes,
-                StreamToString,
-                BytesToStream,
-            ]:
-                ConvertStream,
+            StreamToBytes:
+                ConvertStreamToBytes,
+            StreamToString:
+                ConvertStreamToString,
+            BytesToStream:
+                ConvertBytesToStream,
             StreamToStdout:
                 HandleStreamToStdout,
         }
@@ -82,6 +84,11 @@ mod preset {
         StreamingExecHandlers {
             Pin<Box<dyn AsyncRead + Send>>:
                 HandleStreamingExec,
+            Vec<u8>:
+                PipeHandlers<Product![
+                    ConvertBytesToStream,
+                    HandleStreamingExec,
+                ]>,
         }
     }
 }

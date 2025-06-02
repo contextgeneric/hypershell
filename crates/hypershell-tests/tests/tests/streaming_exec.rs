@@ -5,15 +5,13 @@ use cgp::prelude::*;
 use cgp_error_anyhow::Error;
 use hypershell_apps::presets::HypershellAppPreset;
 use hypershell_components::dsl::{
-    BytesToStream, FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WithArgs,
-    WithStaticArgs,
+    FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WithArgs, WithStaticArgs,
 };
 
 #[tokio::test]
 async fn test_basic_streaming_exec() -> Result<(), Error> {
     pub type Program = Pipe<
         Product![
-            BytesToStream,
             StreamingExec<
                 StaticArg<symbol!("nix-shell")>,
                 WithStaticArgs<
