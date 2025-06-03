@@ -1,14 +1,14 @@
 #[cgp::re_export_imports]
 mod preset {
     use cgp::core::component::UseDelegate;
-    use cgp::extra::handler::{HandlerComponent, Promote};
+    use cgp::extra::handler::{HandlerComponent, PipeHandlers, Promote};
     use cgp::prelude::*;
 
     use crate::components::{StringArgExtractorComponent, UrlArgExtractorComponent};
     use crate::dsl::{BytesToString, ConvertTo, FieldArg, JoinArgs, Pipe, StaticArg};
     use crate::providers::{
         DecodeUtf8Bytes, ExtractFieldArg, ExtractMethodFieldArg, ExtractStaticArg,
-        ExtractStringUrlArg, HandleConvert, JoinStringArgs, RunPipe,
+        ExtractStringUrlArg, HandleConvert, JoinStringArgs, WrapCall,
     };
 
     cgp_preset! {
@@ -47,10 +47,10 @@ mod preset {
         BaseHandlerPreset {
             BytesToString:
                 DecodeUtf8Bytes,
-            <Output> ConvertTo<Output>:
+            <T> ConvertTo<T>:
                 Promote<HandleConvert>,
-            <Handlers> Pipe<Handlers>:
-                RunPipe,
+            <Handlers: WrapCall> Pipe<Handlers>:
+                PipeHandlers<Handlers::Wrapped>,
         }
     }
 }
