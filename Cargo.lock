@@ -689,6 +689,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "hypershell-examples"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "cgp-error-anyhow",
+ "futures",
+ "hypershell",
+ "hypershell-components",
+ "hypershell-macro",
+ "hypershell-tokio-components",
+ "reqwest",
+ "serde",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
 name = "hypershell-json-components"
 version = "0.1.0"
 dependencies = [
@@ -719,23 +736,6 @@ dependencies = [
  "tokio",
  "tokio-util",
  "url",
-]
-
-[[package]]
-name = "hypershell-tests"
-version = "0.1.0"
-dependencies = [
- "cgp",
- "cgp-error-anyhow",
- "futures",
- "hypershell",
- "hypershell-components",
- "hypershell-macro",
- "hypershell-tokio-components",
- "reqwest",
- "serde",
- "tokio",
- "tokio-util",
 ]
 
 [[package]]

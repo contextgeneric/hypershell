@@ -10,7 +10,7 @@ members = [
     "crates/hypershell-tokio-components",
     "crates/hypershell-tungstenite-components",
     "crates/hypershell-macro",
-    "crates/hypershell-tests",
+    "crates/hypershell-examples",
 ]
 
 [workspace.package]
