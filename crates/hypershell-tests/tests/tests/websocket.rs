@@ -8,7 +8,7 @@ use hypershell_components::dsl::{
     FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WebSocket, WithArgs,
 };
 use hypershell_macro::hypershell;
-use hypershell_tokio_components::types::tokio_async_read::TokioAsyncReadStream;
+use hypershell_tokio_components::types::TokioAsyncReadStream;
 use tokio::io::simplex;
 
 #[tokio::test]

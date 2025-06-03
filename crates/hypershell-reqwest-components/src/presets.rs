@@ -1,12 +1,10 @@
 #[cgp::re_export_imports]
 mod preset {
-    use core::pin::Pin;
     use std::vec::Vec;
 
     use cgp::core::component::UseDelegate;
     use cgp::extra::handler::{HandlerComponent, PipeHandlers, UseInputDelegate};
     use cgp::prelude::{cgp_preset, *};
-    use futures::AsyncRead;
     use hypershell_components::components::{
         HttpMethodTypeProviderComponent, MethodArgExtractorComponent, StringArgExtractorComponent,
         UrlTypeProviderComponent,
@@ -16,7 +14,7 @@ mod preset {
         WithHeaders,
     };
     use hypershell_tokio_components::providers::FuturesToTokioStream;
-    use hypershell_tokio_components::types::tokio_async_read::TokioAsyncReadStream;
+    use hypershell_tokio_components::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
     use reqwest::{Method, Url};
 
     use crate::components::RequestBuilderUpdaterComponent;
@@ -88,7 +86,7 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseInputDelegate)]
         StreamingHttpHandlers {
-            Pin<Box<dyn AsyncRead + Send>>:
+            <S> FuturesAsyncReadStream<S>:
                 PipeHandlers<Product![
                     FuturesToTokioStream,
                     StreamToBody,

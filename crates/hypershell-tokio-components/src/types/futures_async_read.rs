@@ -1,13 +1,13 @@
 use core::pin::Pin;
 use core::task::{Context, Poll};
 
-use tokio::io::{AsyncRead, ReadBuf};
+use futures::AsyncRead;
 
-pub struct TokioAsyncReadStream<S> {
+pub struct FuturesAsyncReadStream<S> {
     pub stream: S,
 }
 
-impl<S> From<S> for TokioAsyncReadStream<S>
+impl<S> From<S> for FuturesAsyncReadStream<S>
 where
     S: Send + Unpin + AsyncRead + 'static,
 {
@@ -16,15 +16,15 @@ where
     }
 }
 
-impl<S> AsyncRead for TokioAsyncReadStream<S>
+impl<S> AsyncRead for FuturesAsyncReadStream<S>
 where
     S: Send + Unpin + AsyncRead + 'static,
 {
     fn poll_read(
         mut self: Pin<&mut Self>,
         cx: &mut Context<'_>,
-        buf: &mut ReadBuf<'_>,
-    ) -> Poll<std::io::Result<()>> {
+        buf: &mut [u8],
+    ) -> Poll<std::io::Result<usize>> {
         Pin::new(&mut self.stream).poll_read(cx, buf)
     }
 }

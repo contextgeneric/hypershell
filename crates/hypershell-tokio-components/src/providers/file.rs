@@ -7,7 +7,7 @@ use hypershell_components::components::CanExtractCommandArg;
 use hypershell_components::dsl::ReadFile;
 use tokio::fs::File;
 
-use crate::types::tokio_async_read::TokioAsyncReadStream;
+use crate::types::TokioAsyncReadStream;
 
 #[cgp_new_provider]
 impl<Context, PathArg> Handler<Context, ReadFile<PathArg>, ()> for HandleReadFile

@@ -1,13 +1,11 @@
 #[cgp::re_export_imports]
 mod preset {
-    use core::pin::Pin;
     use std::path::PathBuf;
     use std::vec::Vec;
 
     use cgp::core::component::UseDelegate;
     use cgp::extra::handler::{HandlerComponent, PipeHandlers, UseInputDelegate};
     use cgp::prelude::{cgp_preset, *};
-    use futures::AsyncRead;
     use hypershell_components::components::{
         CommandArgExtractorComponent, CommandArgTypeProviderComponent,
     };
@@ -24,7 +22,7 @@ mod preset {
         ExtractFieldArgs, FuturesToTokioStream, HandleCoreExec, HandleReadFile, HandleSimpleExec,
         HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs,
     };
-    use crate::types::tokio_async_read::TokioAsyncReadStream;
+    use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
     cgp_preset! {
         HypershellTokioPreset {
@@ -84,7 +82,7 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseInputDelegate)]
         StreamingExecHandlers {
-            Pin<Box<dyn AsyncRead + Send>>:
+            <S> FuturesAsyncReadStream<S>:
                 PipeHandlers<Product![
                     FuturesToTokioStream,
                     HandleStreamingExec,

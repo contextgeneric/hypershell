@@ -1,15 +1,13 @@
 #[cgp::re_export_imports]
 mod preset {
-    use core::pin::Pin;
     use std::vec::Vec;
 
     use cgp::extra::handler::{PipeHandlers, UseInputDelegate};
     use cgp::prelude::*;
-    use futures::AsyncRead;
     use hypershell_components::dsl::{BytesToStream, WebSocket};
     use hypershell_components::providers::Call;
     use hypershell_tokio_components::providers::FuturesToTokioStream;
-    use hypershell_tokio_components::types::tokio_async_read::TokioAsyncReadStream;
+    use hypershell_tokio_components::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
     use crate::providers::HandleWebsocket;
 
@@ -24,7 +22,7 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseInputDelegate)]
         WebSocketHandlers {
-            Pin<Box<dyn AsyncRead + Send>>:
+            <S> FuturesAsyncReadStream<S>:
                 PipeHandlers<Product![
                     FuturesToTokioStream,
                     HandleWebsocket,

@@ -1,5 +1,4 @@
 use core::marker::PhantomData;
-use core::pin::Pin;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
@@ -8,7 +7,7 @@ use futures::io::Cursor;
 use tokio::io::{AsyncRead as TokioAsyncRead, AsyncReadExt as _};
 use tokio_util::compat::{Compat, FuturesAsyncReadCompatExt, TokioAsyncReadCompatExt};
 
-use crate::types::tokio_async_read::TokioAsyncReadStream;
+use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToBytes
@@ -103,13 +102,13 @@ where
     Input: Send + TokioAsyncRead + Unpin + 'static,
     Code: Send,
 {
-    type Output = Pin<Box<dyn AsyncRead + Send>>;
+    type Output = FuturesAsyncReadStream<Compat<Input>>;
 
     async fn handle(
         _context: &Context,
         _tag: PhantomData<Code>,
         input: Input,
-    ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
-        Ok(Box::pin(input.compat()))
+    ) -> Result<FuturesAsyncReadStream<Compat<Input>>, Context::Error> {
+        Ok(input.compat().into())
     }
 }

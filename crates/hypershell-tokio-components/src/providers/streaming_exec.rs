@@ -9,7 +9,7 @@ use tokio::spawn;
 use tokio_util::either::Either;
 
 use crate::dsl::CoreExec;
-use crate::types::tokio_async_read::TokioAsyncReadStream;
+use crate::types::TokioAsyncReadStream;
 
 #[cgp_new_provider]
 impl<Context, CommandPath, Args, Input> Handler<Context, StreamingExec<CommandPath, Args>, Input>
