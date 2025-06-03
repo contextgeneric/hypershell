@@ -18,7 +18,6 @@ mod preset {
     use hypershell_tokio_components::providers::FuturesToTokioStream;
     use hypershell_tokio_components::types::tokio_async_read::TokioAsyncReadStream;
     use reqwest::{Method, Url};
-    use tokio::io::AsyncRead as TokioAsyncRead;
 
     use crate::components::RequestBuilderUpdaterComponent;
     use crate::dsl::CoreHttpRequest;
@@ -96,11 +95,6 @@ mod preset {
                     HandleStreamingHttpRequest,
                 ]>,
             <S> TokioAsyncReadStream<S>:
-                PipeHandlers<Product![
-                    StreamToBody,
-                    HandleStreamingHttpRequest,
-                ]>,
-            Pin<Box<dyn TokioAsyncRead + Send>>:
                 PipeHandlers<Product![
                     StreamToBody,
                     HandleStreamingHttpRequest,

@@ -6,7 +6,9 @@ use cgp::prelude::*;
 use futures::AsyncRead;
 use futures::io::Cursor;
 use tokio::io::{AsyncRead as TokioAsyncRead, AsyncReadExt as _};
-use tokio_util::compat::{FuturesAsyncReadCompatExt, TokioAsyncReadCompatExt};
+use tokio_util::compat::{Compat, FuturesAsyncReadCompatExt, TokioAsyncReadCompatExt};
+
+use crate::types::tokio_async_read::TokioAsyncReadStream;
 
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToBytes
@@ -65,14 +67,14 @@ where
     Input: Send + AsRef<[u8]> + Unpin + 'static,
     Code: Send,
 {
-    type Output = Pin<Box<dyn TokioAsyncRead + Send>>;
+    type Output = TokioAsyncReadStream<Compat<Cursor<Input>>>;
 
     async fn handle(
         _context: &Context,
         _tag: PhantomData<Code>,
         input: Input,
-    ) -> Result<Pin<Box<dyn TokioAsyncRead + Send>>, Context::Error> {
-        Ok(Box::pin(Cursor::new(input).compat()))
+    ) -> Result<TokioAsyncReadStream<Compat<Cursor<Input>>>, Context::Error> {
+        Ok(Cursor::new(input).compat().into())
     }
 }
 
@@ -83,14 +85,14 @@ where
     Input: Send + AsyncRead + Unpin + 'static,
     Code: Send,
 {
-    type Output = Pin<Box<dyn TokioAsyncRead + Send>>;
+    type Output = TokioAsyncReadStream<Compat<Input>>;
 
     async fn handle(
         _context: &Context,
         _tag: PhantomData<Code>,
         input: Input,
-    ) -> Result<Pin<Box<dyn TokioAsyncRead + Send>>, Context::Error> {
-        Ok(Box::pin(input.compat()))
+    ) -> Result<TokioAsyncReadStream<Compat<Input>>, Context::Error> {
+        Ok(input.compat().into())
     }
 }
 

@@ -16,7 +16,6 @@ mod preset {
         StreamToBytes, StreamToStdout, StreamToString, StreamingExec, WithArgs,
     };
     use hypershell_components::providers::{Call, ExtractStringCommandArg};
-    use tokio::io::AsyncRead as TokioAsyncRead;
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
@@ -91,8 +90,6 @@ mod preset {
                     HandleStreamingExec,
                 ]>,
             <S> TokioAsyncReadStream<S>:
-                HandleStreamingExec,
-            Pin<Box<dyn TokioAsyncRead + Send>>:
                 HandleStreamingExec,
             Vec<u8>:
                 PipeHandlers<Product![
