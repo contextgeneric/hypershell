@@ -6,7 +6,6 @@ use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
 use futures::{AsyncRead as FutAsyncRead, TryStreamExt};
 use hypershell_components::dsl::StreamingHttpRequest;
-use hypershell_tokio_components::types::FuturesAsyncReadStream;
 use reqwest::Response;
 
 use crate::dsl::CoreHttpRequest;
@@ -25,13 +24,13 @@ where
     Headers: Send,
     Input: Send,
 {
-    type Output = FuturesAsyncReadStream<Pin<Box<dyn FutAsyncRead + Send>>>;
+    type Output = Pin<Box<dyn FutAsyncRead + Send>>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<StreamingHttpRequest<MethodArg, UrlArg, Headers>>,
         body: Input,
-    ) -> Result<FuturesAsyncReadStream<Pin<Box<dyn FutAsyncRead + Send>>>, Context::Error> {
+    ) -> Result<Pin<Box<dyn FutAsyncRead + Send>>, Context::Error> {
         let response = context.handle(PhantomData, body).await?;
 
         let status_code = response.status();
@@ -45,8 +44,6 @@ where
             .map_err(|e| std::io::Error::new(ErrorKind::Other, e))
             .into_async_read();
 
-        let output: Pin<Box<dyn FutAsyncRead + Send>> = Box::pin(response_stream);
-
-        Ok(output.into())
+        Ok(Box::pin(response_stream))
     }
 }

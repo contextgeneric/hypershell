@@ -6,7 +6,9 @@ mod preset {
     use cgp::prelude::*;
     use hypershell_components::dsl::{BytesToStream, WebSocket};
     use hypershell_components::providers::Call;
-    use hypershell_tokio_components::providers::FuturesToTokioStream;
+    use hypershell_tokio_components::providers::{
+        FuturesToTokioStream, WrapFuturesAsyncReadStream,
+    };
     use hypershell_tokio_components::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
     use crate::providers::HandleWebsocket;
@@ -15,7 +17,7 @@ mod preset {
         #[wrap_provider(UseDelegate)]
         TungsteniteHandlerPreset {
             <Url, Params> WebSocket<Url, Params>:
-                HandleWebsocket,
+                WebSocketHandlers::Provider,
         }
     }
 
@@ -26,13 +28,18 @@ mod preset {
                 PipeHandlers<Product![
                     FuturesToTokioStream,
                     HandleWebsocket,
+                    WrapFuturesAsyncReadStream,
                 ]>,
             <S> TokioAsyncReadStream<S>:
-                HandleWebsocket,
+                PipeHandlers<Product![
+                    HandleWebsocket,
+                    WrapFuturesAsyncReadStream,
+                ]>,
             Vec<u8>:
                 PipeHandlers<Product![
                     Call<BytesToStream>,
                     HandleWebsocket,
+                    WrapFuturesAsyncReadStream,
                 ]>,
         }
     }

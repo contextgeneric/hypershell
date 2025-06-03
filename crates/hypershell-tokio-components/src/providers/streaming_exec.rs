@@ -9,7 +9,6 @@ use tokio::spawn;
 use tokio_util::either::Either;
 
 use crate::dsl::CoreExec;
-use crate::types::TokioAsyncReadStream;
 
 #[cgp_new_provider]
 impl<Context, CommandPath, Args, Input> Handler<Context, StreamingExec<CommandPath, Args>, Input>
@@ -21,13 +20,13 @@ where
     Args: Send,
     Input: Send + Unpin + AsyncRead + 'static,
 {
-    type Output = TokioAsyncReadStream<Either<ChildStdout, Empty>>;
+    type Output = Either<ChildStdout, Empty>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<StreamingExec<CommandPath, Args>>,
         mut input: Input,
-    ) -> Result<TokioAsyncReadStream<Either<ChildStdout, Empty>>, Context::Error> {
+    ) -> Result<Either<ChildStdout, Empty>, Context::Error> {
         let mut child = context.handle(PhantomData, ()).await?;
 
         if let Some(mut stdin) = child.stdin.take() {
@@ -37,8 +36,8 @@ where
         }
 
         let output = match child.stdout.take() {
-            Some(stdout) => TokioAsyncReadStream::from(Either::Left(stdout)),
-            None => TokioAsyncReadStream::from(Either::Right(empty())),
+            Some(stdout) => Either::Left(stdout),
+            None => Either::Right(empty()),
         };
 
         Ok(output)

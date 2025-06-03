@@ -7,7 +7,6 @@ use cgp::prelude::*;
 use futures::{AsyncRead as FutAsyncRead, StreamExt, TryStreamExt};
 use hypershell_components::components::CanExtractStringArg;
 use hypershell_components::dsl::WebSocket;
-use hypershell_tokio_components::types::FuturesAsyncReadStream;
 use tokio::io::AsyncRead;
 use tokio::spawn;
 use tokio_tungstenite::tungstenite::Message;
@@ -25,13 +24,13 @@ where
     Headers: Send,
     Input: Send + AsyncRead + Unpin + 'static,
 {
-    type Output = FuturesAsyncReadStream<Pin<Box<dyn FutAsyncRead + Send>>>;
+    type Output = Pin<Box<dyn FutAsyncRead + Send>>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<WebSocket<UrlArg, Headers>>,
         input: Input,
-    ) -> Result<FuturesAsyncReadStream<Pin<Box<dyn FutAsyncRead + Send>>>, Context::Error> {
+    ) -> Result<Pin<Box<dyn FutAsyncRead + Send>>, Context::Error> {
         let input = ReaderStream::new(input);
 
         let url = context
@@ -62,8 +61,6 @@ where
             })
             .into_async_read();
 
-        let output: Pin<Box<dyn FutAsyncRead + Send>> = Box::pin(output);
-
-        Ok(output.into())
+        Ok(Box::pin(output))
     }
 }

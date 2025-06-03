@@ -7,8 +7,6 @@ use hypershell_components::components::CanExtractCommandArg;
 use hypershell_components::dsl::ReadFile;
 use tokio::fs::File;
 
-use crate::types::TokioAsyncReadStream;
-
 #[cgp_new_provider]
 impl<Context, PathArg> Handler<Context, ReadFile<PathArg>, ()> for HandleReadFile
 where
@@ -16,19 +14,19 @@ where
     PathArg: Send,
     Context::CommandArg: Send + AsRef<Path>,
 {
-    type Output = TokioAsyncReadStream<File>;
+    type Output = File;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<ReadFile<PathArg>>,
         _input: (),
-    ) -> Result<TokioAsyncReadStream<File>, Context::Error> {
+    ) -> Result<File, Context::Error> {
         let file_path = context.extract_command_arg(PhantomData);
 
         let file = File::open(file_path.as_ref())
             .await
             .map_err(Context::raise_error)?;
 
-        Ok(file.into())
+        Ok(file)
     }
 }

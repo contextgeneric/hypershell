@@ -20,7 +20,7 @@ mod preset {
     use crate::providers::{
         ConvertBytesToStream, ConvertStreamToBytes, ConvertStreamToString, ExtractArgs,
         ExtractFieldArgs, FuturesToTokioStream, HandleCoreExec, HandleReadFile, HandleSimpleExec,
-        HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs,
+        HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs, WrapTokioAsyncReadStream,
     };
     use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
@@ -47,7 +47,10 @@ mod preset {
             <Path, Args> CoreExec<Path, Args>:
                 HandleCoreExec,
             <Path> ReadFile<Path>:
-                HandleReadFile,
+                PipeHandlers<Product![
+                    HandleReadFile,
+                    WrapTokioAsyncReadStream,
+                ]>,
             StreamToBytes:
                 ConvertStreamToBytes,
             StreamToString:
@@ -86,13 +89,18 @@ mod preset {
                 PipeHandlers<Product![
                     FuturesToTokioStream,
                     HandleStreamingExec,
+                    WrapTokioAsyncReadStream,
                 ]>,
             <S> TokioAsyncReadStream<S>:
-                HandleStreamingExec,
+                PipeHandlers<Product![
+                    HandleStreamingExec,
+                    WrapTokioAsyncReadStream,
+                ]>,
             Vec<u8>:
                 PipeHandlers<Product![
                     Call<BytesToStream>,
                     HandleStreamingExec,
+                    WrapTokioAsyncReadStream,
                 ]>,
         }
     }
