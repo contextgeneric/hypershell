@@ -12,7 +12,6 @@ mod preset {
     use hypershell_components::presets::{
         BaseHandlerPreset, BaseStringArgExtractorPreset, HypershellBasePreset,
     };
-    use hypershell_components::providers::WrapCall;
     use hypershell_json_components::presets::{HypershellJsonPreset, JsonHandlerPreset};
     use hypershell_reqwest_components::components::ReqwestClientGetterComponent;
     use hypershell_reqwest_components::presets::{

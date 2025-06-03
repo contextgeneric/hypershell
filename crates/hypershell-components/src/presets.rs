@@ -8,8 +8,9 @@ mod preset {
     use crate::dsl::{BytesToString, ConvertTo, FieldArg, JoinArgs, Pipe, StaticArg};
     use crate::providers::{
         DecodeUtf8Bytes, ExtractFieldArg, ExtractMethodFieldArg, ExtractStaticArg,
-        ExtractStringUrlArg, HandleConvert, JoinStringArgs, WrapCall,
+        ExtractStringUrlArg, HandleConvert, JoinStringArgs,
     };
+    use crate::traits::WrapCall;
 
     cgp_preset! {
         HypershellBasePreset {
@@ -25,9 +26,12 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
         BaseStringArgExtractorPreset {
-            <Arg> StaticArg<Arg>: ExtractStaticArg,
-            <Tag> FieldArg<Tag>: ExtractFieldArg,
-            <Args> JoinArgs<Args>: JoinStringArgs,
+            <Arg> StaticArg<Arg>:
+                ExtractStaticArg,
+            <Tag> FieldArg<Tag>:
+                ExtractFieldArg,
+            <Args> JoinArgs<Args>:
+                JoinStringArgs,
         }
     }
 
