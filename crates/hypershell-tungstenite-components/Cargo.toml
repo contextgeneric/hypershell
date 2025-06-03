@@ -17,4 +17,4 @@ cgp                     = { workspace = true }
 futures                 = { workspace = true }
 tokio                   = { workspace = true }
 tokio-tungstenite       = { workspace = true, features = [ "native-tls" ] }
-tokio-util              = { workspace = true, features = [ "compat" ] }
+tokio-util              = { workspace = true, features = [ "compat", "io" ] }

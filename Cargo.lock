@@ -737,7 +737,6 @@ dependencies = [
 name = "hypershell-macro"
 version = "0.1.0-alpha"
 dependencies = [
- "cgp",
  "proc-macro2",
  "quote",
 ]
