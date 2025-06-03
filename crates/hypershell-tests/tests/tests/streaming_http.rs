@@ -1,13 +1,5 @@
-use core::marker::PhantomData;
-
-use cgp::extra::handler::CanHandle;
-use cgp::prelude::*;
-use cgp_error_anyhow::Error;
-use hypershell_apps::presets::HypershellAppPreset;
-use hypershell_components::dsl::{
-    BytesToStream, FieldArg, GetMethod, Pipe, StaticArg, StreamToStdout, StreamingExec,
-    StreamingHttpRequest, WithArgs, WithHeaders, WithStaticArgs,
-};
+use hypershell::prelude::*;
+use hypershell::presets::HypershellAppPreset;
 use hypershell_macro::hypershell;
 use reqwest::Client;
 

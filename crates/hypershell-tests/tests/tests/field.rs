@@ -1,11 +1,5 @@
-use core::marker::PhantomData;
-
-use cgp::extra::handler::CanHandle;
-use cgp::prelude::*;
-use cgp_error_anyhow::Error;
-use hypershell_apps::presets::HypershellAppPreset;
-use hypershell_components::dsl::{FieldArg, FieldArgs, JoinArgs, SimpleExec, StaticArg, WithArgs};
-use hypershell_macro::hypershell;
+use hypershell::prelude::*;
+use hypershell::presets::HypershellAppPreset;
 
 #[tokio::test]
 async fn test_join_fields() -> Result<(), Error> {

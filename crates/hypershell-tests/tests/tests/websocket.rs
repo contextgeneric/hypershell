@@ -1,18 +1,10 @@
-use core::marker::PhantomData;
-
-use cgp::extra::handler::CanHandle;
-use cgp::prelude::*;
-use cgp_error_anyhow::Error;
-use hypershell_apps::presets::HypershellAppPreset;
-use hypershell_components::dsl::{
-    FieldArg, Pipe, StaticArg, StreamToStdout, StreamingExec, WebSocket, WithArgs,
-};
-use hypershell_macro::hypershell;
+use hypershell::prelude::*;
+use hypershell::presets::HypershellAppPreset;
 use hypershell_tokio_components::types::TokioAsyncReadStream;
 use tokio::io::simplex;
 
 #[tokio::test]
-async fn test_basic_streaming_exec() -> Result<(), Error> {
+async fn test_basic_websocket_streaming() -> Result<(), Error> {
     pub type Program = hypershell! {
             WebSocket<
                 StaticArg<"wss://jetstream1.us-west.bsky.network/subscribe">,

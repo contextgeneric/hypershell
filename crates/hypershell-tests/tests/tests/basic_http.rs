@@ -1,15 +1,5 @@
-use core::marker::PhantomData;
-
-use cgp::extra::handler::CanHandle;
-use cgp::prelude::*;
-use cgp_error_anyhow::Error;
-use hypershell_apps::contexts::HttpApp;
-use hypershell_apps::presets::HypershellAppPreset;
-use hypershell_components::dsl::{
-    DecodeJson, EncodeJson, FieldArg, GetMethod, Header, JoinArgs, Pipe, PostMethod,
-    SimpleHttpRequest, StaticArg, UrlEncodeArg, WithHeaders,
-};
-use hypershell_macro::hypershell;
+use hypershell::prelude::*;
+use hypershell::presets::HypershellAppPreset;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
@@ -97,7 +87,7 @@ async fn test_post_http_request() -> Result<(), Error> {
         pub code: String,
     }
 
-    let app = HttpApp {
+    let app = HypershellHttp {
         http_client: Client::new(),
     };
 

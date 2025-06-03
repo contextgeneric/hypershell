@@ -664,13 +664,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "hypershell-apps"
+name = "hypershell"
 version = "0.1.0"
 dependencies = [
  "cgp",
  "cgp-error-anyhow",
  "hypershell-components",
  "hypershell-json-components",
+ "hypershell-macro",
  "hypershell-reqwest-components",
  "hypershell-tokio-components",
  "hypershell-tungstenite-components",
@@ -727,7 +728,7 @@ dependencies = [
  "cgp",
  "cgp-error-anyhow",
  "futures",
- "hypershell-apps",
+ "hypershell",
  "hypershell-components",
  "hypershell-macro",
  "hypershell-tokio-components",
