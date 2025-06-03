@@ -1,14 +1,15 @@
 use core::marker::PhantomData;
-use core::pin::Pin;
 
 use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
 use hypershell_components::dsl::StreamingExec;
-use tokio::io::{AsyncRead, copy, empty};
-use tokio::process::Child;
+use tokio::io::{AsyncRead, Empty, copy, empty};
+use tokio::process::{Child, ChildStdout};
 use tokio::spawn;
+use tokio_util::either::Either;
 
 use crate::dsl::CoreExec;
+use crate::types::tokio_async_read::TokioAsyncReadStream;
 
 #[cgp_new_provider]
 impl<Context, CommandPath, Args, Input> Handler<Context, StreamingExec<CommandPath, Args>, Input>
@@ -18,15 +19,15 @@ where
         + CanRaiseAsyncError<std::io::Error>,
     CommandPath: Send,
     Args: Send,
-    Input: Send + AsyncRead + Unpin + 'static,
+    Input: Send + Unpin + AsyncRead + 'static,
 {
-    type Output = Pin<Box<dyn AsyncRead + Send>>;
+    type Output = TokioAsyncReadStream<Either<ChildStdout, Empty>>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<StreamingExec<CommandPath, Args>>,
         mut input: Input,
-    ) -> Result<Pin<Box<dyn AsyncRead + Send>>, Context::Error> {
+    ) -> Result<TokioAsyncReadStream<Either<ChildStdout, Empty>>, Context::Error> {
         let mut child = context.handle(PhantomData, ()).await?;
 
         if let Some(mut stdin) = child.stdin.take() {
@@ -35,9 +36,9 @@ where
             });
         }
 
-        let output: Pin<Box<dyn AsyncRead + Send>> = match child.stdout.take() {
-            Some(stdout) => Box::pin(stdout),
-            None => Box::pin(empty()),
+        let output = match child.stdout.take() {
+            Some(stdout) => TokioAsyncReadStream::new(Either::Left(stdout)),
+            None => TokioAsyncReadStream::new(Either::Right(empty())),
         };
 
         Ok(output)

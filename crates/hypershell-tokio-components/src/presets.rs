@@ -25,6 +25,7 @@ mod preset {
         ExtractFieldArgs, FuturesToTokioStream, HandleCoreExec, HandleReadFile, HandleSimpleExec,
         HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs,
     };
+    use crate::types::tokio_async_read::TokioAsyncReadStream;
 
     cgp_preset! {
         HypershellTokioPreset {
@@ -89,6 +90,8 @@ mod preset {
                     FuturesToTokioStream,
                     HandleStreamingExec,
                 ]>,
+            <S> TokioAsyncReadStream<S>:
+                HandleStreamingExec,
             Pin<Box<dyn TokioAsyncRead + Send>>:
                 HandleStreamingExec,
             Vec<u8>:
