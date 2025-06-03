@@ -665,7 +665,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell"
-version = "0.1.0"
+version = "0.1.0-alpha"
 dependencies = [
  "cgp",
  "cgp-error-anyhow",
@@ -683,14 +683,14 @@ dependencies = [
 
 [[package]]
 name = "hypershell-components"
-version = "0.1.0"
+version = "0.1.0-alpha"
 dependencies = [
  "cgp",
 ]
 
 [[package]]
 name = "hypershell-examples"
-version = "0.1.0"
+version = "0.1.0-alpha"
 dependencies = [
  "cgp",
  "cgp-error-anyhow",
@@ -707,7 +707,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-json-components"
-version = "0.1.0"
+version = "0.1.0-alpha"
 dependencies = [
  "cgp",
  "hypershell-components",
@@ -717,7 +717,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-macro"
-version = "0.1.0"
+version = "0.1.0-alpha"
 dependencies = [
  "cgp",
  "proc-macro2",
@@ -726,7 +726,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-reqwest-components"
-version = "0.1.0"
+version = "0.1.0-alpha"
 dependencies = [
  "cgp",
  "futures",
@@ -740,7 +740,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-tokio-components"
-version = "0.1.0"
+version = "0.1.0-alpha"
 dependencies = [
  "cgp",
  "futures",
@@ -752,7 +752,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-tungstenite-components"
-version = "0.1.0"
+version = "0.1.0-alpha"
 dependencies = [
  "cgp",
  "futures",

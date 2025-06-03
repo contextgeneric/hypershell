@@ -1,6 +1,6 @@
 [package]
 name         = "hypershell-components"
-version      = "0.1.0"
+version      =  "0.1.0-alpha"
 edition      = { workspace = true }
 license      = { workspace = true }
 repository   = { workspace = true }
