@@ -22,8 +22,8 @@ authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp"]
 
 [workspace.dependencies]
-cgp                 = { version = "0.4.0" }
-cgp-error-anyhow    = { version = "0.4.0" }
+cgp                 = { version = "0.4.1-alpha" }
+cgp-error-anyhow    = { version = "0.4.1-alpha" }
 futures             = { version = "0.3.31" }
 itertools           = { version = "0.14.0" }
 proc-macro2         = { version = "1.0.95" }
@@ -53,21 +53,21 @@ hypershell-tokio-components         = { path = "./crates/hypershell-tokio-compon
 hypershell-tungstenite-components   = { path = "./crates/hypershell-tungstenite-components" }
 hypershell-macro                    = { path = "./crates/hypershell-macro" }
 
-cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git", branch = "delegate-input" }
-cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-handler                 = { git = "https://github.com/contextgeneric/cgp.git", branch = "delegate-input" }
-cgp-error-anyhow            = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-handler                 = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-error-anyhow            = { git = "https://github.com/contextgeneric/cgp.git" }
