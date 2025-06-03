@@ -58,7 +58,7 @@ mod preset {
             BytesToStream:
                 ConvertBytesToStream,
             StreamToStdout:
-                HandleStreamToStdout,
+                StreamingToStdoutHandlers::Provider,
         }
     }
 
@@ -79,6 +79,24 @@ mod preset {
         CommandUpdaterPreset {
             <Args> WithArgs<Args>: ExtractArgs,
             <Tag> FieldArgs<Tag>: ExtractFieldArgs,
+        }
+    }
+
+    cgp_preset! {
+        #[wrap_provider(UseInputDelegate)]
+        StreamingToStdoutHandlers {
+            <S> FuturesAsyncReadStream<S>:
+                PipeHandlers<Product![
+                    FuturesToTokioStream,
+                    HandleStreamToStdout,
+                ]>,
+            <S> TokioAsyncReadStream<S>:
+                HandleStreamToStdout,
+            Vec<u8>:
+                PipeHandlers<Product![
+                    Call<BytesToStream>,
+                    HandleStreamToStdout,
+                ]>,
         }
     }
 
