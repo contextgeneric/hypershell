@@ -1,6 +1,6 @@
 use cgp::prelude::*;
 
-use crate::presets::HypershellAppPreset;
+use crate::presets::HypershellPreset;
 
-#[cgp_context(HypershellCliComponents: HypershellAppPreset)]
+#[cgp_context(HypershellCliComponents: HypershellPreset)]
 pub struct HypershellCli;

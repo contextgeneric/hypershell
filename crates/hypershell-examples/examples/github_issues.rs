@@ -1,5 +1,5 @@
 use hypershell::prelude::*;
-use hypershell::presets::HypershellAppPreset;
+use hypershell::presets::HypershellPreset;
 use reqwest::Client;
 use serde::Deserialize;
 
@@ -24,9 +24,9 @@ pub type Program = hypershell! {
     | DecodeJson<Vec<Issue>>
 };
 
-#[cgp_context(TestAppComponents: HypershellAppPreset)]
+#[cgp_context(MyAppComponents: HypershellPreset)]
 #[derive(HasField)]
-pub struct TestApp {
+pub struct MyApp {
     pub http_client: Client,
     pub base_url: String,
     pub github_org: String,
@@ -43,7 +43,7 @@ pub struct Issue {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let app = TestApp {
+    let app = MyApp {
         http_client: Client::new(),
         base_url: "https://api.github.com".to_owned(),
         github_org: "rust-lang".to_owned(),

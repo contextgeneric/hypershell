@@ -1,9 +1,9 @@
 use hypershell::prelude::*;
-use hypershell::presets::HypershellAppPreset;
+use hypershell::presets::HypershellPreset;
 
 #[tokio::test]
 async fn test_simple_pipe() -> Result<(), Error> {
-    #[cgp_context(TestAppComponents: HypershellAppPreset)]
+    #[cgp_context(TestAppComponents: HypershellPreset)]
     #[derive(HasField)]
     pub struct TestApp {
         pub base_dir: String,

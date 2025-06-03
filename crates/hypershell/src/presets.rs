@@ -28,7 +28,7 @@ mod preset {
     use url::ParseError;
 
     cgp_preset! {
-        HypershellAppPreset:
+        HypershellPreset:
             HypershellBasePreset
             + HypershellTokioPreset
             + HypershellReqwestPreset

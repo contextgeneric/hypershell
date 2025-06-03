@@ -7,3 +7,4 @@ pub use hypershell_components::dsl::*;
 pub use hypershell_macro::hypershell;
 
 pub use crate::contexts::{HypershellCli, HypershellHttp};
+pub use crate::presets::HypershellPreset;

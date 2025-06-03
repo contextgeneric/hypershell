@@ -1,7 +1,7 @@
 #![recursion_limit = "256"]
 
 use hypershell::prelude::*;
-use hypershell::presets::HypershellAppPreset;
+use hypershell::presets::HypershellPreset;
 
 pub type Program = hypershell! {
         StreamingExec<
@@ -20,15 +20,15 @@ pub type Program = hypershell! {
     |   StreamToStdout
 };
 
-#[cgp_context(TestAppComponents: HypershellAppPreset)]
+#[cgp_context(MyAppComponents: HypershellPreset)]
 #[derive(HasField)]
-pub struct TestApp {
+pub struct MyApp {
     pub keyword: String,
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let app = TestApp {
+    let app = MyApp {
         keyword: "love".to_owned(),
     };
 

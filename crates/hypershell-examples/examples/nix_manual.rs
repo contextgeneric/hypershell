@@ -1,5 +1,5 @@
 use hypershell::prelude::*;
-use hypershell::presets::HypershellAppPreset;
+use hypershell::presets::HypershellPreset;
 use hypershell_macro::hypershell;
 use reqwest::Client;
 
@@ -27,16 +27,16 @@ pub type Program = hypershell! {
     | StreamToStdout
 };
 
-#[cgp_context(TestAppComponents: HypershellAppPreset)]
+#[cgp_context(MyAppComponents: HypershellPreset)]
 #[derive(HasField)]
-pub struct TestApp {
+pub struct MyApp {
     pub http_client: Client,
     pub keyword: String,
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let app = TestApp {
+    let app = MyApp {
         http_client: Client::new(),
         keyword: "Nix".to_owned(),
     };
