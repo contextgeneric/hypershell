@@ -4,8 +4,22 @@ use core::fmt::Debug;
 use core::marker::PhantomData;
 use core::str::Utf8Error;
 
-use cgp::extra::handler::{Handler, HandlerComponent};
+use cgp::extra::handler::{Computer, ComputerComponent, Handler, HandlerComponent};
 use cgp::prelude::*;
+
+use crate::dsl::ConvertTo;
+
+#[cgp_new_provider]
+impl<Context, Input, Output> Computer<Context, ConvertTo<Output>, Input> for HandleConvert
+where
+    Input: Into<Output>,
+{
+    type Output = Output;
+
+    fn compute(_context: &Context, _tag: PhantomData<ConvertTo<Output>>, input: Input) -> Output {
+        input.into()
+    }
+}
 
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for DecodeUtf8Bytes

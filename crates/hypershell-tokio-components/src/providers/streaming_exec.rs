@@ -37,8 +37,8 @@ where
         }
 
         let output = match child.stdout.take() {
-            Some(stdout) => TokioAsyncReadStream::new(Either::Left(stdout)),
-            None => TokioAsyncReadStream::new(Either::Right(empty())),
+            Some(stdout) => TokioAsyncReadStream::from(Either::Left(stdout)),
+            None => TokioAsyncReadStream::from(Either::Right(empty())),
         };
 
         Ok(output)

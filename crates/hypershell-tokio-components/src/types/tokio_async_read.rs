@@ -7,11 +7,11 @@ pub struct TokioAsyncReadStream<S> {
     pub stream: S,
 }
 
-impl<S> TokioAsyncReadStream<S>
+impl<S> From<S> for TokioAsyncReadStream<S>
 where
     S: Send + Unpin + TokioAsyncRead + 'static,
 {
-    pub fn new(stream: S) -> Self {
+    fn from(stream: S) -> Self {
         Self { stream }
     }
 }
