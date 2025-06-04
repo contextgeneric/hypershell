@@ -37,21 +37,21 @@ mod preset {
             ErrorTypeProviderComponent:
                 UseAnyhowError,
             ErrorRaiserComponent:
-                AppErrorHandlers::Provider,
+                HypershellErrorHandlers::Provider,
             ErrorWrapperComponent:
                 DebugAnyhowError,
             ReqwestClientGetterComponent:
                 UseField<symbol!("http_client")>,
             override StringArgExtractorComponent:
-                AppStringArgExtractorPreset::Provider,
+                HypershellStringArgExtractorPreset::Provider,
             override HandlerComponent:
-                AppHandlerPreset::Provider,
+                HypershellHandlerPreset::Provider,
         }
     }
 
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
-        AppErrorHandlers {
+        HypershellErrorHandlers {
             [
                 StdIoError,
                 Utf8Error,
@@ -73,7 +73,7 @@ mod preset {
 
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
-        AppHandlerPreset:
+        HypershellHandlerPreset:
             BaseHandlerPreset
             + TokioHandlerPreset
             + ReqwestHandlerPreset
@@ -85,7 +85,7 @@ mod preset {
 
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
-        AppStringArgExtractorPreset:
+        HypershellStringArgExtractorPreset:
             BaseStringArgExtractorPreset
             + ReqwestStringArgExtractorPreset
         { }
