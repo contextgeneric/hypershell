@@ -13,9 +13,7 @@ mod preset {
         GetMethod, Header, PostMethod, SimpleHttpRequest, StreamingHttpRequest, UrlEncodeArg,
         WithHeaders,
     };
-    use hypershell_tokio_components::providers::{
-        FuturesToTokioStream, WrapFuturesAsyncReadStream,
-    };
+    use hypershell_tokio_components::providers::{FuturesToTokioAsyncRead, WrapFuturesAsyncRead};
     use hypershell_tokio_components::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
     use reqwest::{Method, Url};
 
@@ -90,21 +88,21 @@ mod preset {
         StreamingHttpHandlers {
             <S> FuturesAsyncReadStream<S>:
                 PipeHandlers<Product![
-                    FuturesToTokioStream,
+                    FuturesToTokioAsyncRead,
                     StreamToBody,
                     HandleStreamingHttpRequest,
-                    WrapFuturesAsyncReadStream,
+                    WrapFuturesAsyncRead,
                 ]>,
             <S> TokioAsyncReadStream<S>:
                 PipeHandlers<Product![
                     StreamToBody,
                     HandleStreamingHttpRequest,
-                    WrapFuturesAsyncReadStream,
+                    WrapFuturesAsyncRead,
                 ]>,
             Vec<u8>:
                 PipeHandlers<Product![
                     HandleStreamingHttpRequest,
-                    WrapFuturesAsyncReadStream,
+                    WrapFuturesAsyncRead,
                 ]>,
         }
     }

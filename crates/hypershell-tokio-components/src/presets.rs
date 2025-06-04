@@ -19,8 +19,9 @@ mod preset {
     use crate::dsl::CoreExec;
     use crate::providers::{
         ConvertBytesToStream, ConvertStreamToBytes, ConvertStreamToString, ExtractArgs,
-        ExtractFieldArgs, FuturesToTokioStream, HandleCoreExec, HandleReadFile, HandleSimpleExec,
-        HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs, WrapTokioAsyncReadStream,
+        ExtractFieldArgs, FuturesToTokioAsyncRead, HandleCoreExec, HandleReadFile,
+        HandleSimpleExec, HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs,
+        WrapTokioAsyncRead,
     };
     use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
@@ -49,7 +50,7 @@ mod preset {
             <Path> ReadFile<Path>:
                 PipeHandlers<Product![
                     HandleReadFile,
-                    WrapTokioAsyncReadStream,
+                    WrapTokioAsyncRead,
                 ]>,
             StreamToBytes:
                 ConvertStreamToBytes,
@@ -87,7 +88,7 @@ mod preset {
         StreamingToStdoutHandlers {
             <S> FuturesAsyncReadStream<S>:
                 PipeHandlers<Product![
-                    FuturesToTokioStream,
+                    FuturesToTokioAsyncRead,
                     HandleStreamToStdout,
                 ]>,
             <S> TokioAsyncReadStream<S>:
@@ -105,20 +106,20 @@ mod preset {
         StreamingExecHandlers {
             <S> FuturesAsyncReadStream<S>:
                 PipeHandlers<Product![
-                    FuturesToTokioStream,
+                    FuturesToTokioAsyncRead,
                     HandleStreamingExec,
-                    WrapTokioAsyncReadStream,
+                    WrapTokioAsyncRead,
                 ]>,
             <S> TokioAsyncReadStream<S>:
                 PipeHandlers<Product![
                     HandleStreamingExec,
-                    WrapTokioAsyncReadStream,
+                    WrapTokioAsyncRead,
                 ]>,
             Vec<u8>:
                 PipeHandlers<Product![
                     Call<BytesToStream>,
                     HandleStreamingExec,
-                    WrapTokioAsyncReadStream,
+                    WrapTokioAsyncRead,
                 ]>,
         }
     }

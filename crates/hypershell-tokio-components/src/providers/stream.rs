@@ -6,8 +6,9 @@ use futures::AsyncRead as FuturesAsyncRead;
 use futures::io::Cursor;
 use tokio::io::{AsyncRead as TokioAsyncRead, AsyncReadExt as _};
 use tokio_util::compat::{Compat, FuturesAsyncReadCompatExt, TokioAsyncReadCompatExt};
+use tokio_util::io::ReaderStream;
 
-use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
+use crate::types::{FuturesAsyncReadStream, FuturesStream, TokioAsyncReadStream};
 
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToBytes
@@ -63,7 +64,7 @@ where
 impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertBytesToStream
 where
     Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + AsRef<[u8]> + Unpin + 'static,
+    Input: Send + AsRef<[u8]> + Unpin,
     Code: Send,
 {
     type Output = TokioAsyncReadStream<Compat<Cursor<Input>>>;
@@ -78,10 +79,10 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for FuturesToTokioStream
+impl<Context, Code, Input> Handler<Context, Code, Input> for FuturesToTokioAsyncRead
 where
     Context: HasAsyncErrorType,
-    Input: Send + FuturesAsyncRead + Unpin + 'static,
+    Input: Send + FuturesAsyncRead + Unpin,
     Code: Send,
 {
     type Output = TokioAsyncReadStream<Compat<Input>>;
@@ -96,10 +97,10 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for TokioToFuturesStream
+impl<Context, Code, Input> Handler<Context, Code, Input> for TokioToFuturesAsyncRead
 where
     Context: HasAsyncErrorType,
-    Input: Send + TokioAsyncRead + Unpin + 'static,
+    Input: Send + TokioAsyncRead + Unpin,
     Code: Send,
 {
     type Output = FuturesAsyncReadStream<Compat<Input>>;
@@ -114,10 +115,10 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for WrapTokioAsyncReadStream
+impl<Context, Code, Input> Handler<Context, Code, Input> for WrapTokioAsyncRead
 where
     Context: HasAsyncErrorType,
-    Input: Send + TokioAsyncRead + Unpin + 'static,
+    Input: Send + TokioAsyncRead + Unpin,
     Code: Send,
 {
     type Output = TokioAsyncReadStream<Input>;
@@ -132,10 +133,10 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for WrapFuturesAsyncReadStream
+impl<Context, Code, Input> Handler<Context, Code, Input> for WrapFuturesAsyncRead
 where
     Context: HasAsyncErrorType,
-    Input: Send + FuturesAsyncRead + Unpin + 'static,
+    Input: Send + FuturesAsyncRead + Unpin,
     Code: Send,
 {
     type Output = FuturesAsyncReadStream<Input>;
@@ -146,5 +147,23 @@ where
         input: Input,
     ) -> Result<FuturesAsyncReadStream<Input>, Context::Error> {
         Ok(input.into())
+    }
+}
+
+#[cgp_new_provider]
+impl<Context, Code, Input> Handler<Context, Code, Input> for AsyncReadToStream
+where
+    Context: HasAsyncErrorType,
+    Input: Send + TokioAsyncRead + Unpin,
+    Code: Send,
+{
+    type Output = FuturesStream<ReaderStream<Input>>;
+
+    async fn handle(
+        _context: &Context,
+        _tag: PhantomData<Code>,
+        input: Input,
+    ) -> Result<FuturesStream<ReaderStream<Input>>, Context::Error> {
+        Ok(ReaderStream::new(input).into())
     }
 }

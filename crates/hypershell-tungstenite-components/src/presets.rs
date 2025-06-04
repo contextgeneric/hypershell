@@ -6,9 +6,7 @@ mod preset {
     use cgp::prelude::*;
     use hypershell_components::dsl::{BytesToStream, WebSocket};
     use hypershell_components::providers::Call;
-    use hypershell_tokio_components::providers::{
-        FuturesToTokioStream, WrapFuturesAsyncReadStream,
-    };
+    use hypershell_tokio_components::providers::{FuturesToTokioAsyncRead, WrapFuturesAsyncRead};
     use hypershell_tokio_components::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
     use crate::providers::HandleWebsocket;
@@ -26,20 +24,20 @@ mod preset {
         WebSocketHandlers {
             <S> FuturesAsyncReadStream<S>:
                 PipeHandlers<Product![
-                    FuturesToTokioStream,
+                    FuturesToTokioAsyncRead,
                     HandleWebsocket,
-                    WrapFuturesAsyncReadStream,
+                    WrapFuturesAsyncRead,
                 ]>,
             <S> TokioAsyncReadStream<S>:
                 PipeHandlers<Product![
                     HandleWebsocket,
-                    WrapFuturesAsyncReadStream,
+                    WrapFuturesAsyncRead,
                 ]>,
             Vec<u8>:
                 PipeHandlers<Product![
                     Call<BytesToStream>,
                     HandleWebsocket,
-                    WrapFuturesAsyncReadStream,
+                    WrapFuturesAsyncRead,
                 ]>,
         }
     }
