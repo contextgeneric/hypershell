@@ -3,10 +3,11 @@ use hypershell_macro::hypershell;
 use reqwest::Client;
 
 pub type Program = hypershell! {
-    StreamingHttpRequest<
-        GetMethod,
-        StaticArg<"https://nixos.org/manual/nixpkgs/unstable/">,
-        WithHeaders<Nil>,
+    StreamingExec<
+        StaticArg<"curl">,
+        WithStaticArgs [
+            "https://nixos.org/manual/nixpkgs/unstable/",
+        ],
     >
     |   StreamingExec<
             StaticArg<"sha256sum">,

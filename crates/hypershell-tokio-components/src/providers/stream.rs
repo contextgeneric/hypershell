@@ -1,9 +1,12 @@
+use core::convert::Infallible;
+use core::iter::Once;
 use core::marker::PhantomData;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 use futures::AsyncRead as FuturesAsyncRead;
 use futures::io::Cursor;
+use futures::stream::Iter;
 use tokio::io::{AsyncRead as TokioAsyncRead, AsyncReadExt as _};
 use tokio_util::compat::{Compat, FuturesAsyncReadCompatExt, TokioAsyncReadCompatExt};
 use tokio_util::io::ReaderStream;
@@ -11,7 +14,7 @@ use tokio_util::io::ReaderStream;
 use crate::types::{FuturesAsyncReadStream, FuturesStream, TokioAsyncReadStream};
 
 #[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToBytes
+impl<Context, Code, Input> Handler<Context, Code, Input> for HandleTokioAsyncReadToBytes
 where
     Context: CanRaiseAsyncError<std::io::Error>,
     Input: Send + TokioAsyncRead + Unpin,
@@ -36,7 +39,7 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertStreamToString
+impl<Context, Code, Input> Handler<Context, Code, Input> for HandleTokioAsyncReadToString
 where
     Context: CanRaiseAsyncError<std::io::Error>,
     Input: Send + TokioAsyncRead + Unpin,
@@ -61,7 +64,7 @@ where
 }
 
 #[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for ConvertBytesToStream
+impl<Context, Code, Input> Handler<Context, Code, Input> for HandleBytesToTokioAsyncRead
 where
     Context: CanRaiseAsyncError<std::io::Error>,
     Input: Send + AsRef<[u8]> + Unpin,
@@ -75,6 +78,24 @@ where
         input: Input,
     ) -> Result<TokioAsyncReadStream<Compat<Cursor<Input>>>, Context::Error> {
         Ok(Cursor::new(input).compat().into())
+    }
+}
+
+#[cgp_new_provider]
+impl<Context, Code, Input> Handler<Context, Code, Input> for HandleBytesToStream
+where
+    Context: CanRaiseAsyncError<std::io::Error>,
+    Input: Send + AsRef<[u8]> + Unpin,
+    Code: Send,
+{
+    type Output = FuturesStream<Iter<Once<Result<Input, Infallible>>>>;
+
+    async fn handle(
+        _context: &Context,
+        _tag: PhantomData<Code>,
+        input: Input,
+    ) -> Result<Self::Output, Context::Error> {
+        Ok(futures::stream::iter(core::iter::once(Ok(input))).into())
     }
 }
 

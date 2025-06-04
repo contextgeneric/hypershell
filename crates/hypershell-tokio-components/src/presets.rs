@@ -18,10 +18,10 @@ mod preset {
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::CoreExec;
     use crate::providers::{
-        ConvertBytesToStream, ConvertStreamToBytes, ConvertStreamToString, ExtractArgs,
-        ExtractFieldArgs, FuturesToTokioAsyncRead, HandleCoreExec, HandleReadFile,
-        HandleSimpleExec, HandleStreamToStdout, HandleStreamingExec, JoinExtractArgs,
-        WrapTokioAsyncRead,
+        ExtractArgs, ExtractFieldArgs, FuturesToTokioAsyncRead, HandleBytesToTokioAsyncRead,
+        HandleCoreExec, HandleReadFile, HandleSimpleExec, HandleStreamToStdout,
+        HandleStreamingExec, HandleTokioAsyncReadToBytes, HandleTokioAsyncReadToString,
+        JoinExtractArgs, WrapTokioAsyncRead,
     };
     use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
@@ -53,11 +53,11 @@ mod preset {
                     WrapTokioAsyncRead,
                 ]>,
             StreamToBytes:
-                ConvertStreamToBytes,
+                HandleTokioAsyncReadToBytes,
             StreamToString:
-                ConvertStreamToString,
+                HandleTokioAsyncReadToString,
             BytesToStream:
-                ConvertBytesToStream,
+                HandleBytesToTokioAsyncRead,
             StreamToStdout:
                 StreamingToStdoutHandlers::Provider,
         }

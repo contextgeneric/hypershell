@@ -1,5 +1,6 @@
 #[cgp::re_export_imports]
 mod preset {
+    use core::convert::Infallible;
     use core::str::Utf8Error;
     use std::io::Error as StdIoError;
 
@@ -7,8 +8,9 @@ mod preset {
     use cgp::core::error::{
         ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent,
     };
+    use cgp::extra::error::{RaiseInfallible, ReturnError};
     use cgp::prelude::*;
-    use cgp_error_anyhow::{DebugAnyhowError, RaiseAnyhowError, UseAnyhowError};
+    use cgp_error_anyhow::{DebugAnyhowError, Error, RaiseAnyhowError, UseAnyhowError};
     use hypershell_components::presets::{
         BaseHandlerPreset, BaseStringArgExtractorPreset, HypershellBasePreset,
     };
@@ -52,6 +54,8 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
         HypershellErrorHandlers {
+            Error: ReturnError,
+            Infallible: RaiseInfallible,
             [
                 StdIoError,
                 Utf8Error,
