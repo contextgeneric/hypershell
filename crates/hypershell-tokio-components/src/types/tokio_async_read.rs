@@ -9,7 +9,7 @@ pub struct TokioAsyncReadStream<S> {
 
 impl<S> From<S> for TokioAsyncReadStream<S>
 where
-    S: Send + Unpin + AsyncRead + 'static,
+    S: Unpin + AsyncRead,
 {
     fn from(stream: S) -> Self {
         Self { stream }
@@ -18,7 +18,7 @@ where
 
 impl<S> AsyncRead for TokioAsyncReadStream<S>
 where
-    S: Send + Unpin + AsyncRead + 'static,
+    S: Unpin + AsyncRead,
 {
     fn poll_read(
         mut self: Pin<&mut Self>,

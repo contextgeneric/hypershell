@@ -9,7 +9,7 @@ pub struct FuturesAsyncReadStream<S> {
 
 impl<S> From<S> for FuturesAsyncReadStream<S>
 where
-    S: Send + Unpin + AsyncRead + 'static,
+    S: Unpin + AsyncRead,
 {
     fn from(stream: S) -> Self {
         Self { stream }
@@ -18,7 +18,7 @@ where
 
 impl<S> AsyncRead for FuturesAsyncReadStream<S>
 where
-    S: Send + Unpin + AsyncRead + 'static,
+    S: Unpin + AsyncRead,
 {
     fn poll_read(
         mut self: Pin<&mut Self>,
