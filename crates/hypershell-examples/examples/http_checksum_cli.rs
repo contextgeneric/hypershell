@@ -1,12 +1,11 @@
 use hypershell::prelude::*;
 use hypershell_macro::hypershell;
-use reqwest::Client;
 
 pub type Program = hypershell! {
     StreamingExec<
         StaticArg<"curl">,
-        WithStaticArgs [
-            "https://nixos.org/manual/nixpkgs/unstable/",
+        WithArgs [
+            FieldArg<"url">,
         ],
     >
     |   StreamingExec<
@@ -25,10 +24,16 @@ pub type Program = hypershell! {
     | StreamToStdout
 };
 
+#[cgp_context(MyAppComponents: HypershellPreset)]
+#[derive(HasField)]
+pub struct MyApp {
+    pub url: String,
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let app = HypershellHttp {
-        http_client: Client::new(),
+    let app = MyApp {
+        url: "https://nixos.org/manual/nixpkgs/unstable/".to_owned(),
     };
 
     app.handle(PhantomData::<Program>, Vec::new()).await?;

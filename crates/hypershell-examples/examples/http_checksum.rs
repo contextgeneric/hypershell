@@ -7,7 +7,7 @@ use sha2::Sha256;
 pub type Program = hypershell! {
     StreamingHttpRequest<
         GetMethod,
-        StaticArg<"https://nixos.org/manual/nixpkgs/unstable/">,
+        FieldArg<"url">,
         WithHeaders<Nil>,
     >
     | Checksum<Sha256>
@@ -18,6 +18,7 @@ pub type Program = hypershell! {
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
+    pub url: String,
 }
 
 #[cgp::re_export_imports]
@@ -69,6 +70,7 @@ mod preset {
 async fn main() -> Result<(), Error> {
     let app = MyApp {
         http_client: Client::new(),
+        url: "https://nixos.org/manual/nixpkgs/unstable/".to_owned(),
     };
 
     let checksum = app.handle(PhantomData::<Program>, Vec::new()).await?;

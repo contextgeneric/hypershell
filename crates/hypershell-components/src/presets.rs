@@ -7,8 +7,8 @@ mod preset {
     use crate::components::{StringArgExtractorComponent, UrlArgExtractorComponent};
     use crate::dsl::{BytesToString, ConvertTo, FieldArg, JoinArgs, Pipe, StaticArg, Use};
     use crate::providers::{
-        DecodeUtf8Bytes, ExtractFieldArg, ExtractMethodFieldArg, ExtractStaticArg,
-        ExtractStringUrlArg, HandleConvert, HandlePipe, HandleUseProvider, JoinStringArgs,
+        DecodeUtf8Bytes, ExtractFieldArg, ExtractStaticArg, ExtractStringUrlArg, HandleConvert,
+        HandlePipe, HandleUseProvider, JoinStringArgs,
     };
 
     cgp_preset! {
@@ -40,9 +40,8 @@ mod preset {
             [
                 <Arg> StaticArg<Arg>,
                 <Args> JoinArgs<Args>,
+                <Tag> FieldArg<Tag>,
             ]: ExtractStringUrlArg,
-            <Tag> FieldArg<Tag>:
-                ExtractMethodFieldArg,
         }
     }
 
