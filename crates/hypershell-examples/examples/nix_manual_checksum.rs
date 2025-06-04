@@ -26,7 +26,7 @@ async fn main() -> Result<(), Error> {
 
     let checksum = app.handle(PhantomData::<Program>, Vec::new()).await?;
 
-    println!("checksum: {:?}", checksum);
+    println!("{}", hex::encode(checksum));
 
     Ok(())
 }

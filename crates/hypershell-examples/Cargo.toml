@@ -19,6 +19,7 @@ hypershell-macro                = { workspace = true }
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
 futures                 = { workspace = true }
+hex                     = { workspace = true }
 reqwest                 = { workspace = true }
 sha2                    = { workspace = true }
 serde                   = { workspace = true, features = [ "derive" ] }
