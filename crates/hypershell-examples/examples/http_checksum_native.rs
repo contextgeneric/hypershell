@@ -8,7 +8,7 @@ pub type Program = hypershell! {
     StreamingHttpRequest<
         GetMethod,
         FieldArg<"url">,
-        WithHeaders<Nil>,
+        WithHeaders[ ],
     >
     | Checksum<Sha256>
     | ConvertTo<[u8; 32]>
