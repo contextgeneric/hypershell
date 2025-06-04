@@ -1,0 +1,17 @@
+[package]
+name         = "hypershell-hash-components"
+version      =  "0.1.0-alpha"
+edition      = { workspace = true }
+license      = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+keywords     = { workspace = true }
+description  = "Modular DSL for shellscripting in Rust"
+
+[dependencies]
+hypershell-components   = { workspace = true }
+
+cgp                     = { workspace = true }
+futures                 = { workspace = true }
+sha2                    = { workspace = true }

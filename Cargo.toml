@@ -11,6 +11,7 @@ members = [
     "crates/hypershell-tungstenite-components",
     "crates/hypershell-macro",
     "crates/hypershell-examples",
+    "crates/hypershell-hash-components",
 ]
 
 [workspace.package]
@@ -31,6 +32,7 @@ quote               = { version = "1.0.40" }
 reqwest             = { version = "0.12.15" }
 serde               = { version = "1.0.219", default-features = false }
 serde_json          = { version = "1.0.140", default-features = false }
+sha2                = { version = "0.10.9" }
 tokio               = { version = "1.45.0" }
 tokio-tungstenite   = { version = "0.26.2" }
 tokio-util          = { version = "0.7.15" }
