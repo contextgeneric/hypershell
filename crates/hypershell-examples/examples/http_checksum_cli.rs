@@ -37,6 +37,5 @@ async fn main() -> Result<(), Error> {
     };
 
     app.handle(PhantomData::<Program>, Vec::new()).await?;
-
     Ok(())
 }

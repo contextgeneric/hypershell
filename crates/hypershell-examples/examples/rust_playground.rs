@@ -18,12 +18,11 @@ pub type Program = hypershell! {
 };
 
 #[derive(Serialize)]
-pub struct Input {
+pub struct Request {
     pub code: String,
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(dead_code)]
 pub struct Response {
     pub id: String,
     pub url: String,
@@ -36,7 +35,7 @@ async fn main() -> Result<(), Error> {
         http_client: Client::new(),
     };
 
-    let input = Input {
+    let input = Request {
         code: "fn main() { println!(\"Hello, world!\"); }".to_owned(),
     };
 
