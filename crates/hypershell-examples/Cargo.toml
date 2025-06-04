@@ -13,12 +13,14 @@ description  = "Modular DSL for shellscripting in Rust"
 hypershell                      = { workspace = true }
 hypershell-components           = { workspace = true }
 hypershell-tokio-components     = { workspace = true }
+hypershell-hash-components      = { workspace = true }
 hypershell-macro                = { workspace = true }
 
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
 futures                 = { workspace = true }
 reqwest                 = { workspace = true }
+sha2                    = { workspace = true }
 serde                   = { workspace = true, features = [ "derive" ] }
 tokio                   = { workspace = true, features = [ "macros", "rt", "io-std", "rt-multi-thread" ] }
 tokio-util              = { workspace = true, features = [ "compat" ] }

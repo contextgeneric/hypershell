@@ -715,10 +715,12 @@ dependencies = [
  "futures",
  "hypershell",
  "hypershell-components",
+ "hypershell-hash-components",
  "hypershell-macro",
  "hypershell-tokio-components",
  "reqwest",
  "serde",
+ "sha2",
  "tokio",
  "tokio-util",
 ]

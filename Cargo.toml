@@ -44,6 +44,7 @@ hypershell-json-components          = { version =  "0.1.0-alpha" }
 hypershell-reqwest-components       = { version =  "0.1.0-alpha" }
 hypershell-tokio-components         = { version =  "0.1.0-alpha" }
 hypershell-tungstenite-components   = { version =  "0.1.0-alpha" }
+hypershell-hash-components          = { version =  "0.1.0-alpha" }
 hypershell-macro                    = { version =  "0.1.0-alpha" }
 
 [patch.crates-io]
@@ -53,6 +54,7 @@ hypershell-json-components          = { path = "./crates/hypershell-json-compone
 hypershell-reqwest-components       = { path = "./crates/hypershell-reqwest-components" }
 hypershell-tokio-components         = { path = "./crates/hypershell-tokio-components" }
 hypershell-tungstenite-components   = { path = "./crates/hypershell-tungstenite-components" }
+hypershell-hash-components          = { path = "./crates/hypershell-hash-components" }
 hypershell-macro                    = { path = "./crates/hypershell-macro" }
 
 # cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }

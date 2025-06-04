@@ -13,9 +13,15 @@ pub fn expand(mut tokens: Peekable<impl Iterator<Item = ExtendedTokenTree>>) -> 
     loop {
         match tokens.next() {
             Some(token) => match token {
-                ExtendedTokenTree::Literal(literal) => out.extend(quote! {
-                    symbol!( #literal )
-                }),
+                ExtendedTokenTree::Literal(literal) => {
+                    if literal.to_string().starts_with('"') {
+                        out.extend(quote! {
+                            symbol!( #literal )
+                        });
+                    } else {
+                        out.extend(quote! { #literal });
+                    }
+                }
                 ExtendedTokenTree::Group(group) => {
                     let in_expanded = expand_and_pipe(group.body);
                     out.extend(expand_grouped(&group.delim, in_expanded));
@@ -107,7 +113,7 @@ pub fn expand_grouped(delim: &ExtendedDelimiter, body: TokenStream) -> TokenStre
                 quote! { { #body } }
             }
             Delimiter::Bracket => {
-                quote! { { #body } }
+                quote! { [ #body ] }
             }
             Delimiter::Parenthesis => {
                 quote! { ( #body ) }

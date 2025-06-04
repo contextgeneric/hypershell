@@ -5,10 +5,10 @@ mod preset {
     use cgp::prelude::*;
 
     use crate::components::{StringArgExtractorComponent, UrlArgExtractorComponent};
-    use crate::dsl::{BytesToString, ConvertTo, FieldArg, JoinArgs, Pipe, StaticArg};
+    use crate::dsl::{BytesToString, ConvertTo, FieldArg, JoinArgs, Pipe, StaticArg, Use};
     use crate::providers::{
         DecodeUtf8Bytes, ExtractFieldArg, ExtractMethodFieldArg, ExtractStaticArg,
-        ExtractStringUrlArg, HandleConvert, HandlePipe, JoinStringArgs,
+        ExtractStringUrlArg, HandleConvert, HandlePipe, HandleUseProvider, JoinStringArgs,
     };
 
     cgp_preset! {
@@ -55,6 +55,8 @@ mod preset {
                 Promote<HandleConvert>,
             <Handlers> Pipe<Handlers>:
                 HandlePipe,
+            <Provider, Code> Use<Provider, Code>:
+                HandleUseProvider,
         }
     }
 }

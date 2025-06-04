@@ -4,8 +4,7 @@ use hypershell_macro::hypershell;
 use reqwest::Client;
 
 pub type Program = hypershell! {
-    BytesToStream
-    |   StreamingHttpRequest<
+    StreamingHttpRequest<
             GetMethod,
             StaticArg<"https://nixos.org/manual/nixpkgs/unstable/">,
             WithHeaders<Nil>,
