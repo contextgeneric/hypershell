@@ -1,5 +1,5 @@
 use hypershell::prelude::*;
-use hypershell_hash_components::dsl::Checksum;
+use hypershell_hash_components::dsl::{BytesToHex, Checksum};
 use hypershell_macro::hypershell;
 use reqwest::Client;
 use sha2::Sha256;
@@ -11,7 +11,8 @@ pub type Program = hypershell! {
         WithHeaders[ ],
     >
     | Checksum<Sha256>
-    | ConvertTo<[u8; 32]>
+    | BytesToHex
+    | StreamToStdout
 };
 
 #[cgp_context(MyAppComponents: MyAppPreset)]
@@ -26,8 +27,8 @@ mod preset {
     use cgp::extra::handler::{PipeHandlers, UseInputDelegate};
     use hypershell::prelude::*;
     use hypershell::presets::HypershellHandlerPreset;
-    use hypershell_hash_components::dsl::Checksum;
-    use hypershell_hash_components::providers::HandleStreamChecksum;
+    use hypershell_hash_components::dsl::{BytesToHex, Checksum};
+    use hypershell_hash_components::providers::{HandleBytesToHex, HandleStreamChecksum};
     use hypershell_tokio_components::providers::{
         AsyncReadToStream, FuturesToTokioAsyncRead, HandleBytesToStream,
     };
@@ -61,7 +62,9 @@ mod preset {
                             HandleBytesToStream,
                             HandleStreamChecksum,
                         ]>,
-                }>
+                }>,
+            BytesToHex:
+                HandleBytesToHex,
         }
     }
 }
@@ -73,9 +76,7 @@ async fn main() -> Result<(), Error> {
         url: "https://nixos.org/manual/nixpkgs/unstable/".to_owned(),
     };
 
-    let checksum = app.handle(PhantomData::<Program>, Vec::new()).await?;
-
-    println!("{}", hex::encode(checksum));
+    app.handle(PhantomData::<Program>, Vec::new()).await?;
 
     Ok(())
 }

@@ -1,6 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
     use std::path::PathBuf;
+    use std::string::String;
     use std::vec::Vec;
 
     use cgp::core::component::UseDelegate;
@@ -93,7 +94,10 @@ mod preset {
                 ]>,
             <S> TokioAsyncReadStream<S>:
                 HandleStreamToStdout,
-            Vec<u8>:
+            [
+                Vec<u8>,
+                String,
+            ]:
                 PipeHandlers<Product![
                     Call<BytesToStream>,
                     HandleStreamToStdout,

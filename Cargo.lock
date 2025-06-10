@@ -738,6 +738,7 @@ version = "0.1.0-alpha"
 dependencies = [
  "cgp",
  "futures",
+ "hex",
  "hypershell-components",
  "sha2",
 ]
