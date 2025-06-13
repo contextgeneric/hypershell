@@ -698,10 +698,8 @@ dependencies = [
  "hypershell-macro",
  "hypershell-reqwest-components",
  "hypershell-tokio-components",
- "hypershell-tungstenite-components",
  "reqwest",
  "serde_json",
- "tokio-tungstenite",
  "url",
 ]
 
@@ -723,12 +721,13 @@ dependencies = [
  "hypershell",
  "hypershell-components",
  "hypershell-hash-components",
- "hypershell-macro",
  "hypershell-tokio-components",
+ "hypershell-tungstenite-components",
  "reqwest",
  "serde",
  "sha2",
  "tokio",
+ "tokio-tungstenite",
  "tokio-util",
 ]
 

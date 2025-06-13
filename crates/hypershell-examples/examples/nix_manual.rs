@@ -1,6 +1,5 @@
 use hypershell::prelude::*;
 use hypershell::presets::HypershellPreset;
-use hypershell_macro::hypershell;
 use reqwest::Client;
 
 pub type Program = hypershell! {

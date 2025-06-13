@@ -19,10 +19,10 @@ mod preset {
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::{CoreExec, ToTokioAsyncRead};
     use crate::providers::{
-        ExtractArgs, ExtractFieldArgs, FuturesToTokioAsyncRead, HandleBytesToTokioAsyncRead,
-        HandleCoreExec, HandleReadFile, HandleSimpleExec, HandleStreamToStdout,
-        HandleStreamingExec, HandleTokioAsyncReadToBytes, HandleTokioAsyncReadToString,
-        HandleWriteFile, JoinExtractArgs, WrapTokioAsyncRead,
+        AsyncReadToStream, ExtractArgs, ExtractFieldArgs, FuturesToTokioAsyncRead,
+        HandleBytesToStream, HandleBytesToTokioAsyncRead, HandleCoreExec, HandleReadFile,
+        HandleSimpleExec, HandleStreamToStdout, HandleStreamingExec, HandleTokioAsyncReadToBytes,
+        HandleTokioAsyncReadToString, HandleWriteFile, JoinExtractArgs, WrapTokioAsyncRead,
     };
     use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
@@ -107,6 +107,24 @@ mod preset {
                 String,
             ]:
                 HandleBytesToTokioAsyncRead,
+        }
+    }
+
+    cgp_preset! {
+        #[wrap_provider(UseInputDelegate)]
+        ToFuturesStreamHandlers {
+            <S> FuturesAsyncReadStream<S>:
+                PipeHandlers<Product![
+                    FuturesToTokioAsyncRead,
+                    AsyncReadToStream,
+                ]>,
+            <S> TokioAsyncReadStream<S>:
+                AsyncReadToStream,
+            [
+                Vec<u8>,
+                String,
+            ]:
+                HandleBytesToStream,
         }
     }
 }

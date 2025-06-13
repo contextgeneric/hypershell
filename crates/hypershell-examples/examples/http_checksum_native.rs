@@ -2,7 +2,6 @@
 
 use hypershell::prelude::*;
 use hypershell_hash_components::dsl::{BytesToHex, Checksum};
-use hypershell_macro::hypershell;
 use reqwest::Client;
 use sha2::Sha256;
 
@@ -26,15 +25,12 @@ pub struct MyApp {
 
 #[cgp::re_export_imports]
 mod preset {
-    use cgp::extra::handler::{PipeHandlers, UseInputDelegate};
+    use cgp::extra::handler::PipeHandlers;
     use hypershell::prelude::*;
     use hypershell::presets::HypershellHandlerPreset;
     use hypershell_hash_components::dsl::{BytesToHex, Checksum};
     use hypershell_hash_components::providers::{HandleBytesToHex, HandleStreamChecksum};
-    use hypershell_tokio_components::providers::{
-        AsyncReadToStream, FuturesToTokioAsyncRead, HandleBytesToStream,
-    };
-    use hypershell_tokio_components::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
+    use hypershell_tokio_components::presets::ToFuturesStreamHandlers;
 
     cgp_preset! {
         MyAppPreset: HypershellPreset {
@@ -47,24 +43,10 @@ mod preset {
         #[wrap_provider(UseDelegate)]
         MyHandlerPreset: HypershellHandlerPreset {
             <Hasher> Checksum<Hasher>:
-                UseInputDelegate<new ChecksumHandlers {
-                    <S> FuturesAsyncReadStream<S>:
-                        PipeHandlers<Product![
-                            FuturesToTokioAsyncRead,
-                            AsyncReadToStream,
-                            HandleStreamChecksum,
-                        ]>,
-                    <S> TokioAsyncReadStream<S>:
-                        PipeHandlers<Product![
-                            AsyncReadToStream,
-                            HandleStreamChecksum,
-                        ]>,
-                    Vec<u8>:
-                        PipeHandlers<Product![
-                            HandleBytesToStream,
-                            HandleStreamChecksum,
-                        ]>,
-                }>,
+                PipeHandlers<Product![
+                    ToFuturesStreamHandlers::Provider,
+                    HandleStreamChecksum,
+                ]>,
             BytesToHex:
                 HandleBytesToHex,
         }

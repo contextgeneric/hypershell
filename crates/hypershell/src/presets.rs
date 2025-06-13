@@ -22,11 +22,9 @@ mod preset {
     use hypershell_reqwest_components::providers::ErrorResponse;
     use hypershell_tokio_components::presets::{HypershellTokioPreset, TokioHandlerPreset};
     use hypershell_tokio_components::providers::ExecOutputError;
-    use hypershell_tungstenite_components::presets::TungsteniteHandlerPreset;
     use reqwest::Error as ReqwestError;
     use reqwest::header::{InvalidHeaderName, InvalidHeaderValue};
     use serde_json::Error as JsonError;
-    use tokio_tungstenite::tungstenite::Error as TungsteniteError;
     use url::ParseError;
 
     cgp_preset! {
@@ -64,7 +62,6 @@ mod preset {
                 InvalidHeaderName,
                 InvalidHeaderValue,
                 JsonError,
-                TungsteniteError,
             ]:
                 RaiseAnyhowError,
             [
@@ -81,7 +78,6 @@ mod preset {
             BaseHandlerPreset
             + TokioHandlerPreset
             + ReqwestHandlerPreset
-            + TungsteniteHandlerPreset
             + JsonHandlerPreset
         {
         }

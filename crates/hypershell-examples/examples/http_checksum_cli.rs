@@ -1,5 +1,4 @@
 use hypershell::prelude::*;
-use hypershell_macro::hypershell;
 
 pub type Program = hypershell! {
     StreamingExec<
