@@ -58,7 +58,10 @@ mod preset {
                     WrapTokioAsyncRead,
                 ]>,
             <Path> WriteFile<Path>:
-                HandleWriteFile,
+                PipeHandlers<Product![
+                    ToTokioAsyncReadHandlers::Provider,
+                    HandleWriteFile,
+                ]>,
             StreamToBytes:
                 HandleTokioAsyncReadToBytes,
             StreamToString:

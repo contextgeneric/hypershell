@@ -8,7 +8,6 @@ pub type Program = hypershell! {
         FieldArg<"url">,
         WithHeaders[ ],
     >
-    |   Use<FuturesToTokioAsyncRead, ()>
     |   WriteFile<FieldArg<"file_path">>
 };
 

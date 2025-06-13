@@ -4,7 +4,7 @@ use std::io::ErrorKind;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
-use futures::{AsyncRead as FutAsyncRead, StreamExt, TryStreamExt};
+use futures::{AsyncRead as FuturesAsyncRead, StreamExt, TryStreamExt};
 use hypershell_components::components::CanExtractStringArg;
 use hypershell_components::dsl::WebSocket;
 use tokio::io::AsyncRead;
@@ -24,13 +24,13 @@ where
     Headers: Send,
     Input: Send + AsyncRead + Unpin + 'static,
 {
-    type Output = Pin<Box<dyn FutAsyncRead + Send>>;
+    type Output = Pin<Box<dyn FuturesAsyncRead + Send>>;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<WebSocket<UrlArg, Headers>>,
         input: Input,
-    ) -> Result<Pin<Box<dyn FutAsyncRead + Send>>, Context::Error> {
+    ) -> Result<Pin<Box<dyn FuturesAsyncRead + Send>>, Context::Error> {
         let input = ReaderStream::new(input);
 
         let url = context
