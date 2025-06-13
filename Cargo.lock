@@ -100,9 +100,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "cgp"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40950d43dff3a69ea220e922293dac43d75686bf59150e48563641639434abf6"
+checksum = "76cc58a84422b88bc3af3317144eb850c1155cdceb63f05c64fcf1f31142526e"
 dependencies = [
  "cgp-async",
  "cgp-core",
@@ -111,9 +111,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-async"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cfe5075dcb528f76502ef8571a7fa30a247d91e5e2dde964d65c3f5dd12792f2"
+checksum = "bb694df1a7ebd2224c1fc9991791e9c14621a46ef24f4339cde65056adca384d"
 dependencies = [
  "cgp-async-macro",
  "cgp-sync",
@@ -121,9 +121,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-async-macro"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b072ab723c8848f344e1fdccb03d72e770d6e275212f42df918d777608856ec"
+checksum = "83d9ac57830f6a65c6936129334f79254dc7f267b48f790c49c7922a37ce4a32"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -132,15 +132,15 @@ dependencies = [
 
 [[package]]
 name = "cgp-component"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d86263a6c167a1b3a9382a739c1e160d759b47dfca246b8d21d6e4e8a3a5c6db"
+checksum = "3e0ec1d668fbf5ef7c973942a1853eebcc9ef0e0422033e11ba2ad11e97d6781"
 
 [[package]]
 name = "cgp-core"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee866419d771af9d08332f868da56f491cde3361e426be774d31fe49b8b003f6"
+checksum = "a6694b2ddb9e0d8b1655c2f439938848e3da2b4a2acf4a362e46e39111070706"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -152,9 +152,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-error"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad4d97311d57cc0bd80c4b760d87167ad2ae10a3dfd5113e173cd6110af4600b"
+checksum = "d2a7497841ded44c084695f56ac8300e56f708e26ec10f2de45b5c57e68ee5a4"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -164,9 +164,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-error-anyhow"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1968184c0e80796e02705e66cc46d875a5b768754ca5e455a71e023e685d8c9d"
+checksum = "d8c5aaeb1cbcea48f92939efd87ae49c072e4cc31f06c653fcd88a165f90ef05"
 dependencies = [
  "anyhow",
  "cgp-core",
@@ -174,18 +174,18 @@ dependencies = [
 
 [[package]]
 name = "cgp-error-extra"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab7bc170cc7929d4ca39157770b1118e36c408a28907e5529b45fb1b9c72639f"
+checksum = "06b0725dc0890a6e66474bf9eec75a026fe53149770ca5b028a119bf99951582"
 dependencies = [
  "cgp-core",
 ]
 
 [[package]]
 name = "cgp-extra"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c05dde570e96df5d91982debdc9f4f1f5b5e07411e2a257bbac21c88ccbfe7bc"
+checksum = "8d6b3d76499d7a31cccddf528e8f4f69f89c507c8c27e01842d0c23f4d2b6389"
 dependencies = [
  "cgp-error-extra",
  "cgp-handler",
@@ -196,9 +196,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-field"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "22c4bb4fb5c7574dba2cfaa36664219e5d90b4d8596e3991f2e40f54aa061182"
+checksum = "143f966e0c6fd7e2722fd72aa280cd01eca207542361f04581a25715dc76fa94"
 dependencies = [
  "cgp-component",
  "cgp-macro",
@@ -207,18 +207,18 @@ dependencies = [
 
 [[package]]
 name = "cgp-handler"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b33be1d92b29a0e9b735c57f2b718f08b1d77fd0895f5bbb8c9ccbf64b5036fb"
+checksum = "83be60af525de18c5c173446575b5985aba174910ad0c74647952dc992850b53"
 dependencies = [
  "cgp-core",
 ]
 
 [[package]]
 name = "cgp-inner"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e145be1ed0568dd2646e9619a07c5d1ee5186281b186bf85cf460878f513516c"
+checksum = "ef4a99d87c7a14c5afced4f22bcc5ad60fdf1d0b01f1cdf80e4489313614944a"
 dependencies = [
  "cgp-component",
  "cgp-macro",
@@ -226,9 +226,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-macro"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c555dea534479d33dda40d6e3be4663523d0070ddd34ffe6c0048df218dfff8"
+checksum = "7775b0e31ae5da7a7bb09da575fc663a664541bb4c8c1f9263f01d72ad1a9945"
 dependencies = [
  "cgp-macro-lib",
  "syn",
@@ -236,9 +236,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-macro-lib"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2fa4a8f9dc111e590dbbc97cc0940619f3d7a52a21accd9f9fc80a499b7c5737"
+checksum = "43f294399768ab8d3198808d80c544dd9f513e9bc677fb6ae7eb078f39fe70f9"
 dependencies = [
  "itertools",
  "prettyplease",
@@ -249,9 +249,9 @@ dependencies = [
 
 [[package]]
 name = "cgp-run"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6045e1f8370ff06d08eb04be69933a5061540755524a957cd45f73846c061e6"
+checksum = "47d51e0f6489c1ee781a6e802e16d981b9ae14031e94b8e68cdead2b71153e86"
 dependencies = [
  "cgp-async",
  "cgp-component",
@@ -261,27 +261,27 @@ dependencies = [
 
 [[package]]
 name = "cgp-runtime"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "20187f2c1610f040f3b2a1836535dc380d094e17da055eff500d02c84706f03e"
+checksum = "9847e5a37b4fece60ba631a03186821b058cc3883344b23ea8fc84eae2993bae"
 dependencies = [
  "cgp-core",
 ]
 
 [[package]]
 name = "cgp-sync"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1a6ae69f68673e01fb5bef8eb5059830a7f30d8275371c0aace34315c94f8a7"
+checksum = "14a61708c126b368f1d4f8592e25e65116f2ad6e70da8f3b0ec86ea6fc12d3e0"
 dependencies = [
  "cgp-async-macro",
 ]
 
 [[package]]
 name = "cgp-type"
-version = "0.4.1-alpha"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f5a008b3b4eb60543c5f358779976008eb2f81bed68908d61cd77df937effe53"
+checksum = "db4a01bd242d01ec5e177dc57cf16b07c6fd28edb1afe47a722227856c94eeda"
 dependencies = [
  "cgp-component",
  "cgp-macro",
@@ -689,7 +689,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "cgp",
  "cgp-error-anyhow",
@@ -705,14 +705,14 @@ dependencies = [
 
 [[package]]
 name = "hypershell-components"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "cgp",
 ]
 
 [[package]]
 name = "hypershell-examples"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "cgp",
  "cgp-error-anyhow",
@@ -733,7 +733,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-hash-components"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "cgp",
  "futures",
@@ -744,7 +744,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-json-components"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "cgp",
  "hypershell-components",
@@ -754,7 +754,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-macro"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -762,7 +762,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-reqwest-components"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "cgp",
  "futures",
@@ -776,7 +776,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-tokio-components"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "cgp",
  "futures",
@@ -788,7 +788,7 @@ dependencies = [
 
 [[package]]
 name = "hypershell-tungstenite-components"
-version = "0.1.0-alpha"
+version = "0.1.0"
 dependencies = [
  "cgp",
  "futures",

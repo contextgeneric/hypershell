@@ -17,7 +17,7 @@ async fn test_join_fields() -> Result<(), Error> {
                 JoinArgs [
                     FieldArg<"base_dir">,
                     StaticArg<"crates">,
-                    StaticArg<"hypershell-apps">,
+                    StaticArg<"hypershell-examples">,
                 ],
             ]
         >

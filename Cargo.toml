@@ -23,8 +23,8 @@ authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp"]
 
 [workspace.dependencies]
-cgp                 = { version = "0.4.1-alpha" }
-cgp-error-anyhow    = { version = "0.4.1-alpha" }
+cgp                 = { version = "0.4.1" }
+cgp-error-anyhow    = { version = "0.4.1" }
 futures             = { version = "0.3.31" }
 hex                 = { version = "0.4.3" }
 itertools           = { version = "0.14.0" }
@@ -39,14 +39,14 @@ tokio-tungstenite   = { version = "0.26.2" }
 tokio-util          = { version = "0.7.15" }
 url                 = { version = "2.5.4" }
 
-hypershell                          = { version =  "0.1.0-alpha" }
-hypershell-components               = { version =  "0.1.0-alpha" }
-hypershell-json-components          = { version =  "0.1.0-alpha" }
-hypershell-reqwest-components       = { version =  "0.1.0-alpha" }
-hypershell-tokio-components         = { version =  "0.1.0-alpha" }
-hypershell-tungstenite-components   = { version =  "0.1.0-alpha" }
-hypershell-hash-components          = { version =  "0.1.0-alpha" }
-hypershell-macro                    = { version =  "0.1.0-alpha" }
+hypershell                          = { version =  "0.1.0" }
+hypershell-components               = { version =  "0.1.0" }
+hypershell-json-components          = { version =  "0.1.0" }
+hypershell-reqwest-components       = { version =  "0.1.0" }
+hypershell-tokio-components         = { version =  "0.1.0" }
+hypershell-tungstenite-components   = { version =  "0.1.0" }
+hypershell-hash-components          = { version =  "0.1.0" }
+hypershell-macro                    = { version =  "0.1.0" }
 
 [patch.crates-io]
 hypershell                          = { path = "./crates/hypershell" }
