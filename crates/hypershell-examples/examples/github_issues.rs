@@ -1,3 +1,30 @@
+// This example demonstrates how to use Hypershell to interact with a
+// JSON-based web API.
+//
+// The Hypershell program is defined as a `Program` type. It performs the
+// following steps:
+//
+// 1. Constructs a URL for the GitHub API to list issues for a repository.
+//    The URL is built by joining static arguments with dynamic arguments
+//    extracted from fields of the `MyApp` context, such as `base_url`,
+//    `github_org`, and `github_repo`.
+//
+// 2. The dynamic arguments are URL-encoded to ensure the final URL is valid.
+//
+// 3. A `SimpleHttpRequest` is sent to the constructed URL using the GET method,
+//    with a "User-Agent" header.
+//
+// 4. The JSON response from the API is piped to `DecodeJson`, which deserializes
+//    the JSON byte stream into a `Vec<Issue>`.
+//
+// The `MyApp` struct defines the context for running the Hypershell program.
+// It uses `#[cgp_context]` to inherit the necessary components from
+// `HypershellPreset` for executing the program. It also uses `#[derive(HasField)]`
+// to expose its fields to be used by `FieldArg` within the program definition.
+//
+// The `main` function sets up the `MyApp` context with the required values,
+// executes the `Program` using `app.handle`, and prints the fetched issues.
+
 use hypershell::prelude::*;
 use hypershell::presets::HypershellPreset;
 use reqwest::Client;

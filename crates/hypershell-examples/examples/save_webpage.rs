@@ -1,3 +1,24 @@
+// This example demonstrates how to download a webpage and save it to a file.
+//
+// The Hypershell program is defined as a `Program` type. It performs the
+// following steps:
+//
+// 1. A `StreamingHttpRequest` handler fetches content from a given `url`.
+//    The URL is provided dynamically from the `url` field of the `MyApp` context.
+//
+// 2. The response stream is piped to the `WriteFile` handler.
+//
+// 3. The `WriteFile` handler saves the incoming stream to a file at a given
+//    path. The path is provided dynamically from the `file_path` field of the
+//    `MyApp` context.
+//
+// The `MyApp` context provides the `http_client` for the request, the `url` to
+// download, and the `file_path` where the content should be saved.
+//
+// The `main` function initializes the `MyApp` context with these values and
+// runs the program. A confirmation message is printed to the console upon
+// completion.
+
 use hypershell::prelude::*;
 use reqwest::Client;
 
