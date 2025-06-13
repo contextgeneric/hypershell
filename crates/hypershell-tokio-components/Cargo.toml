@@ -16,4 +16,4 @@ cgp                     = { workspace = true }
 itertools               = { workspace = true }
 futures                 = { workspace = true }
 tokio                   = { workspace = true, features = [ "process", "fs", "rt", "io-util", "io-std" ] }
-tokio-util              = { workspace = true, features = [ "compat", "codec" ] }
+tokio-util              = { workspace = true, features = [ "compat", "codec", "io" ] }
