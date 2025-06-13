@@ -25,6 +25,20 @@ Hypershell allows you to define complex command pipelines, similar to shell scri
 -   **Streaming Pipelines**: Efficiently stream I/O between handlers, just like in a traditional shell.
 -   **Compile-Time Interpretation**: Your DSL programs are resolved at compile-time, resulting in highly performant native code.
 
+## Crate Organization
+
+Hypershell is organized into several crates, each with a specific purpose. This modular structure allows for clear separation of concerns and makes the language easier to extend.
+
+-   [`hypershell`](./crates/hypershell): The main crate that re-exports all the necessary components for using the Hypershell DSL. It defines the default presets and contexts for running Hypershell programs.
+-   [`hypershell-macro`](./crates/hypershell-macro): Contains the `hypershell!` procedural macro, which provides the shell-like syntax for the DSL.
+-   [`hypershell-components`](./crates/hypershell-components): Defines the core abstract syntax (e.g., `SimpleExec`, `StreamingExec`) and the fundamental CGP components and traits that form the basis of the DSL.
+-   [`hypershell-tokio-components`](./crates/hypershell-tokio-components): Provides Tokio-based implementations for executing external CLI commands and handling file I/O.
+-   [`hypershell-reqwest-components`](./crates/hypershell-reqwest-components): Implements native HTTP handlers (e.g., `SimpleHttpRequest`, `StreamingHttpRequest`) using the `reqwest` crate.
+-   [`hypershell-json-components`](./crates/hypershell-json-components): Provides handlers for JSON serialization (`EncodeJson`) and deserialization (`DecodeJson`).
+-   [`hypershell-hash-components`](./crates/hypershell-hash-components): An extension crate that offers native handlers for checksumming (`Checksum`) and hex encoding (`BytesToHex`).
+-   [`hypershell-tungstenite-components`](./crates/hypershell-tungstenite-components): An extension crate that adds native WebSocket support to Hypershell.
+-   [`hypershell-examples`](./crates/hypershell-examples): Contains a collection of examples demonstrating various features and use cases of Hypershell.
+
 ## Getting Started
 
 ### Installation
