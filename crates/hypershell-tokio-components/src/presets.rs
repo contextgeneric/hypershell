@@ -14,7 +14,7 @@ mod preset {
         BytesToStream, FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg,
         StreamToBytes, StreamToStdout, StreamToString, StreamingExec, WithArgs, WriteFile,
     };
-    use hypershell_components::providers::{Call, ExtractStringCommandArg, ReturnInput};
+    use hypershell_components::providers::{ExtractStringCommandArg, ReturnInput};
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::{CoreExec, ToTokioAsyncRead};
@@ -46,7 +46,7 @@ mod preset {
                 HandleSimpleExec,
             <Path, Args> StreamingExec<Path, Args>:
                 PipeHandlers<Product![
-                    Call<ToTokioAsyncRead>,
+                    ToTokioAsyncReadHandlers::Provider,
                     HandleStreamingExec,
                     WrapTokioAsyncRead,
                 ]>,
@@ -67,7 +67,7 @@ mod preset {
                 HandleBytesToTokioAsyncRead,
             StreamToStdout:
                 PipeHandlers<Product![
-                    Call<ToTokioAsyncRead>,
+                    ToTokioAsyncReadHandlers::Provider,
                     HandleStreamToStdout,
                 ]>,
             ToTokioAsyncRead:
@@ -106,7 +106,7 @@ mod preset {
                 Vec<u8>,
                 String,
             ]:
-                Call<BytesToStream>,
+                HandleBytesToTokioAsyncRead,
         }
     }
 }

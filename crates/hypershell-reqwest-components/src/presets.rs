@@ -11,8 +11,7 @@ mod preset {
         GetMethod, Header, PostMethod, SimpleHttpRequest, StreamingHttpRequest, UrlEncodeArg,
         WithHeaders,
     };
-    use hypershell_components::providers::Call;
-    use hypershell_tokio_components::dsl::ToTokioAsyncRead;
+    use hypershell_tokio_components::presets::ToTokioAsyncReadHandlers;
     use hypershell_tokio_components::providers::WrapFuturesAsyncRead;
     use reqwest::{Method, Url};
 
@@ -48,7 +47,7 @@ mod preset {
                 HandleSimpleHttpRequest,
             <Method, Url, Headers> StreamingHttpRequest<Method, Url, Headers>:
                 PipeHandlers<Product![
-                    Call<ToTokioAsyncRead>,
+                    ToTokioAsyncReadHandlers::Provider,
                     StreamToBody,
                     HandleStreamingHttpRequest,
                     WrapFuturesAsyncRead,
