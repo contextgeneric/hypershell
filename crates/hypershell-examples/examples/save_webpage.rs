@@ -1,5 +1,4 @@
 use hypershell::prelude::*;
-use hypershell_tokio_components::providers::FuturesToTokioAsyncRead;
 use reqwest::Client;
 
 pub type Program = hypershell! {

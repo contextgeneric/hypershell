@@ -42,70 +42,20 @@ reqwest = "0.11"
 anyhow = "1.0"
 ```
 
-### Example: Native HTTP and CLI Pipeline
+### Examples
 
-Here's an example that showcases Hypershell's ability to mix native Rust handlers with CLI commands. This program fetches a webpage using the native `reqwest` HTTP client, then pipes the response to the `sha256sum` and `cut` CLI commands to extract the checksum.
+The `hypershell-examples` crate contains various examples demonstrating different features and use cases of Hypershell. You can find the full source code for these examples in the [`crates/hypershell-examples/examples/`](./crates/hypershell-examples/examples) directory.
 
-```rust
-use cgp::prelude::*;
-use hypershell::prelude::*;
-use reqwest::Client;
-use std::marker::PhantomData;
-use anyhow::Error;
+Here are a few hand-picked examples with short descriptions:
 
-// Define the Hypershell program as a type
-pub type Program = hypershell! {
-    // Use a native HTTP client for the request
-    StreamingHttpRequest<
-        GetMethod,
-        FieldArg<"url">,
-        WithHeaders[],
-    >
-    // Pipe the streaming response to `sha256sum`
-    |   StreamingExec<
-            StaticArg<"sha256sum">,
-            WithStaticArgs[],
-        >
-    // Pipe the output of `sha256sum` to `cut`
-    |   StreamingExec<
-            StaticArg<"cut">,
-            WithStaticArgs [
-                "-d",
-                " ",
-                "-f",
-                "1",
-            ],
-        >
-    // Stream the final result to STDOUT
-    |   StreamToStdout
-};
-
-// Define a custom context to provide the `url` field and an HTTP client.
-// The context inherits all standard Hypershell functionality from `HypershellPreset`.
-#[cgp_context(MyAppComponents: HypershellPreset)]
-#[derive(HasField)]
-pub struct MyApp {
-    pub http_client: Client,
-    pub url: String,
-}
-
-#[tokio::main]
-async fn main() -> Result<(), Error> {
-    // Create an instance of our custom context
-    let app = MyApp {
-        http_client: Client::new(),
-        url: "https://nixos.org/manual/nixpkgs/unstable/".to_owned(),
-    };
-
-    // Run the program with the context.
-    // The initial input is an empty Vec, as the first handler generates the data.
-    app.handle(PhantomData::<Program>, Vec::new()).await?;
-
-    Ok(())
-}
-```
-
-When you run this program, it will print the SHA256 checksum of the Nixpkgs manual page.
+*   [`hello.rs`](./crates/hypershell-examples/examples/hello.rs): A basic "hello world" program that executes `echo hello world!` using `SimpleExec`.
+*   [`hello_name.rs`](./crates/hypershell-examples/examples/hello_name.rs): Demonstrates using variable parameters (`FieldArg`) to pass dynamic values to shell commands.
+*   [`http_checksum_cli.rs`](./crates/hypershell-examples/examples/http_checksum_cli.rs): Fetches a URL using `curl` and pipes the output to `sha256sum` and `cut` via streaming execution.
+*   [`http_checksum_client.rs`](./crates/hypershell-examples/examples/http_checksum_client.rs): Fetches a URL using Hypershell's native HTTP client, then pipes the response to `sha256sum` and `cut` via streaming execution.
+*   [`http_checksum_native.rs`](./crates/hypershell-examples/examples/http_checksum_native.rs): The same checksum functionality, but uses Hypershell's native HTTP client together with an extended version of the DSL that introduces `Checksum` to the language syntax, showcasing the extensibility of the DSL.
+*   [`rust_playground.rs`](./crates/hypershell-examples/examples/rust_playground.rs): Shows how to encode and decode JSON, sending a Rust code snippet to the Rust Playground API and parsing its response.
+*   [`bluesky.rs`](./crates/hypershell-examples/examples/bluesky.rs): Connects to the Bluesky social media firehose via `nix-shell` and `websocat`, and then filters the stream using `grep`.
+*   [`bluesky_websocket.rs`](./crates/hypershell-examples/examples/bluesky_websocket.rs): The same Bluesky firehose example, but extends the DSL with native Websocket handling and using it in the program, showcasing the extensibility of the DSL.
 
 ## Disclaimer
 
