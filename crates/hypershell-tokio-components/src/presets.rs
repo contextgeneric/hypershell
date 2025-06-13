@@ -12,7 +12,7 @@ mod preset {
     };
     use hypershell_components::dsl::{
         BytesToStream, FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg,
-        StreamToBytes, StreamToStdout, StreamToString, StreamingExec, WithArgs,
+        StreamToBytes, StreamToStdout, StreamToString, StreamingExec, WithArgs, WriteFile,
     };
     use hypershell_components::providers::{Call, ExtractStringCommandArg};
 
@@ -22,7 +22,7 @@ mod preset {
         ExtractArgs, ExtractFieldArgs, FuturesToTokioAsyncRead, HandleBytesToTokioAsyncRead,
         HandleCoreExec, HandleReadFile, HandleSimpleExec, HandleStreamToStdout,
         HandleStreamingExec, HandleTokioAsyncReadToBytes, HandleTokioAsyncReadToString,
-        JoinExtractArgs, WrapTokioAsyncRead,
+        HandleWriteFile, JoinExtractArgs, WrapTokioAsyncRead,
     };
     use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
@@ -53,6 +53,8 @@ mod preset {
                     HandleReadFile,
                     WrapTokioAsyncRead,
                 ]>,
+            <Path> WriteFile<Path>:
+                HandleWriteFile,
             StreamToBytes:
                 HandleTokioAsyncReadToBytes,
             StreamToString:
