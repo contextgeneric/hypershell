@@ -1,9 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
-    use std::vec::Vec;
-
     use cgp::core::component::UseDelegate;
-    use cgp::extra::handler::{HandlerComponent, PipeHandlers, UseInputDelegate};
+    use cgp::extra::handler::{HandlerComponent, PipeHandlers};
     use cgp::prelude::{cgp_preset, *};
     use hypershell_components::components::{
         HttpMethodTypeProviderComponent, MethodArgExtractorComponent, StringArgExtractorComponent,
@@ -13,8 +11,9 @@ mod preset {
         GetMethod, Header, PostMethod, SimpleHttpRequest, StreamingHttpRequest, UrlEncodeArg,
         WithHeaders,
     };
-    use hypershell_tokio_components::providers::{FuturesToTokioAsyncRead, WrapFuturesAsyncRead};
-    use hypershell_tokio_components::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
+    use hypershell_components::providers::Call;
+    use hypershell_tokio_components::dsl::ToTokioAsyncRead;
+    use hypershell_tokio_components::providers::WrapFuturesAsyncRead;
     use reqwest::{Method, Url};
 
     use crate::components::RequestBuilderUpdaterComponent;
@@ -48,7 +47,12 @@ mod preset {
             <Method, Url, Headers> SimpleHttpRequest<Method, Url, Headers>:
                 HandleSimpleHttpRequest,
             <Method, Url, Headers> StreamingHttpRequest<Method, Url, Headers>:
-                StreamingHttpHandlers::Provider,
+                PipeHandlers<Product![
+                    Call<ToTokioAsyncRead>,
+                    StreamToBody,
+                    HandleStreamingHttpRequest,
+                    WrapFuturesAsyncRead,
+                ]>,
             <Method, Url, Headers> CoreHttpRequest<Method, Url, Headers>:
                 HandleCoreHttpRequest,
         }
@@ -80,30 +84,6 @@ mod preset {
                 UpdateRequestHeaders,
             <Key, Value> Header<Key, Value>:
                 UpdateRequestHeader,
-        }
-    }
-
-    cgp_preset! {
-        #[wrap_provider(UseInputDelegate)]
-        StreamingHttpHandlers {
-            <S> FuturesAsyncReadStream<S>:
-                PipeHandlers<Product![
-                    FuturesToTokioAsyncRead,
-                    StreamToBody,
-                    HandleStreamingHttpRequest,
-                    WrapFuturesAsyncRead,
-                ]>,
-            <S> TokioAsyncReadStream<S>:
-                PipeHandlers<Product![
-                    StreamToBody,
-                    HandleStreamingHttpRequest,
-                    WrapFuturesAsyncRead,
-                ]>,
-            Vec<u8>:
-                PipeHandlers<Product![
-                    HandleStreamingHttpRequest,
-                    WrapFuturesAsyncRead,
-                ]>,
         }
     }
 }

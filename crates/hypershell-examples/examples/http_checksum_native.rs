@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 use hypershell::prelude::*;
 use hypershell_hash_components::dsl::{BytesToHex, Checksum};
 use hypershell_macro::hypershell;

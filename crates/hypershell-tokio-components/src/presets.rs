@@ -14,10 +14,10 @@ mod preset {
         BytesToStream, FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg,
         StreamToBytes, StreamToStdout, StreamToString, StreamingExec, WithArgs, WriteFile,
     };
-    use hypershell_components::providers::{Call, ExtractStringCommandArg};
+    use hypershell_components::providers::{Call, ExtractStringCommandArg, ReturnInput};
 
     use crate::components::CommandUpdaterComponent;
-    use crate::dsl::CoreExec;
+    use crate::dsl::{CoreExec, ToTokioAsyncRead};
     use crate::providers::{
         ExtractArgs, ExtractFieldArgs, FuturesToTokioAsyncRead, HandleBytesToTokioAsyncRead,
         HandleCoreExec, HandleReadFile, HandleSimpleExec, HandleStreamToStdout,
@@ -45,7 +45,11 @@ mod preset {
             <Path, Args> SimpleExec<Path, Args>:
                 HandleSimpleExec,
             <Path, Args> StreamingExec<Path, Args>:
-                StreamingExecHandlers::Provider,
+                PipeHandlers<Product![
+                    Call<ToTokioAsyncRead>,
+                    HandleStreamingExec,
+                    WrapTokioAsyncRead,
+                ]>,
             <Path, Args> CoreExec<Path, Args>:
                 HandleCoreExec,
             <Path> ReadFile<Path>:
@@ -62,7 +66,12 @@ mod preset {
             BytesToStream:
                 HandleBytesToTokioAsyncRead,
             StreamToStdout:
-                StreamingToStdoutHandlers::Provider,
+                PipeHandlers<Product![
+                    Call<ToTokioAsyncRead>,
+                    HandleStreamToStdout,
+                ]>,
+            ToTokioAsyncRead:
+                ToTokioAsyncReadHandlers::Provider,
         }
     }
 
@@ -88,45 +97,16 @@ mod preset {
 
     cgp_preset! {
         #[wrap_provider(UseInputDelegate)]
-        StreamingToStdoutHandlers {
+        ToTokioAsyncReadHandlers {
             <S> FuturesAsyncReadStream<S>:
-                PipeHandlers<Product![
-                    FuturesToTokioAsyncRead,
-                    HandleStreamToStdout,
-                ]>,
+                FuturesToTokioAsyncRead,
             <S> TokioAsyncReadStream<S>:
-                HandleStreamToStdout,
+                ReturnInput,
             [
                 Vec<u8>,
                 String,
             ]:
-                PipeHandlers<Product![
-                    Call<BytesToStream>,
-                    HandleStreamToStdout,
-                ]>,
-        }
-    }
-
-    cgp_preset! {
-        #[wrap_provider(UseInputDelegate)]
-        StreamingExecHandlers {
-            <S> FuturesAsyncReadStream<S>:
-                PipeHandlers<Product![
-                    FuturesToTokioAsyncRead,
-                    HandleStreamingExec,
-                    WrapTokioAsyncRead,
-                ]>,
-            <S> TokioAsyncReadStream<S>:
-                PipeHandlers<Product![
-                    HandleStreamingExec,
-                    WrapTokioAsyncRead,
-                ]>,
-            Vec<u8>:
-                PipeHandlers<Product![
-                    Call<BytesToStream>,
-                    HandleStreamingExec,
-                    WrapTokioAsyncRead,
-                ]>,
+                Call<BytesToStream>,
         }
     }
 }
