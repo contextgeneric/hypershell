@@ -1,3 +1,7 @@
+![Crates.io](https://img.shields.io/crates/v/hypershell.svg)
+[![Docs.rs](https://docs.rs/hypershell/badge.svg)](https://docs.rs/hypershell)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/contextgeneric/hypershell/blob/main/LICENSE)
+
 # Hypershell
 
 Hypershell is a modular, *type-level* domain-specific language (DSL) for writing shell-script-like programs in Rust. It is powered by [context-generic programming (CGP)](https://contextgeneric.dev/), which makes it possible for users to *extend* or *modify* both the language syntax and semantics.
