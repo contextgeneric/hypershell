@@ -4,16 +4,13 @@ use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 use hypershell::prelude::CanHandle;
 
-pub struct Compare<CodeA, CodeB>(pub PhantomData<(CodeA, CodeB)>);
+use crate::dsl::Compare;
 
 #[cgp_new_provider]
 impl<Context, CodeA: Send, CodeB: Send, InputA: Send, InputB: Send, Output>
-    Handler<Context, Compare<CodeA, CodeB>, (InputA, InputB)>
-    for HandleCompare
+    Handler<Context, Compare<CodeA, CodeB>, (InputA, InputB)> for HandleCompare
 where
-    Context: CanHandle<CodeA, InputA, Output = Output>
-        + CanHandle<CodeB, InputB, Output = Output>
-        ,
+    Context: CanHandle<CodeA, InputA, Output = Output> + CanHandle<CodeB, InputB, Output = Output>,
     Output: Send + Eq,
 {
     type Output = bool;
