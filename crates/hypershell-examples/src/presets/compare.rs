@@ -18,6 +18,7 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
         CompareHandlerPreset: ChecksumHandlerPreset {
+            // Note: The compare handler is somehow much slower when the future is not boxed
             <CodeA, CodeB> Compare<CodeA, CodeB>:
                 BoxHandler<HandleCompare>,
             <CodeCond, CodeThen, CodeElse> If<CodeCond, CodeThen, CodeElse>:

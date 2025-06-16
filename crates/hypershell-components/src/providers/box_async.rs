@@ -21,9 +21,8 @@ where
         code: PhantomData<Code>,
         input: Input,
     ) -> impl Future<Output = Result<Self::Output, Context::Error>> + Send {
-        let future: Pin<
-            Box<dyn Future<Output = Result<Self::Output, Context::Error>> + Send + '_>,
-        > = Box::pin(InHandler::handle(context, code, input));
+        let future: Pin<Box<dyn Future<Output = Result<Self::Output, Context::Error>> + Send>> =
+            Box::pin(InHandler::handle(context, code, input));
 
         future
     }

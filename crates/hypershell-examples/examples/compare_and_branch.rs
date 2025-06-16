@@ -24,11 +24,21 @@ pub type Program = hypershell! {
             GetChecksumOf<FieldArg<"url_b">>,
         >,
         Pipe[
-            SimpleExec<StaticArg<"echo">, WithArgs[StaticArg<"equals">]>,
+            SimpleExec<
+                StaticArg<"echo">,
+                WithArgs[
+                    StaticArg<"the checksums are equals">,
+                ],
+            >,
             StreamToStdout,
         ],
         Pipe[
-            SimpleExec<StaticArg<"echo">, WithArgs[StaticArg<"not equals">]>,
+            SimpleExec<
+                StaticArg<"echo">,
+                WithArgs[
+                    StaticArg<"the checksums are not equal">,
+                ],
+            >,
             StreamToStdout,
         ],
     >
