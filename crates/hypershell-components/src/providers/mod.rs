@@ -1,3 +1,4 @@
+mod box_async;
 mod call;
 mod convert;
 mod method_arg;
@@ -7,6 +8,7 @@ mod string_arg;
 mod url_arg;
 mod r#use;
 
+pub use box_async::*;
 pub use call::*;
 pub use convert::*;
 pub use method_arg::*;
