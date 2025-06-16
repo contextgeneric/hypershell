@@ -2,6 +2,7 @@
 mod preset {
     use cgp::extra::handler::HandlerComponent;
     use hypershell::prelude::*;
+    use hypershell_components::providers::BoxHandler;
 
     use crate::dsl::{Compare, If};
     use crate::presets::ChecksumHandlerPreset;
@@ -18,7 +19,7 @@ mod preset {
         #[wrap_provider(UseDelegate)]
         CompareHandlerPreset: ChecksumHandlerPreset {
             <CodeA, CodeB> Compare<CodeA, CodeB>:
-                HandleCompare,
+                BoxHandler<HandleCompare>,
             <CodeCond, CodeThen, CodeElse> If<CodeCond, CodeThen, CodeElse>:
                 HandleIf,
         }

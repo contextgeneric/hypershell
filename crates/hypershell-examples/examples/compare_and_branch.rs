@@ -50,11 +50,11 @@ async fn main() -> Result<(), Error> {
         url_b: "https://nixos.org/manual/nixpkgs/unstable".to_owned(),
     };
 
-    // app.handle(
-    //     PhantomData::<Program>,
-    //     ((<Vec<u8>>::new(), <Vec<u8>>::new()), Vec::new()),
-    // )
-    // .await?;
+    app.handle(
+        PhantomData::<Program>,
+        ((<Vec<u8>>::new(), <Vec<u8>>::new()), Vec::new()),
+    )
+    .await?;
 
     Ok(())
 }
