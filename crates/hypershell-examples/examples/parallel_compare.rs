@@ -1,66 +1,50 @@
-#![recursion_limit = "256"]
+#![recursion_limit = "512"]
 
 use hypershell::prelude::*;
+use hypershell_examples::dsl::Compare;
+use hypershell_examples::presets::HypershellComparePreset;
 use hypershell_hash_components::dsl::{BytesToHex, Checksum};
 use reqwest::Client;
 use sha2::Sha256;
 
-pub type Program = hypershell! {
+pub type GetChecksumOf<Url> = hypershell! {
     StreamingHttpRequest<
         GetMethod,
-        FieldArg<"url">,
+        Url,
         WithHeaders[ ],
     >
     | Checksum<Sha256>
     | BytesToHex
-    | StreamToStdout
 };
 
-#[cgp_context(MyAppComponents: MyAppPreset)]
+pub type Program = hypershell! {
+    Compare<
+        GetChecksumOf<FieldArg<"url_a">>,
+        GetChecksumOf<FieldArg<"url_b">>,
+    >
+};
+
+#[cgp_context(MyAppComponents: HypershellComparePreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
-    pub url: String,
-}
-
-#[cgp::re_export_imports]
-mod preset {
-    use cgp::extra::handler::PipeHandlers;
-    use hypershell::prelude::*;
-    use hypershell::presets::HypershellHandlerPreset;
-    use hypershell_hash_components::dsl::{BytesToHex, Checksum};
-    use hypershell_hash_components::providers::{HandleBytesToHex, HandleStreamChecksum};
-    use hypershell_tokio_components::presets::ToFuturesStreamHandlers;
-
-    cgp_preset! {
-        MyAppPreset: HypershellPreset {
-            override HandlerComponent:
-                MyHandlerPreset::Provider,
-        }
-    }
-
-    cgp_preset! {
-        #[wrap_provider(UseDelegate)]
-        MyHandlerPreset: HypershellHandlerPreset {
-            <Hasher> Checksum<Hasher>:
-                PipeHandlers<Product![
-                    ToFuturesStreamHandlers::Provider,
-                    HandleStreamChecksum,
-                ]>,
-            BytesToHex:
-                HandleBytesToHex,
-        }
-    }
+    pub url_a: String,
+    pub url_b: String,
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     let app = MyApp {
         http_client: Client::new(),
-        url: "https://nixos.org/manual/nixpkgs/unstable/".to_owned(),
+        url_a: "https://nixos.org/manual/nixpkgs/unstable/".to_owned(),
+        url_b: "https://nixos.org/manual/nixpkgs/unstable".to_owned(),
     };
 
-    app.handle(PhantomData::<Program>, Vec::new()).await?;
+    let res = app
+        .handle(PhantomData::<Program>, (<Vec<u8>>::new(), <Vec<u8>>::new()))
+        .await?;
+
+    println!("equals: {res}");
 
     Ok(())
 }

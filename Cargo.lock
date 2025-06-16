@@ -237,8 +237,7 @@ dependencies = [
 [[package]]
 name = "cgp-macro-lib"
 version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43f294399768ab8d3198808d80c544dd9f513e9bc677fb6ae7eb078f39fe70f9"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=direct-delegate#b1ca692573469d8ddeca69514e86dce69e6f1267"
 dependencies = [
  "itertools",
  "prettyplease",

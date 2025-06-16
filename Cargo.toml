@@ -22,6 +22,11 @@ repository      = "https://github.com/contextgeneric/cgp"
 authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp"]
 
+[profile.dev]
+opt-level = 0
+debug = false
+lto = false
+
 [workspace.dependencies]
 cgp                 = { version = "0.4.1" }
 cgp-error-anyhow    = { version = "0.4.1" }
@@ -65,7 +70,7 @@ hypershell-macro                    = { path = "./crates/hypershell-macro" }
 # cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git" }
-# cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git", branch = "direct-delegate" }
 # cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
