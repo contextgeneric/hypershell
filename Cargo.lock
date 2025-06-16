@@ -237,7 +237,7 @@ dependencies = [
 [[package]]
 name = "cgp-macro-lib"
 version = "0.4.1"
-source = "git+https://github.com/contextgeneric/cgp.git?branch=direct-delegate#b1ca692573469d8ddeca69514e86dce69e6f1267"
+source = "git+https://github.com/contextgeneric/cgp.git#abb4573d93858f3ec21b6b25b66a132f9bf06922"
 dependencies = [
  "itertools",
  "prettyplease",
