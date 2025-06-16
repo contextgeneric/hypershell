@@ -1,5 +1,7 @@
 #[cgp::re_export_imports]
 mod preset {
+    use alloc::boxed::Box;
+
     use cgp::core::component::UseDelegate;
     use cgp::extra::handler::{HandlerComponent, Promote};
     use cgp::prelude::*;
@@ -7,8 +9,8 @@ mod preset {
     use crate::components::{StringArgExtractorComponent, UrlArgExtractorComponent};
     use crate::dsl::{BytesToString, ConvertTo, FieldArg, JoinArgs, Pipe, StaticArg, Use};
     use crate::providers::{
-        DecodeUtf8Bytes, ExtractFieldArg, ExtractStaticArg, ExtractStringUrlArg, HandleConvert,
-        HandlePipe, HandleUseProvider, JoinStringArgs,
+        BoxHandler, Call, DecodeUtf8Bytes, ExtractFieldArg, ExtractStaticArg, ExtractStringUrlArg,
+        HandleConvert, HandlePipe, HandleUseProvider, JoinStringArgs,
     };
 
     cgp_preset! {
@@ -56,6 +58,8 @@ mod preset {
                 HandlePipe,
             <Provider, Code> Use<Provider, Code>:
                 HandleUseProvider,
+            <Code> Box<Code>:
+                BoxHandler<Call<Code>>,
         }
     }
 }
