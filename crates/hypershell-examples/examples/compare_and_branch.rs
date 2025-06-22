@@ -23,25 +23,20 @@ pub type Program = hypershell! {
             GetChecksumOf<FieldArg<"url_a">>,
             GetChecksumOf<FieldArg<"url_b">>,
         >,
-        Pipe[
-            SimpleExec<
-                StaticArg<"echo">,
-                WithArgs[
-                    StaticArg<"the checksums are equals">,
-                ],
-            >,
-            StreamToStdout,
-        ],
-        Pipe[
-            SimpleExec<
-                StaticArg<"echo">,
-                WithArgs[
-                    StaticArg<"the checksums are not equal">,
-                ],
-            >,
-            StreamToStdout,
-        ],
+        SimpleExec<
+            StaticArg<"echo">,
+            WithStaticArgs[
+                "the checksums are equals",
+            ],
+        >,
+        SimpleExec<
+            StaticArg<"echo">,
+            WithStaticArgs[
+                "the checksums are not equal",
+            ],
+        >,
     >
+    | StreamToStdout
 };
 
 #[cgp_context(MyAppComponents: HypershellComparePreset)]
