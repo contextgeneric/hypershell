@@ -15,7 +15,7 @@ members = [
 ]
 
 [workspace.package]
-rust-version    = "1.87"
+rust-version    = "1.88"
 edition         = "2024"
 license         = "MIT"
 repository      = "https://github.com/contextgeneric/cgp"
@@ -23,8 +23,8 @@ authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp"]
 
 [workspace.dependencies]
-cgp                 = { version = "0.4.1" }
-cgp-error-anyhow    = { version = "0.4.1" }
+cgp                 = { version = "0.4.2" }
+cgp-error-anyhow    = { version = "0.4.2" }
 futures             = { version = "0.3.31" }
 hex                 = { version = "0.4.3" }
 itertools           = { version = "0.14.0" }
@@ -65,7 +65,7 @@ hypershell-macro                    = { path = "./crates/hypershell-macro" }
 # cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git" }
+# cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-type                    = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-field                   = { git = "https://github.com/contextgeneric/cgp.git" }
 # cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git" }
