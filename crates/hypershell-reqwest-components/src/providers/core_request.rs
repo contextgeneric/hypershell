@@ -16,11 +16,8 @@ where
         + CanExtractUrlArg<UrlArg, Url = Url>
         + CanExtractMethodArg<MethodArg, HttpMethod = Method>
         + CanUpdateRequestBuilder<Headers>
-        + CanRaiseAsyncError<reqwest::Error>,
-    MethodArg: Send,
-    UrlArg: Send,
-    Headers: Send,
-    Input: Send + Into<Body>,
+        + CanRaiseError<reqwest::Error>,
+    Input: Into<Body>,
 {
     type Output = Response;
 

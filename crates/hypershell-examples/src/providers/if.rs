@@ -7,15 +7,8 @@ use hypershell::prelude::CanHandle;
 use crate::dsl::If;
 
 #[cgp_new_provider]
-impl<
-    Context,
-    CodeCond: Send,
-    CodeThen: Send,
-    CodeElse: Send,
-    InputCond: Send,
-    InputBranch: Send,
-    Output: Send,
-> Handler<Context, If<CodeCond, CodeThen, CodeElse>, (InputCond, InputBranch)> for HandleIf
+impl<Context, CodeCond, CodeThen, CodeElse, InputCond, InputBranch, Output>
+    Handler<Context, If<CodeCond, CodeThen, CodeElse>, (InputCond, InputBranch)> for HandleIf
 where
     Context: CanHandle<CodeCond, InputCond, Output = bool>
         + CanHandle<CodeThen, InputBranch, Output = Output>

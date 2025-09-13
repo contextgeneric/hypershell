@@ -19,9 +19,7 @@ use tokio_util::io::ReaderStream;
 impl<Context, UrlArg, Headers, Input> Handler<Context, WebSocket<UrlArg, Headers>, Input>
     for HandleWebsocket
 where
-    Context: CanExtractStringArg<UrlArg> + CanRaiseAsyncError<tungstenite::Error>,
-    UrlArg: Send,
-    Headers: Send,
+    Context: CanExtractStringArg<UrlArg> + CanRaiseError<tungstenite::Error>,
     Input: Send + AsyncRead + Unpin + 'static,
 {
     type Output = Pin<Box<dyn FuturesAsyncRead + Send>>;

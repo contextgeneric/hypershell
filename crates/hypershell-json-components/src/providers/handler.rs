@@ -10,9 +10,9 @@ use serde::de::DeserializeOwned;
 #[cgp_new_provider]
 impl<Context, Input, Output> Handler<Context, DecodeJson<Output>, Input> for HandleDecodeJson
 where
-    Context: CanRaiseAsyncError<serde_json::Error>,
-    Input: Send + AsRef<[u8]>,
-    Output: Send + DeserializeOwned,
+    Context: CanRaiseError<serde_json::Error>,
+    Input: AsRef<[u8]>,
+    Output: DeserializeOwned,
 {
     type Output = Output;
 
@@ -29,9 +29,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for HandleEncodeJson
 where
-    Context: CanRaiseAsyncError<serde_json::Error>,
-    Input: Send + Serialize,
-    Code: Send,
+    Context: CanRaiseError<serde_json::Error>,
+    Input: Serialize,
 {
     type Output = Vec<u8>;
 

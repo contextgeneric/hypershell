@@ -14,10 +14,8 @@ use crate::dsl::CoreExec;
 impl<Context, CommandPath, Args, Input> Handler<Context, StreamingExec<CommandPath, Args>, Input>
     for HandleStreamingExec
 where
-    Context: CanHandle<CoreExec<CommandPath, Args>, (), Output = Child>
-        + CanRaiseAsyncError<std::io::Error>,
-    CommandPath: Send,
-    Args: Send,
+    Context:
+        CanHandle<CoreExec<CommandPath, Args>, (), Output = Child> + CanRaiseError<std::io::Error>,
     Input: Send + Unpin + AsyncRead + 'static,
 {
     type Output = Either<ChildStdout, Empty>;

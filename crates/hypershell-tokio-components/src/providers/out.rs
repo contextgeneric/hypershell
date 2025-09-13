@@ -8,8 +8,8 @@ use tokio::io::{AsyncRead, copy};
 #[cgp_new_provider]
 impl<Context, Input> Handler<Context, StreamToStdout, Input> for HandleStreamToStdout
 where
-    Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + AsyncRead + Unpin,
+    Context: CanRaiseError<std::io::Error>,
+    Input: AsyncRead + Unpin,
 {
     type Output = ();
 

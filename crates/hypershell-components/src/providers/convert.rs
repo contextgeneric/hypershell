@@ -24,9 +24,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for DecodeUtf8Bytes
 where
-    Context: CanRaiseAsyncError<Utf8Error> + for<'a> CanWrapAsyncError<DecodeUtf8InputError<'a>>,
-    Code: Send,
-    Input: Send + AsRef<[u8]>,
+    Context: CanRaiseError<Utf8Error> + for<'a> CanWrapError<DecodeUtf8InputError<'a>>,
+    Input: AsRef<[u8]>,
 {
     type Output = String;
 

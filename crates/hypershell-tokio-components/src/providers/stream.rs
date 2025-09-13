@@ -16,9 +16,8 @@ use crate::types::{FuturesAsyncReadStream, FuturesStream, TokioAsyncReadStream};
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for HandleTokioAsyncReadToBytes
 where
-    Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + TokioAsyncRead + Unpin,
-    Code: Send,
+    Context: CanRaiseError<std::io::Error>,
+    Input: TokioAsyncRead + Unpin,
 {
     type Output = Vec<u8>;
 
@@ -41,9 +40,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for HandleTokioAsyncReadToString
 where
-    Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + TokioAsyncRead + Unpin,
-    Code: Send,
+    Context: CanRaiseError<std::io::Error>,
+    Input: TokioAsyncRead + Unpin,
 {
     type Output = String;
 
@@ -66,9 +64,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for HandleBytesToTokioAsyncRead
 where
-    Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + AsRef<[u8]> + Unpin,
-    Code: Send,
+    Context: CanRaiseError<std::io::Error>,
+    Input: AsRef<[u8]> + Unpin,
 {
     type Output = TokioAsyncReadStream<Compat<Cursor<Input>>>;
 
@@ -84,9 +81,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for HandleBytesToStream
 where
-    Context: CanRaiseAsyncError<std::io::Error>,
-    Input: Send + AsRef<[u8]> + Unpin,
-    Code: Send,
+    Context: CanRaiseError<std::io::Error>,
+    Input: AsRef<[u8]> + Unpin,
 {
     type Output = FuturesStream<Iter<Once<Result<Input, Infallible>>>>;
 
@@ -102,9 +98,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for FuturesToTokioAsyncRead
 where
-    Context: HasAsyncErrorType,
-    Input: Send + FuturesAsyncRead + Unpin,
-    Code: Send,
+    Context: HasErrorType,
+    Input: FuturesAsyncRead + Unpin,
 {
     type Output = TokioAsyncReadStream<Compat<Input>>;
 
@@ -120,9 +115,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for TokioToFuturesAsyncRead
 where
-    Context: HasAsyncErrorType,
-    Input: Send + TokioAsyncRead + Unpin,
-    Code: Send,
+    Context: HasErrorType,
+    Input: TokioAsyncRead + Unpin,
 {
     type Output = FuturesAsyncReadStream<Compat<Input>>;
 
@@ -138,9 +132,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for WrapTokioAsyncRead
 where
-    Context: HasAsyncErrorType,
-    Input: Send + TokioAsyncRead + Unpin,
-    Code: Send,
+    Context: HasErrorType,
+    Input: TokioAsyncRead + Unpin,
 {
     type Output = TokioAsyncReadStream<Input>;
 
@@ -156,9 +149,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for WrapFuturesAsyncRead
 where
-    Context: HasAsyncErrorType,
-    Input: Send + FuturesAsyncRead + Unpin,
-    Code: Send,
+    Context: HasErrorType,
+    Input: FuturesAsyncRead + Unpin,
 {
     type Output = FuturesAsyncReadStream<Input>;
 
@@ -174,9 +166,8 @@ where
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for AsyncReadToStream
 where
-    Context: HasAsyncErrorType,
-    Input: Send + TokioAsyncRead + Unpin,
-    Code: Send,
+    Context: HasErrorType,
+    Input: TokioAsyncRead + Unpin,
 {
     type Output = FuturesStream<ReaderStream<Input>>;
 

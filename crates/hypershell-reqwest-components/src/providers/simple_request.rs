@@ -18,12 +18,8 @@ impl<Context, MethodArg, UrlArg, Headers, Input>
     for HandleSimpleHttpRequest
 where
     Context: CanHandle<CoreHttpRequest<MethodArg, UrlArg, Headers>, Input, Output = Response>
-        + CanRaiseAsyncError<reqwest::Error>
-        + CanRaiseAsyncError<ErrorResponse>,
-    MethodArg: Send,
-    UrlArg: Send,
-    Headers: Send,
-    Input: Send,
+        + CanRaiseError<reqwest::Error>
+        + CanRaiseError<ErrorResponse>,
 {
     type Output = Vec<u8>;
 

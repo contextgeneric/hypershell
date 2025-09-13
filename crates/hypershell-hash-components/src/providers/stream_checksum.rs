@@ -11,9 +11,9 @@ use crate::dsl::Checksum;
 #[cgp_new_provider]
 impl<Context, Input, Hasher> Handler<Context, Checksum<Hasher>, Input> for HandleStreamChecksum
 where
-    Context: CanRaiseAsyncError<Input::Error>,
-    Input: Send + Unpin + TryStream,
-    Hasher: Send + Digest,
+    Context: CanRaiseError<Input::Error>,
+    Input: Unpin + TryStream,
+    Hasher: Digest,
     Input::Ok: AsRef<[u8]>,
 {
     type Output = GenericArray<u8, Hasher::OutputSize>;
