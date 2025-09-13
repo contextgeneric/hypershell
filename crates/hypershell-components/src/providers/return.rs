@@ -6,9 +6,7 @@ use cgp::prelude::*;
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for ReturnInput
 where
-    Context: HasAsyncErrorType,
-    Code: Send,
-    Input: Send,
+    Context: HasErrorType,
 {
     type Output = Input;
 

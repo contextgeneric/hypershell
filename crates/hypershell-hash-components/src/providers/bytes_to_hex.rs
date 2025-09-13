@@ -6,9 +6,8 @@ use cgp::prelude::*;
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for HandleBytesToHex
 where
-    Context: HasAsyncErrorType,
-    Code: Send,
-    Input: Send + AsRef<[u8]>,
+    Context: HasErrorType,
+    Input: AsRef<[u8]>,
 {
     type Output = String;
 

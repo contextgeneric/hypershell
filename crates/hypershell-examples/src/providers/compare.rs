@@ -7,11 +7,11 @@ use hypershell::prelude::CanHandle;
 use crate::dsl::Compare;
 
 #[cgp_new_provider]
-impl<Context, CodeA: Send, CodeB: Send, InputA: Send, InputB: Send, Output>
+impl<Context, CodeA, CodeB, InputA, InputB, Output>
     Handler<Context, Compare<CodeA, CodeB>, (InputA, InputB)> for HandleCompare
 where
     Context: CanHandle<CodeA, InputA, Output = Output> + CanHandle<CodeB, InputB, Output = Output>,
-    Output: Send + Eq,
+    Output: Eq,
 {
     type Output = bool;
 

@@ -10,17 +10,16 @@ use tokio_util::codec::{FramedRead, LinesCodec, LinesCodecError};
 #[cgp_new_provider]
 impl<Context, Input> Handler<Context, StreamToLines, Input> for HandleStreamToLines
 where
-    Context: HasAsyncErrorType,
-    Input: Send + AsyncRead + Unpin + 'static,
+    Context: HasErrorType,
+    Input: AsyncRead + Unpin + 'static,
 {
-    type Output = Box<dyn Stream<Item = Result<String, LinesCodecError>> + Send>;
+    type Output = Box<dyn Stream<Item = Result<String, LinesCodecError>>>;
 
     async fn handle(
         _context: &Context,
         _tag: PhantomData<StreamToLines>,
         input: Input,
-    ) -> Result<Box<dyn Stream<Item = Result<String, LinesCodecError>> + Send>, Context::Error>
-    {
+    ) -> Result<Box<dyn Stream<Item = Result<String, LinesCodecError>>>, Context::Error> {
         let stream = FramedRead::new(input, LinesCodec::new());
 
         Ok(Box::new(stream))

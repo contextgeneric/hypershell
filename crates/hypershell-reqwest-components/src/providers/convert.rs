@@ -9,9 +9,8 @@ use tokio_util::io::ReaderStream;
 #[cgp_new_provider]
 impl<Context, Code, Input> Handler<Context, Code, Input> for StreamToBody
 where
-    Context: HasAsyncErrorType,
+    Context: HasErrorType,
     Input: Send + AsyncRead + 'static,
-    Code: Send,
 {
     type Output = Body;
 

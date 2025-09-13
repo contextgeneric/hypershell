@@ -11,9 +11,8 @@ use tokio::io::AsyncRead;
 #[cgp_new_provider]
 impl<Context, PathArg> Handler<Context, ReadFile<PathArg>, ()> for HandleReadFile
 where
-    Context: CanExtractCommandArg<PathArg> + CanRaiseAsyncError<std::io::Error>,
-    PathArg: Send,
-    Context::CommandArg: Send + AsRef<Path>,
+    Context: CanExtractCommandArg<PathArg> + CanRaiseError<std::io::Error>,
+    Context::CommandArg: AsRef<Path>,
 {
     type Output = File;
 
@@ -35,10 +34,9 @@ where
 #[cgp_new_provider]
 impl<Context, PathArg, Input> Handler<Context, WriteFile<PathArg>, Input> for HandleWriteFile
 where
-    Context: CanExtractCommandArg<PathArg> + CanRaiseAsyncError<std::io::Error>,
-    PathArg: Send,
-    Context::CommandArg: Send + AsRef<Path>,
-    Input: Send + AsyncRead + Unpin,
+    Context: CanExtractCommandArg<PathArg> + CanRaiseError<std::io::Error>,
+    Context::CommandArg: AsRef<Path>,
+    Input: AsyncRead + Unpin,
 {
     type Output = ();
 

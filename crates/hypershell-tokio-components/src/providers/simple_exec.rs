@@ -19,12 +19,10 @@ impl<Context, CommandPath, Args, Input> Handler<Context, SimpleExec<CommandPath,
     for HandleSimpleExec
 where
     Context: CanHandle<CoreExec<CommandPath, Args>, (), Output = Child>
-        + for<'a> CanRaiseAsyncError<ExecOutputError>
-        + CanWrapAsyncError<StdinPipeError>
-        + CanWrapAsyncError<WaitWithOutputError>
-        + CanRaiseAsyncError<std::io::Error>,
-    CommandPath: Send,
-    Args: Send,
+        + for<'a> CanRaiseError<ExecOutputError>
+        + CanWrapError<StdinPipeError>
+        + CanWrapError<WaitWithOutputError>
+        + CanRaiseError<std::io::Error>,
     Input: Send + AsRef<[u8]>,
 {
     type Output = Vec<u8>;

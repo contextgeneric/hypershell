@@ -17,15 +17,13 @@ use crate::dsl::CoreExec;
 impl<Context, CommandPath, Args> Handler<Context, CoreExec<CommandPath, Args>, ()>
     for HandleCoreExec
 where
-    Context: HasAsyncErrorType
+    Context: HasErrorType
         + CanExtractCommandArg<CommandPath>
         + CanUpdateCommand<Args>
-        + CanRaiseAsyncError<std::io::Error>
-        + for<'a> CanWrapAsyncError<CommandNotFound<'a>>
-        + for<'a> CanWrapAsyncError<SpawnCommandFailure<'a>>,
-    Context::CommandArg: AsRef<OsStr> + Send,
-    CommandPath: Send,
-    Args: Send,
+        + CanRaiseError<std::io::Error>
+        + for<'a> CanWrapError<CommandNotFound<'a>>
+        + for<'a> CanWrapError<SpawnCommandFailure<'a>>,
+    Context::CommandArg: AsRef<OsStr>,
 {
     type Output = Child;
 

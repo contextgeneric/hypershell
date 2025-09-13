@@ -11,11 +11,8 @@ pub struct HandleUseProvider;
 impl<Context, Provider, Code, Input> Handler<Context, Use<Provider, Code>, Input>
     for HandleUseProvider
 where
-    Context: HasAsyncErrorType,
+    Context: HasErrorType,
     Provider: Handler<Context, Code, Input>,
-    Input: Send,
-    Provider: Send,
-    Code: Send,
 {
     type Output = Provider::Output;
 

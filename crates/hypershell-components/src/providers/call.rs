@@ -7,9 +7,6 @@ use cgp::prelude::*;
 impl<Context, OutCode, InCode, Input> Handler<Context, OutCode, Input> for Call<InCode>
 where
     Context: CanHandle<InCode, Input>,
-    InCode: Send,
-    OutCode: Send,
-    Input: Send,
 {
     type Output = Context::Output;
 

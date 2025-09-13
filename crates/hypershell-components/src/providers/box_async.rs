@@ -6,13 +6,12 @@ use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 
 #[cgp_new_provider]
-impl<Context, Code: Send, Input: Send, InHandler> Handler<Context, Code, Input>
-    for BoxHandler<InHandler>
+impl<Context, Code, Input, InHandler> Handler<Context, Code, Input> for BoxHandler<InHandler>
 where
-    Context: HasAsyncErrorType,
-    InHandler: Send + 'static + Handler<Context, Code, Input>,
-    Code: Send + 'static,
-    Input: Send + 'static,
+    Context: HasErrorType,
+    InHandler: 'static + Handler<Context, Code, Input>,
+    Code: 'static,
+    Input: 'static,
 {
     type Output = InHandler::Output;
 
@@ -20,8 +19,8 @@ where
         context: &Context,
         code: PhantomData<Code>,
         input: Input,
-    ) -> impl Future<Output = Result<Self::Output, Context::Error>> + Send {
-        let future: Pin<Box<dyn Future<Output = Result<Self::Output, Context::Error>> + Send>> =
+    ) -> impl Future<Output = Result<Self::Output, Context::Error>> {
+        let future: Pin<Box<dyn Future<Output = Result<Self::Output, Context::Error>>>> =
             Box::pin(InHandler::handle(context, code, input));
 
         future
