@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 use core::pin::Pin;
-use std::io::ErrorKind;
 
 use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
@@ -37,7 +36,7 @@ where
 
         let response_stream = response
             .bytes_stream()
-            .map_err(|e| std::io::Error::new(ErrorKind::Other, e))
+            .map_err(std::io::Error::other)
             .into_async_read();
 
         Ok(Box::pin(response_stream))

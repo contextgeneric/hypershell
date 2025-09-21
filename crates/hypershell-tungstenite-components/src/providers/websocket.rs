@@ -1,6 +1,5 @@
 use core::marker::PhantomData;
 use core::pin::Pin;
-use std::io::ErrorKind;
 
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
@@ -41,21 +40,21 @@ where
 
         spawn(async move {
             let _ = input
-                .map_ok(|data| Message::Binary(data))
-                .map_err(|e| tungstenite::Error::from(e))
+                .map_ok(Message::Binary)
+                .map_err(tungstenite::Error::from)
                 .forward(writer)
                 .await;
         });
 
         let output = reader
-            .map_err(|e| std::io::Error::new(ErrorKind::Other, e))
+            .map_err(std::io::Error::other)
             .filter_map(async |res| match res {
                 Ok(Message::Text(data)) => {
                     let text = format!("{}\n", data.as_str());
                     Some(Ok(Bytes::from(text)))
                 }
                 Ok(message) => Some(Ok(message.into_data())),
-                Err(e) => Some(Err(std::io::Error::new(ErrorKind::Other, e))),
+                Err(e) => Some(Err(std::io::Error::other(e))),
             })
             .into_async_read();
 

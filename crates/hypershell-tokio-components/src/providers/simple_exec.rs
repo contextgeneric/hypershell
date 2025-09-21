@@ -36,14 +36,14 @@ where
 
         let input_bytes = input.as_ref();
 
-        if !input_bytes.is_empty() {
-            if let Some(mut stdin) = child.stdin.take() {
-                stdin
-                    .write_all(&input_bytes)
-                    .await
-                    .map_err(Context::raise_error)
-                    .map_err(|e| Context::wrap_error(e, StdinPipeError))?;
-            }
+        if !input_bytes.is_empty()
+            && let Some(mut stdin) = child.stdin.take()
+        {
+            stdin
+                .write_all(input_bytes)
+                .await
+                .map_err(Context::raise_error)
+                .map_err(|e| Context::wrap_error(e, StdinPipeError))?;
         }
 
         let output = child

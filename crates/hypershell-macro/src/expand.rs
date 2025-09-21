@@ -29,16 +29,16 @@ pub fn expand(mut tokens: Peekable<impl Iterator<Item = ExtendedTokenTree>>) -> 
                 ExtendedTokenTree::Ident(ident) => {
                     out.extend(quote! { #ident });
 
-                    if let Some(ExtendedTokenTree::Group(group)) = tokens.peek() {
-                        if &group.delim == &ExtendedDelimiter::Base(Delimiter::Bracket) {
-                            let in_expanded = expand_and_pipe(group.body.clone());
+                    if let Some(ExtendedTokenTree::Group(group)) = tokens.peek()
+                        && group.delim == ExtendedDelimiter::Base(Delimiter::Bracket)
+                    {
+                        let in_expanded = expand_and_pipe(group.body.clone());
 
-                            out.extend(quote! {
-                                < Product![ #in_expanded ] >
-                            });
+                        out.extend(quote! {
+                            < Product![ #in_expanded ] >
+                        });
 
-                            tokens.next();
-                        }
+                        tokens.next();
                     }
                 }
                 ExtendedTokenTree::Punct(punct) => {
