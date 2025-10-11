@@ -42,7 +42,7 @@ async fn test_field_args() -> Result<(), Error> {
         pub args: Vec<&'a str>,
     }
 
-    pub type Program = SimpleExec<StaticArg<symbol!("echo")>, FieldArgs<symbol!("args")>>;
+    pub type Program = SimpleExec<StaticArg<Symbol!("echo")>, FieldArgs<Symbol!("args")>>;
 
     let app = TestApp {
         args: vec!["hello", "world!"],

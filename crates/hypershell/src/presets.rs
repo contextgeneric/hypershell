@@ -41,7 +41,7 @@ mod preset {
             ErrorWrapperComponent:
                 DebugAnyhowError,
             ReqwestClientGetterComponent:
-                UseField<symbol!("http_client")>,
+                UseField<Symbol!("http_client")>,
             override StringArgExtractorComponent:
                 HypershellStringArgExtractorPreset::Provider,
             override HandlerComponent:

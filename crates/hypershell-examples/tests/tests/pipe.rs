@@ -14,13 +14,13 @@ async fn test_simple_pipe() -> Result<(), Error> {
             ReadFile<
                 JoinArgs<
                     Product![
-                        FieldArg<symbol!("base_dir")>,
-                        StaticArg<symbol!("Cargo.toml")>,
+                        FieldArg<Symbol!("base_dir")>,
+                        StaticArg<Symbol!("Cargo.toml")>,
                     ],
                 >,
             >,
             StreamToBytes,
-            SimpleExec<StaticArg<symbol!("wc")>, WithArgs<Product![StaticArg<symbol!("-l")>,]>>,
+            SimpleExec<StaticArg<Symbol!("wc")>, WithArgs<Product![StaticArg<Symbol!("-l")>,]>>,
             BytesToString,
         ],
     >;

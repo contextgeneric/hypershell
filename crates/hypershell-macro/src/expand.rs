@@ -16,7 +16,7 @@ pub fn expand(mut tokens: Peekable<impl Iterator<Item = ExtendedTokenTree>>) -> 
                 ExtendedTokenTree::Literal(literal) => {
                     if literal.to_string().starts_with('"') {
                         out.extend(quote! {
-                            symbol!( #literal )
+                            Symbol!( #literal )
                         });
                     } else {
                         out.extend(quote! { #literal });
