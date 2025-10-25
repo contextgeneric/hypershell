@@ -10,8 +10,8 @@ use crate::components::{CommandUpdater, CommandUpdaterComponent};
 
 pub struct ExtractArgs;
 
-#[cgp_provider]
-impl<Context, Arg, Args> CommandUpdater<Context, WithArgs<Cons<Arg, Args>>> for ExtractArgs
+#[cgp_impl(ExtractArgs)]
+impl<Context, Arg, Args> CommandUpdater<WithArgs<Cons<Arg, Args>>> for Context
 where
     Context: CanExtractCommandArg<Arg>,
     Context::CommandArg: AsRef<OsStr> + Send,
@@ -29,8 +29,8 @@ where
     }
 }
 
-#[cgp_provider]
-impl<Context> CommandUpdater<Context, WithArgs<Nil>> for ExtractArgs {
+#[cgp_impl(ExtractArgs)]
+impl<Context> CommandUpdater<WithArgs<Nil>> for Context {
     fn update_command(
         _context: &Context,
         _phantom: PhantomData<WithArgs<Nil>>,
@@ -39,8 +39,8 @@ impl<Context> CommandUpdater<Context, WithArgs<Nil>> for ExtractArgs {
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Tag> CommandUpdater<Context, FieldArgs<Tag>> for ExtractFieldArgs
+#[cgp_impl(new ExtractFieldArgs)]
+impl<Context, Tag> CommandUpdater<FieldArgs<Tag>> for Context
 where
     Context: HasField<Tag>,
     for<'a> &'a Context::Value: IntoIterator<Item: AsRef<OsStr>>,

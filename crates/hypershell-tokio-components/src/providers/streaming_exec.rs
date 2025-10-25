@@ -10,9 +10,8 @@ use tokio_util::either::Either;
 
 use crate::dsl::CoreExec;
 
-#[cgp_new_provider]
-impl<Context, CommandPath, Args, Input> Handler<Context, StreamingExec<CommandPath, Args>, Input>
-    for HandleStreamingExec
+#[cgp_impl(new HandleStreamingExec)]
+impl<Context, CommandPath, Args, Input> Handler<StreamingExec<CommandPath, Args>, Input> for Context
 where
     Context:
         CanHandle<CoreExec<CommandPath, Args>, (), Output = Child> + CanRaiseError<std::io::Error>,

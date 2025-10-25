@@ -12,10 +12,9 @@ pub struct ErrorResponse {
     pub response: Response,
 }
 
-#[cgp_new_provider]
+#[cgp_impl(new HandleSimpleHttpRequest)]
 impl<Context, MethodArg, UrlArg, Headers, Input>
-    Handler<Context, SimpleHttpRequest<MethodArg, UrlArg, Headers>, Input>
-    for HandleSimpleHttpRequest
+    Handler<SimpleHttpRequest<MethodArg, UrlArg, Headers>, Input> for Context
 where
     Context: CanHandle<CoreHttpRequest<MethodArg, UrlArg, Headers>, Input, Output = Response>
         + CanRaiseError<reqwest::Error>

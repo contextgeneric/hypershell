@@ -8,9 +8,9 @@ use reqwest::{Body, Method, Response, Url};
 use crate::components::{CanUpdateRequestBuilder, HasReqwestClient};
 use crate::dsl::CoreHttpRequest;
 
-#[cgp_new_provider]
+#[cgp_impl(new HandleCoreHttpRequest)]
 impl<Context, MethodArg, UrlArg, Headers, Input>
-    Handler<Context, CoreHttpRequest<MethodArg, UrlArg, Headers>, Input> for HandleCoreHttpRequest
+    Handler<CoreHttpRequest<MethodArg, UrlArg, Headers>, Input> for Context
 where
     Context: HasReqwestClient
         + CanExtractUrlArg<UrlArg, Url = Url>

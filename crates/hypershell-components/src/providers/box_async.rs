@@ -5,8 +5,8 @@ use core::pin::Pin;
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 
-#[cgp_new_provider]
-impl<Context, Code, Input, InHandler> Handler<Context, Code, Input> for BoxHandler<InHandler>
+#[cgp_impl(new BoxHandler<InHandler>)]
+impl<Context, Code, Input, InHandler> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
     InHandler: 'static + Handler<Context, Code, Input>,

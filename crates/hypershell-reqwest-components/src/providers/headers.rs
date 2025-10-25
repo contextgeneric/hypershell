@@ -10,8 +10,8 @@ use crate::components::{
     CanUpdateRequestBuilder, RequestBuilderUpdater, RequestBuilderUpdaterComponent,
 };
 
-#[cgp_new_provider]
-impl<Context, Key, Value> RequestBuilderUpdater<Context, Header<Key, Value>> for UpdateRequestHeader
+#[cgp_impl(new UpdateRequestHeader)]
+impl<Context, Key, Value> RequestBuilderUpdater<Header<Key, Value>> for Context
 where
     Context: CanExtractStringArg<Key>
         + CanExtractStringArg<Value>
@@ -36,12 +36,11 @@ where
 
 pub struct UpdateRequestHeaders;
 
-#[cgp_provider]
-impl<Context, Arg, Args> RequestBuilderUpdater<Context, WithHeaders<Cons<Arg, Args>>>
-    for UpdateRequestHeaders
+#[cgp_impl(UpdateRequestHeaders)]
+impl<Context, Arg, Args> RequestBuilderUpdater<WithHeaders<Cons<Arg, Args>>> for Context
 where
     Context: CanUpdateRequestBuilder<Arg>,
-    Self: RequestBuilderUpdater<Context, WithHeaders<Args>>,
+    UpdateRequestHeaders: RequestBuilderUpdater<Context, WithHeaders<Args>>,
 {
     fn update_request_builder(
         context: &Context,
@@ -49,15 +48,18 @@ where
         builder: RequestBuilder,
     ) -> Result<RequestBuilder, Context::Error> {
         let builder = context.update_request_builder(PhantomData, builder)?;
-        let builder =
-            Self::update_request_builder(context, PhantomData::<WithHeaders<Args>>, builder)?;
+        let builder = UpdateRequestHeaders::update_request_builder(
+            context,
+            PhantomData::<WithHeaders<Args>>,
+            builder,
+        )?;
 
         Ok(builder)
     }
 }
 
-#[cgp_provider]
-impl<Context> RequestBuilderUpdater<Context, WithHeaders<Nil>> for UpdateRequestHeaders
+#[cgp_impl(UpdateRequestHeaders)]
+impl<Context> RequestBuilderUpdater<WithHeaders<Nil>> for Context
 where
     Context: HasErrorType,
 {

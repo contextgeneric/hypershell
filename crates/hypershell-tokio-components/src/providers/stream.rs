@@ -13,8 +13,8 @@ use tokio_util::io::ReaderStream;
 
 use crate::types::{FuturesAsyncReadStream, FuturesStream, TokioAsyncReadStream};
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for HandleTokioAsyncReadToBytes
+#[cgp_impl(new HandleTokioAsyncReadToBytes)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: CanRaiseError<std::io::Error>,
     Input: TokioAsyncRead + Unpin,
@@ -37,8 +37,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for HandleTokioAsyncReadToString
+#[cgp_impl(new HandleTokioAsyncReadToString)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: CanRaiseError<std::io::Error>,
     Input: TokioAsyncRead + Unpin,
@@ -61,8 +61,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for HandleBytesToTokioAsyncRead
+#[cgp_impl(new HandleBytesToTokioAsyncRead)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: CanRaiseError<std::io::Error>,
     Input: AsRef<[u8]> + Unpin,
@@ -78,8 +78,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for HandleBytesToStream
+#[cgp_impl(new HandleBytesToStream)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: CanRaiseError<std::io::Error>,
     Input: AsRef<[u8]> + Unpin,
@@ -95,8 +95,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for FuturesToTokioAsyncRead
+#[cgp_impl(new FuturesToTokioAsyncRead)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
     Input: FuturesAsyncRead + Unpin,
@@ -112,8 +112,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for TokioToFuturesAsyncRead
+#[cgp_impl(new TokioToFuturesAsyncRead)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
     Input: TokioAsyncRead + Unpin,
@@ -129,8 +129,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for WrapTokioAsyncRead
+#[cgp_impl(new WrapTokioAsyncRead)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
     Input: TokioAsyncRead + Unpin,
@@ -146,8 +146,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for WrapFuturesAsyncRead
+#[cgp_impl(new WrapFuturesAsyncRead)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
     Input: FuturesAsyncRead + Unpin,
@@ -163,8 +163,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for AsyncReadToStream
+#[cgp_impl(new AsyncReadToStream)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
     Input: TokioAsyncRead + Unpin,

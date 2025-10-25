@@ -3,8 +3,8 @@ use core::marker::PhantomData;
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for ReturnInput
+#[cgp_impl(new ReturnInput)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
 {

@@ -9,18 +9,18 @@ use hypershell_components::dsl::JoinArgs;
 
 pub struct JoinExtractArgs;
 
-#[cgp_provider]
-impl<Context, Arg, Args> CommandArgExtractor<Context, JoinArgs<Cons<Arg, Args>>> for JoinExtractArgs
+#[cgp_impl(JoinExtractArgs)]
+impl<Context, Arg, Args> CommandArgExtractor<JoinArgs<Cons<Arg, Args>>> for Context
 where
     Context: CanExtractCommandArg<Arg> + HasCommandArgType<CommandArg = PathBuf>,
-    Self: CommandArgExtractor<Context, JoinArgs<Args>>,
+    JoinExtractArgs: CommandArgExtractor<Context, JoinArgs<Args>>,
 {
     fn extract_command_arg(
         context: &Context,
         _phantom: PhantomData<JoinArgs<Cons<Arg, Args>>>,
     ) -> PathBuf {
         let arg_a = context.extract_command_arg(PhantomData);
-        let arg_b = Self::extract_command_arg(context, PhantomData::<JoinArgs<Args>>);
+        let arg_b = JoinExtractArgs::extract_command_arg(context, PhantomData::<JoinArgs<Args>>);
 
         if arg_b.as_os_str().is_empty() {
             arg_a
@@ -30,8 +30,8 @@ where
     }
 }
 
-#[cgp_provider]
-impl<Context> CommandArgExtractor<Context, JoinArgs<Nil>> for JoinExtractArgs
+#[cgp_impl(JoinExtractArgs)]
+impl<Context> CommandArgExtractor<JoinArgs<Nil>> for Context
 where
     Context: HasCommandArgType<CommandArg = PathBuf>,
 {

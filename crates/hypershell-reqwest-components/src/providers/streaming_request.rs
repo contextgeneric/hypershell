@@ -10,10 +10,9 @@ use reqwest::Response;
 use crate::dsl::CoreHttpRequest;
 use crate::providers::ErrorResponse;
 
-#[cgp_new_provider]
+#[cgp_impl(new HandleStreamingHttpRequest)]
 impl<Context, MethodArg, UrlArg, Headers, Input>
-    Handler<Context, StreamingHttpRequest<MethodArg, UrlArg, Headers>, Input>
-    for HandleStreamingHttpRequest
+    Handler<StreamingHttpRequest<MethodArg, UrlArg, Headers>, Input> for Context
 where
     Context: CanHandle<CoreHttpRequest<MethodArg, UrlArg, Headers>, Input, Output = Response>
         + CanRaiseError<reqwest::Error>

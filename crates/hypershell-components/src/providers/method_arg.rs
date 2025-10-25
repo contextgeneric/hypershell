@@ -5,8 +5,8 @@ use cgp::prelude::*;
 use crate::components::{HasHttpMethodType, MethodArgExtractor, MethodArgExtractorComponent};
 use crate::dsl::FieldArg;
 
-#[cgp_new_provider]
-impl<Context, Tag> MethodArgExtractor<Context, FieldArg<Tag>> for ExtractMethodFieldArg
+#[cgp_impl(new ExtractMethodFieldArg)]
+impl<Context, Tag> MethodArgExtractor<FieldArg<Tag>> for Context
 where
     Context: HasHttpMethodType + HasField<Tag, Value = Context::HttpMethod>,
     Context::HttpMethod: Clone,

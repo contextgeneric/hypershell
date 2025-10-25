@@ -14,9 +14,8 @@ use tokio_tungstenite::{connect_async, tungstenite};
 use tokio_util::bytes::Bytes;
 use tokio_util::io::ReaderStream;
 
-#[cgp_new_provider]
-impl<Context, UrlArg, Headers, Input> Handler<Context, WebSocket<UrlArg, Headers>, Input>
-    for HandleWebsocket
+#[cgp_impl(new HandleWebsocket)]
+impl<Context, UrlArg, Headers, Input> Handler<WebSocket<UrlArg, Headers>, Input> for Context
 where
     Context: CanExtractStringArg<UrlArg> + CanRaiseError<tungstenite::Error>,
     Input: Send + AsyncRead + Unpin + 'static,

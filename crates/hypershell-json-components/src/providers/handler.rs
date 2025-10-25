@@ -7,8 +7,8 @@ use hypershell_components::dsl::DecodeJson;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 
-#[cgp_new_provider]
-impl<Context, Input, Output> Handler<Context, DecodeJson<Output>, Input> for HandleDecodeJson
+#[cgp_impl(new HandleDecodeJson)]
+impl<Context, Input, Output> Handler<DecodeJson<Output>, Input> for Context
 where
     Context: CanRaiseError<serde_json::Error>,
     Input: AsRef<[u8]>,
@@ -26,8 +26,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for HandleEncodeJson
+#[cgp_impl(new HandleEncodeJson)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: CanRaiseError<serde_json::Error>,
     Input: Serialize,

@@ -8,8 +8,8 @@ use sha2::digest::generic_array::GenericArray;
 
 use crate::dsl::Checksum;
 
-#[cgp_new_provider]
-impl<Context, Input, Hasher> Handler<Context, Checksum<Hasher>, Input> for HandleStreamChecksum
+#[cgp_impl(new HandleStreamChecksum)]
+impl<Context, Input, Hasher> Handler<Checksum<Hasher>, Input> for Context
 where
     Context: CanRaiseError<Input::Error>,
     Input: Unpin + TryStream,
