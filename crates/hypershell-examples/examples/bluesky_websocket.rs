@@ -46,7 +46,7 @@ pub type Program = hypershell! {
     |   StreamToStdout
 };
 
-#[cgp_context(MyAppComponents: MyAppPreset)]
+#[cgp_inherit(MyAppPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub keyword: String,

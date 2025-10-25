@@ -3,7 +3,7 @@ use hypershell::presets::HypershellPreset;
 
 #[tokio::test]
 async fn test_join_fields() -> Result<(), Error> {
-    #[cgp_context(TestAppComponents: HypershellPreset)]
+    #[cgp_inherit(HypershellPreset)]
     #[derive(HasField)]
     pub struct TestApp {
         pub base_dir: String,
@@ -36,7 +36,7 @@ async fn test_join_fields() -> Result<(), Error> {
 
 #[tokio::test]
 async fn test_field_args() -> Result<(), Error> {
-    #[cgp_context(TestAppComponents: HypershellPreset)]
+    #[cgp_inherit(HypershellPreset)]
     #[derive(HasField)]
     pub struct TestApp<'a> {
         pub args: Vec<&'a str>,

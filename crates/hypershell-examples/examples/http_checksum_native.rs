@@ -47,7 +47,7 @@ pub type Program = hypershell! {
     | StreamToStdout
 };
 
-#[cgp_context(MyAppComponents: HypershellChecksumPreset)]
+#[cgp_inherit(HypershellChecksumPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,

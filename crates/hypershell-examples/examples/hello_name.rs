@@ -18,7 +18,7 @@
 // 5. The output is piped to `StreamToStdout`.
 //
 // To provide the dynamic `name` argument, a custom `MyApp` context is defined
-// with a `name` field. The `#[cgp_context]` macro wires it up with the
+// with a `name` field. The `#[cgp_inherit]` macro wires it up with the
 // `HypershellPreset`, and `#[derive(HasField)]` makes its fields accessible
 // to `FieldArg`.
 //
@@ -38,7 +38,7 @@ pub type Program = hypershell! {
     |   StreamToStdout
 };
 
-#[cgp_context(MyAppComponents: HypershellPreset)]
+#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub name: String,
