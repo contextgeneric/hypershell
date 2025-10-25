@@ -6,8 +6,8 @@ use reqwest::Body;
 use tokio::io::AsyncRead;
 use tokio_util::io::ReaderStream;
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for StreamToBody
+#[cgp_impl(new StreamToBody)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
     Input: Send + AsyncRead + 'static,

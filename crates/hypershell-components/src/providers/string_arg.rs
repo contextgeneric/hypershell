@@ -12,8 +12,8 @@ use crate::components::{
 };
 use crate::dsl::{FieldArg, JoinArgs, StaticArg};
 
-#[cgp_new_provider]
-impl<Context, Arg> CommandArgExtractor<Context, Arg> for ExtractStringCommandArg
+#[cgp_impl(new ExtractStringCommandArg)]
+impl<Context, Arg> CommandArgExtractor<Arg> for Context
 where
     Context: HasCommandArgType + CanExtractStringArg<Arg>,
     Context::CommandArg: From<String>,
@@ -23,8 +23,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Arg> StringArgExtractor<Context, StaticArg<Arg>> for ExtractStaticArg
+#[cgp_impl(new ExtractStaticArg)]
+impl<Context, Arg> StringArgExtractor<StaticArg<Arg>> for Context
 where
     Arg: Default + Display,
 {
@@ -36,8 +36,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Tag> StringArgExtractor<Context, FieldArg<Tag>> for ExtractFieldArg
+#[cgp_impl(new ExtractFieldArg)]
+impl<Context, Tag> StringArgExtractor<FieldArg<Tag>> for Context
 where
     Context: HasField<Tag, Value: Display>,
 {
@@ -48,25 +48,25 @@ where
 
 pub struct JoinStringArgs;
 
-#[cgp_provider]
-impl<Context, Arg, Args> StringArgExtractor<Context, JoinArgs<Cons<Arg, Args>>> for JoinStringArgs
+#[cgp_impl(JoinStringArgs)]
+impl<Context, Arg, Args> StringArgExtractor<JoinArgs<Cons<Arg, Args>>> for Context
 where
     Context: CanExtractStringArg<Arg>,
-    Self: StringArgExtractor<Context, JoinArgs<Args>>,
+    JoinStringArgs: StringArgExtractor<Context, JoinArgs<Args>>,
 {
     fn extract_string_arg(
         context: &Context,
         _phantom: PhantomData<JoinArgs<Cons<Arg, Args>>>,
     ) -> Cow<'_, str> {
         let arg = context.extract_string_arg(PhantomData);
-        let args = Self::extract_string_arg(context, PhantomData::<JoinArgs<Args>>);
+        let args = JoinStringArgs::extract_string_arg(context, PhantomData::<JoinArgs<Args>>);
 
         format!("{arg}{args}").into()
     }
 }
 
-#[cgp_provider]
-impl<Context> StringArgExtractor<Context, JoinArgs<Nil>> for JoinStringArgs {
+#[cgp_impl(JoinStringArgs)]
+impl<Context> StringArgExtractor<JoinArgs<Nil>> for Context {
     fn extract_string_arg(
         _context: &Context,
         _phantom: PhantomData<JoinArgs<Nil>>,

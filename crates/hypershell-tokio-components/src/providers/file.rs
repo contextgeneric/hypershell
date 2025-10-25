@@ -8,8 +8,8 @@ use hypershell_components::dsl::{ReadFile, WriteFile};
 use tokio::fs::File;
 use tokio::io::AsyncRead;
 
-#[cgp_new_provider]
-impl<Context, PathArg> Handler<Context, ReadFile<PathArg>, ()> for HandleReadFile
+#[cgp_impl(new HandleReadFile)]
+impl<Context, PathArg> Handler<ReadFile<PathArg>, ()> for Context
 where
     Context: CanExtractCommandArg<PathArg> + CanRaiseError<std::io::Error>,
     Context::CommandArg: AsRef<Path>,
@@ -31,8 +31,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, PathArg, Input> Handler<Context, WriteFile<PathArg>, Input> for HandleWriteFile
+#[cgp_impl(new HandleWriteFile)]
+impl<Context, PathArg, Input> Handler<WriteFile<PathArg>, Input> for Context
 where
     Context: CanExtractCommandArg<PathArg> + CanRaiseError<std::io::Error>,
     Context::CommandArg: AsRef<Path>,

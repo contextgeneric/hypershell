@@ -14,9 +14,8 @@ pub struct ExecOutputError {
     pub output: Output,
 }
 
-#[cgp_new_provider]
-impl<Context, CommandPath, Args, Input> Handler<Context, SimpleExec<CommandPath, Args>, Input>
-    for HandleSimpleExec
+#[cgp_impl(new HandleSimpleExec)]
+impl<Context, CommandPath, Args, Input> Handler<SimpleExec<CommandPath, Args>, Input> for Context
 where
     Context: CanHandle<CoreExec<CommandPath, Args>, (), Output = Child>
         + for<'a> CanRaiseError<ExecOutputError>

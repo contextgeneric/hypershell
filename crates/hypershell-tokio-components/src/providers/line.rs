@@ -7,8 +7,8 @@ use hypershell_components::dsl::StreamToLines;
 use tokio::io::AsyncRead;
 use tokio_util::codec::{FramedRead, LinesCodec, LinesCodecError};
 
-#[cgp_new_provider]
-impl<Context, Input> Handler<Context, StreamToLines, Input> for HandleStreamToLines
+#[cgp_impl(new HandleStreamToLines)]
+impl<Context, Input> Handler<StreamToLines, Input> for Context
 where
     Context: HasErrorType,
     Input: AsyncRead + Unpin + 'static,

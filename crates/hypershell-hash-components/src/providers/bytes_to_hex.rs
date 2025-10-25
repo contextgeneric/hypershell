@@ -3,8 +3,8 @@ use core::marker::PhantomData;
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for HandleBytesToHex
+#[cgp_impl(new HandleBytesToHex)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: HasErrorType,
     Input: AsRef<[u8]>,

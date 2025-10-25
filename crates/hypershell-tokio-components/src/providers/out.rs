@@ -5,8 +5,8 @@ use cgp::prelude::*;
 use hypershell_components::dsl::StreamToStdout;
 use tokio::io::{AsyncRead, copy};
 
-#[cgp_new_provider]
-impl<Context, Input> Handler<Context, StreamToStdout, Input> for HandleStreamToStdout
+#[cgp_impl(new HandleStreamToStdout)]
+impl<Context, Input> Handler<StreamToStdout, Input> for Context
 where
     Context: CanRaiseError<std::io::Error>,
     Input: AsyncRead + Unpin,

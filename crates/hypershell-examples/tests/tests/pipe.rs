@@ -3,7 +3,7 @@ use hypershell::presets::HypershellPreset;
 
 #[tokio::test]
 async fn test_simple_pipe() -> Result<(), Error> {
-    #[cgp_context(TestAppComponents: HypershellPreset)]
+    #[cgp_inherit(HypershellPreset)]
     #[derive(HasField)]
     pub struct TestApp {
         pub base_dir: String,

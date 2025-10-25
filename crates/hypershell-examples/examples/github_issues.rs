@@ -18,7 +18,7 @@
 //    the JSON byte stream into a `Vec<Issue>`.
 //
 // The `MyApp` struct defines the context for running the Hypershell program.
-// It uses `#[cgp_context]` to inherit the necessary components from
+// It uses `#[cgp_inherit]` to inherit the necessary components from
 // `HypershellPreset` for executing the program. It also uses `#[derive(HasField)]`
 // to expose its fields to be used by `FieldArg` within the program definition.
 //
@@ -51,7 +51,7 @@ pub type Program = hypershell! {
     | DecodeJson<Vec<Issue>>
 };
 
-#[cgp_context(MyAppComponents: HypershellPreset)]
+#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,

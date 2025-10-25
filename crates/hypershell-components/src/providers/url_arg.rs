@@ -8,8 +8,8 @@ use crate::components::{
 };
 use crate::dsl::FieldArg;
 
-#[cgp_new_provider]
-impl<Context, Arg> UrlArgExtractor<Context, Arg> for ExtractStringUrlArg
+#[cgp_impl(new ExtractStringUrlArg)]
+impl<Context, Arg> UrlArgExtractor<Arg> for Context
 where
     Context: HasUrlType + CanExtractStringArg<Arg> + CanRaiseError<<Context::Url as FromStr>::Err>,
     Context::Url: FromStr,
@@ -23,8 +23,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Tag> UrlArgExtractor<Context, FieldArg<Tag>> for ExtractUrlFieldArg
+#[cgp_impl(new ExtractUrlFieldArg)]
+impl<Context, Tag> UrlArgExtractor<FieldArg<Tag>> for Context
 where
     Context: HasUrlType + HasErrorType + HasField<Tag, Value = Context::Url>,
     Context::Url: Clone,

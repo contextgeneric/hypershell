@@ -31,7 +31,7 @@ pub type Program = hypershell! {
     |   WriteFile<FieldArg<"file_path">>
 };
 
-#[cgp_context(MyAppComponents: HypershellPreset)]
+#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,

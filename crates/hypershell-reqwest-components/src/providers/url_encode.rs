@@ -8,8 +8,8 @@ use hypershell_components::components::{
 use hypershell_components::dsl::UrlEncodeArg;
 use url::form_urlencoded;
 
-#[cgp_new_provider]
-impl<Context, Arg> StringArgExtractor<Context, UrlEncodeArg<Arg>> for UrlEncodeStringArg
+#[cgp_impl(new UrlEncodeStringArg)]
+impl<Context, Arg> StringArgExtractor<UrlEncodeArg<Arg>> for Context
 where
     Context: CanExtractStringArg<Arg>,
 {

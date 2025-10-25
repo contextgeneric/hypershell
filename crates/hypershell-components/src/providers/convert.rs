@@ -9,8 +9,8 @@ use cgp::prelude::*;
 
 use crate::dsl::ConvertTo;
 
-#[cgp_new_provider]
-impl<Context, Input, Output> Computer<Context, ConvertTo<Output>, Input> for HandleConvert
+#[cgp_impl(new HandleConvert)]
+impl<Context, Input, Output> Computer<ConvertTo<Output>, Input> for Context
 where
     Input: Into<Output>,
 {
@@ -21,8 +21,8 @@ where
     }
 }
 
-#[cgp_new_provider]
-impl<Context, Code, Input> Handler<Context, Code, Input> for DecodeUtf8Bytes
+#[cgp_impl(new DecodeUtf8Bytes)]
+impl<Context, Code, Input> Handler<Code, Input> for Context
 where
     Context: CanRaiseError<Utf8Error> + for<'a> CanWrapError<DecodeUtf8InputError<'a>>,
     Input: AsRef<[u8]>,

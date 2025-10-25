@@ -6,9 +6,9 @@ use hypershell::prelude::CanHandle;
 
 use crate::dsl::Compare;
 
-#[cgp_new_provider]
-impl<Context, CodeA, CodeB, InputA, InputB, Output>
-    Handler<Context, Compare<CodeA, CodeB>, (InputA, InputB)> for HandleCompare
+#[cgp_impl(new HandleCompare)]
+impl<Context, CodeA, CodeB, InputA, InputB, Output> Handler<Compare<CodeA, CodeB>, (InputA, InputB)>
+    for Context
 where
     Context: CanHandle<CodeA, InputA, Output = Output> + CanHandle<CodeB, InputB, Output = Output>,
     Output: Eq,

@@ -5,11 +5,8 @@ use cgp::prelude::*;
 
 use crate::dsl::Use;
 
-pub struct HandleUseProvider;
-
-#[cgp_provider]
-impl<Context, Provider, Code, Input> Handler<Context, Use<Provider, Code>, Input>
-    for HandleUseProvider
+#[cgp_impl(new HandleUseProvider)]
+impl<Context, Provider, Code, Input> Handler<Use<Provider, Code>, Input> for Context
 where
     Context: HasErrorType,
     Provider: Handler<Context, Code, Input>,
