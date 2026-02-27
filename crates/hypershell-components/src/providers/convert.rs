@@ -10,35 +10,32 @@ use cgp::prelude::*;
 use crate::dsl::ConvertTo;
 
 #[cgp_impl(new HandleConvert)]
-impl<Context, Input, Output> Computer<ConvertTo<Output>, Input> for Context
+impl<Input, Output> Computer<ConvertTo<Output>, Input>
 where
     Input: Into<Output>,
 {
     type Output = Output;
 
-    fn compute(_context: &Context, _tag: PhantomData<ConvertTo<Output>>, input: Input) -> Output {
+    fn compute(&self, _tag: PhantomData<ConvertTo<Output>>, input: Input) -> Output {
         input.into()
     }
 }
 
 #[cgp_impl(new DecodeUtf8Bytes)]
-impl<Context, Code, Input> Handler<Code, Input> for Context
+#[use_type(HasErrorType::Error)]
+impl<Code, Input> Handler<Code, Input>
 where
-    Context: CanRaiseError<Utf8Error> + for<'a> CanWrapError<DecodeUtf8InputError<'a>>,
+    Self: CanRaiseError<Utf8Error> + for<'a> CanWrapError<DecodeUtf8InputError<'a>>,
     Input: AsRef<[u8]>,
 {
     type Output = String;
 
-    async fn handle(
-        _context: &Context,
-        _tag: PhantomData<Code>,
-        input: Input,
-    ) -> Result<String, Context::Error> {
+    async fn handle(&self, _tag: PhantomData<Code>, input: Input) -> Result<String, Error> {
         let raw_input = input.as_ref();
 
         let parsed = str::from_utf8(raw_input)
-            .map_err(Context::raise_error)
-            .map_err(|e| Context::wrap_error(e, DecodeUtf8InputError { raw_input }))?;
+            .map_err(Self::raise_error)
+            .map_err(|e| Self::wrap_error(e, DecodeUtf8InputError { raw_input }))?;
 
         Ok(parsed.to_owned())
     }

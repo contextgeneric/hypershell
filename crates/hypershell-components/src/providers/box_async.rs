@@ -6,22 +6,23 @@ use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 
 #[cgp_impl(new BoxHandler<InHandler>)]
-impl<Context, Code, Input, InHandler> Handler<Code, Input> for Context
+#[use_type(HasErrorType::Error)]
+#[use_provider(InHandler: Handler<Code, Input>)]
+impl<Code, Input, InHandler> Handler<Code, Input>
 where
-    Context: HasErrorType,
-    InHandler: 'static + Handler<Context, Code, Input>,
+    InHandler: 'static,
     Code: 'static,
     Input: 'static,
 {
     type Output = InHandler::Output;
 
     fn handle(
-        context: &Context,
+        &self,
         code: PhantomData<Code>,
         input: Input,
-    ) -> impl Future<Output = Result<Self::Output, Context::Error>> {
-        let future: Pin<Box<dyn Future<Output = Result<Self::Output, Context::Error>>>> =
-            Box::pin(InHandler::handle(context, code, input));
+    ) -> impl Future<Output = Result<Self::Output, Error>> {
+        let future: Pin<Box<dyn Future<Output = Result<Self::Output, Error>>>> =
+            Box::pin(InHandler::handle(self, code, input));
 
         future
     }

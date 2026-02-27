@@ -59,7 +59,11 @@ where
         _phantom: PhantomData<JoinArgs<Cons<Arg, Args>>>,
     ) -> Cow<'_, str> {
         let arg = context.extract_string_arg(PhantomData);
-        let args = JoinStringArgs::extract_string_arg(context, PhantomData::<JoinArgs<Args>>);
+        let args =
+            <JoinStringArgs as StringArgExtractor<Context, JoinArgs<Args>>>::extract_string_arg(
+                context,
+                PhantomData::<JoinArgs<Args>>,
+            );
 
         format!("{arg}{args}").into()
     }

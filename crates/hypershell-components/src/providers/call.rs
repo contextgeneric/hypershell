@@ -4,17 +4,17 @@ use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
 
 #[cgp_impl(new Call<InCode>)]
-impl<Context, OutCode, InCode, Input> Handler<OutCode, Input> for Context
+impl<OutCode, InCode, Input, Output> Handler<OutCode, Input>
 where
-    Context: CanHandle<InCode, Input>,
+    Self: CanHandle<InCode, Input, Output = Output>,
 {
-    type Output = Context::Output;
+    type Output = Output;
 
     async fn handle(
-        context: &Context,
+        &self,
         _tag: PhantomData<OutCode>,
         input: Input,
-    ) -> Result<Context::Output, Context::Error> {
-        context.handle(PhantomData, input).await
+    ) -> Result<Self::Output, Self::Error> {
+        self.handle(PhantomData, input).await
     }
 }
