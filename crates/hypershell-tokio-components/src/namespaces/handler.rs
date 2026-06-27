@@ -4,7 +4,6 @@ use hypershell_components::dsl::{
     BytesToStream, ReadFile, SimpleExec, StreamToBytes, StreamToStdout, StreamToString,
     StreamingExec, WriteFile,
 };
-use hypershell_components::namespaces::BaseHandlerImpls;
 use hypershell_components::providers::ReturnInput;
 
 use crate::dsl::{CoreExec, ToTokioAsyncRead};
@@ -16,16 +15,7 @@ use crate::providers::{
 use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
 cgp_namespace! {
-    BaseHandlerImpls {
-        ToTokioAsyncRead:
-            UseInputDelegate<ToTokioAsyncReadHandlers>,
-        <Path, Args> CoreExec<Path, Args>:
-            HandleCoreExec,
-    }
-}
-
-cgp_namespace! {
-    new TokioHandlerImpls: BaseHandlerImpls {
+    new TokioHandlerImpls {
         <Path, Args> SimpleExec<Path, Args>:
             HandleSimpleExec,
         <Path, Args> StreamingExec<Path, Args>:
@@ -55,6 +45,10 @@ cgp_namespace! {
                 UseInputDelegate<ToTokioAsyncReadHandlers>,
                 HandleStreamToStdout,
             ]>,
+        ToTokioAsyncRead:
+            UseInputDelegate<ToTokioAsyncReadHandlers>,
+        <Path, Args> CoreExec<Path, Args>:
+            HandleCoreExec,
     }
 }
 

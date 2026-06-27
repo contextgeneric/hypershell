@@ -1,64 +1,111 @@
-use alloc::boxed::Box;
-
+use cgp::core::component::IsDelegateKeyIn;
 use cgp::prelude::*;
 
-use crate::components::{StringArgExtractorComponent, UrlArgExtractorComponent};
+use crate::components::{
+    CommandArgExtractorComponent, StringArgExtractorComponent, UrlArgExtractorComponent,
+};
 use crate::dsl::{
-    BytesToStream, BytesToString, ConvertTo, FieldArg, JoinArgs, Pipe, ReadFile, SimpleExec, SimpleHttpRequest, StaticArg, StreamToBytes, StreamToStdout, StreamToString, StreamingExec, StreamingHttpRequest, Use, WebSocket, WriteFile,
+    BytesToStream, BytesToString, ConvertTo, FieldArg, JoinArgs, Pipe, ReadFile, SimpleExec,
+    SimpleHttpRequest, StaticArg, StreamToBytes, StreamToStdout, StreamToString, StreamingExec,
+    StreamingHttpRequest, UrlEncodeArg, Use, WebSocket, WriteFile,
 };
 
 cgp_namespace! {
     new HypershellNamespace: DefaultNamespace {
-        @cgp.extra.HandlerComponent.{
+        @cgp.extra.HandlerComponent.<T: IsDelegateKeyIn<HypershellHandlers>> T:
+            UseDelegate<HypershellHandlers>,
+
+        @cgp.extra.StringArgExtractorComponent.<T: IsDelegateKeyIn<HypershellStringArgExtractors>> T:
+            UseDelegate<HypershellHandlers>,
+
+        @cgp.extra.CommandArgExtractorComponent.<T: IsDelegateKeyIn<HypershellCommandArgExtractors>> T:
+            UseDelegate<HypershellHandlers>,
+
+        @cgp.extra.UrlArgExtractorComponent.<T: IsDelegateKeyIn<HypershellCommandArgExtractors>> T:
+            UseDelegate<HypershellUrlArgExtractors>,
+    }
+}
+
+delegate_components! {
+    new HypershellHandlers {
+        [
             <Handlers> Pipe<Handlers>,
             <Provider, Code> Use<Provider, Code>,
-            <Code> Box<Code>,
-        } =>
+        ] =>
             @hypershell.dsl.handler.core,
 
-        @cgp.extra.HandlerComponent.{
+        [
             BytesToString,
             <T> ConvertTo<T>,
-        } =>
+        ] =>
             @hypershell.dsl.handler.convert,
 
-        @cgp.extra.HandlerComponent.{
+        [
             StreamToBytes,
             StreamToString,
             BytesToStream,
             StreamToStdout,
-        } =>
+        ] =>
             @hypershell.dsl.handler.stream,
 
-        @cgp.extra.HandlerComponent.{
+        [
             <Path, Args> SimpleExec<Path, Args>,
             <Path, Args> StreamingExec<Path, Args>,
-        } =>
+        ] =>
             @hypershell.dsl.handler.cli,
 
-        @cgp.extra.HandlerComponent.{
+        [
             <Path> ReadFile<Path>,
             <Path> WriteFile<Path>,
-        } =>
+        ] =>
             @hypershell.dsl.handler.file,
 
-
-        @cgp.extra.HandlerComponent.{
+        [
             <Method, Url, Headers> SimpleHttpRequest<Method, Url, Headers>,
             <Method, Url, Headers> StreamingHttpRequest<Method, Url, Headers>,
-        } =>
+        ] =>
             @hypershell.dsl.handler.http,
 
-        @cgp.extra.HandlerComponent.{
+        [
             <Url, Params> WebSocket<Url, Params>,
-        } =>
+        ] =>
             @hypershell.dsl.handler.websocket,
 
-        @hypershell.core.[StringArgExtractorComponent, UrlArgExtractorComponent].{
+    }
+}
+
+delegate_components! {
+    new HypershellStringArgExtractors {
+        [
             <Arg> StaticArg<Arg>,
             <Tag> FieldArg<Tag>,
             <Args> JoinArgs<Args>,
-        } =>
+        ] =>
             @hypershell.dsl.arg.core,
+        [
+            <Arg> UrlEncodeArg<Arg>,
+        ] =>
+            @hypershell.dsl.arg.url,
+    }
+}
+
+delegate_components! {
+    new HypershellCommandArgExtractors {
+        [
+            <Arg> StaticArg<Arg>,
+            <Tag> FieldArg<Tag>,
+        ] =>
+            @hypershell.dsl.arg.core
+    }
+}
+
+delegate_components! {
+    new HypershellUrlArgExtractors {
+        [
+            <Arg> StaticArg<Arg>,
+            <Tag> FieldArg<Tag>,
+            <Args> JoinArgs<Args>,
+        ] =>
+            @hypershell.dsl.arg.core
     }
 }

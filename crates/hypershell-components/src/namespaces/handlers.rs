@@ -5,8 +5,7 @@ use cgp::prelude::cgp_namespace;
 
 use crate::dsl::{BytesToString, ConvertTo, Pipe, Use};
 use crate::providers::{
-    BoxHandler, Call, DecodeUtf8Bytes, HandleConvert, HandlePipe,
-    HandleUseProvider,
+    BoxHandler, Call, DecodeUtf8Bytes, HandleConvert, HandlePipe, HandleUseProvider,
 };
 
 cgp_namespace! {
