@@ -8,6 +8,7 @@ use cgp::prelude::*;
     provider: StringArgExtractor,
     derive_delegate: UseDelegate<Arg>,
 }]
+#[prefix(@hypershell.core in DefaultNamespace)]
 pub trait CanExtractStringArg<Arg> {
     fn extract_string_arg(&self, _phantom: PhantomData<Arg>) -> Cow<'_, str>;
 }

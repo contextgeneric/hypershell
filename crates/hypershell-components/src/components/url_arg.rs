@@ -12,6 +12,7 @@ pub trait HasUrlType {
     provider: UrlArgExtractor,
     derive_delegate: UseDelegate<Arg>,
 }]
+#[prefix(@hypershell.core in DefaultNamespace)]
 pub trait CanExtractUrlArg<Arg>: HasUrlType + HasErrorType {
     fn extract_url_arg(&self, _phantom: PhantomData<Arg>) -> Result<Self::Url, Self::Error>;
 }

@@ -49,5 +49,7 @@ hypershell-hash-components          = { version =  "0.1.0", path = "./crates/hyp
 hypershell-macro                    = { version =  "0.1.0", path = "./crates/hypershell-macro" }
 
 [patch.crates-io]
+cgp                           = { path = "../cgp/crates/main/cgp" }
+cgp-error-anyhow              = { path = "../cgp/crates/standalone/error/cgp-error-anyhow" }
 # cgp                         = { git = "https://github.com/contextgeneric/cgp.git", branch = "v0.7.0" }
 # cgp-error-anyhow            = { git = "https://github.com/contextgeneric/cgp.git", branch = "v0.7.0" }
