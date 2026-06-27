@@ -8,6 +8,7 @@ use tokio::process::Command;
     provider: CommandUpdater,
     derive_delegate: UseDelegate<Args>,
 }]
+#[prefix(@hypershell.tokio in DefaultNamespace)]
 pub trait CanUpdateCommand<Args> {
     fn update_command(&self, _phantom: PhantomData<Args>, command: &mut Command);
 }

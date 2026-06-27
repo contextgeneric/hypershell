@@ -1,11 +1,9 @@
 #[cgp::re_export_imports]
 mod preset {
     use std::path::PathBuf;
-    use std::string::String;
-    use std::vec::Vec;
 
     use cgp::core::component::UseDelegate;
-    use cgp::extra::handler::{HandlerComponent, PipeHandlers, UseInputDelegate};
+    use cgp::extra::handler::{HandlerComponent, PipeHandlers};
     use cgp::prelude::{cgp_preset, *};
     use hypershell_components::components::{
         CommandArgExtractorComponent, CommandArgTypeProviderComponent,
@@ -14,17 +12,16 @@ mod preset {
         BytesToStream, FieldArg, FieldArgs, JoinArgs, ReadFile, SimpleExec, StaticArg,
         StreamToBytes, StreamToStdout, StreamToString, StreamingExec, WithArgs, WriteFile,
     };
-    use hypershell_components::providers::{ExtractStringCommandArg, ReturnInput};
+    use hypershell_components::providers::ExtractStringCommandArg;
 
     use crate::components::CommandUpdaterComponent;
     use crate::dsl::{CoreExec, ToTokioAsyncRead};
     use crate::providers::{
-        AsyncReadToStream, ExtractArgs, ExtractFieldArgs, FuturesToTokioAsyncRead,
-        HandleBytesToStream, HandleBytesToTokioAsyncRead, HandleCoreExec, HandleReadFile,
-        HandleSimpleExec, HandleStreamToStdout, HandleStreamingExec, HandleTokioAsyncReadToBytes,
-        HandleTokioAsyncReadToString, HandleWriteFile, JoinExtractArgs, WrapTokioAsyncRead,
+        ExtractArgs, ExtractFieldArgs, HandleBytesToTokioAsyncRead, HandleCoreExec, HandleReadFile,
+        HandleSimpleExec, HandleStreamToStdout, HandleStreamingExec, HandleToTokioAsyncRead,
+        HandleTokioAsyncReadToBytes, HandleTokioAsyncReadToString, HandleWriteFile,
+        JoinExtractArgs, WrapTokioAsyncRead,
     };
-    use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
     cgp_preset! {
         HypershellTokioPreset {
@@ -46,7 +43,7 @@ mod preset {
                 HandleSimpleExec,
             <Path, Args> StreamingExec<Path, Args>:
                 PipeHandlers<Product![
-                    ToTokioAsyncReadHandlers::Provider,
+                    HandleToTokioAsyncRead,
                     HandleStreamingExec,
                     WrapTokioAsyncRead,
                 ]>,
@@ -59,7 +56,7 @@ mod preset {
                 ]>,
             <Path> WriteFile<Path>:
                 PipeHandlers<Product![
-                    ToTokioAsyncReadHandlers::Provider,
+                    HandleToTokioAsyncRead,
                     HandleWriteFile,
                 ]>,
             StreamToBytes:
@@ -70,11 +67,11 @@ mod preset {
                 HandleBytesToTokioAsyncRead,
             StreamToStdout:
                 PipeHandlers<Product![
-                    ToTokioAsyncReadHandlers::Provider,
+                    HandleToTokioAsyncRead,
                     HandleStreamToStdout,
                 ]>,
             ToTokioAsyncRead:
-                ToTokioAsyncReadHandlers::Provider,
+                HandleToTokioAsyncRead,
         }
     }
 
@@ -95,39 +92,6 @@ mod preset {
         CommandUpdaterPreset {
             <Args> WithArgs<Args>: ExtractArgs,
             <Tag> FieldArgs<Tag>: ExtractFieldArgs,
-        }
-    }
-
-    cgp_preset! {
-        #[wrap_provider(UseInputDelegate)]
-        ToTokioAsyncReadHandlers {
-            <S> FuturesAsyncReadStream<S>:
-                FuturesToTokioAsyncRead,
-            <S> TokioAsyncReadStream<S>:
-                ReturnInput,
-            [
-                Vec<u8>,
-                String,
-            ]:
-                HandleBytesToTokioAsyncRead,
-        }
-    }
-
-    cgp_preset! {
-        #[wrap_provider(UseInputDelegate)]
-        ToFuturesStreamHandlers {
-            <S> FuturesAsyncReadStream<S>:
-                PipeHandlers<Product![
-                    FuturesToTokioAsyncRead,
-                    AsyncReadToStream,
-                ]>,
-            <S> TokioAsyncReadStream<S>:
-                AsyncReadToStream,
-            [
-                Vec<u8>,
-                String,
-            ]:
-                HandleBytesToStream,
         }
     }
 }

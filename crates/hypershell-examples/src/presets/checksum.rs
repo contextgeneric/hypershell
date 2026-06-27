@@ -5,7 +5,7 @@ mod preset {
     use hypershell::presets::HypershellHandlerPreset;
     use hypershell_hash_components::dsl::{BytesToHex, Checksum};
     use hypershell_hash_components::providers::{HandleBytesToHex, HandleStreamChecksum};
-    use hypershell_tokio_components::presets::ToFuturesStreamHandlers;
+    use hypershell_tokio_components::providers::HandleToFuturesStream;
 
     cgp_preset! {
         HypershellChecksumPreset: HypershellPreset {
@@ -19,7 +19,7 @@ mod preset {
         ChecksumHandlerPreset: HypershellHandlerPreset {
             <Hasher> Checksum<Hasher>:
                 PipeHandlers<Product![
-                    ToFuturesStreamHandlers::Provider,
+                    HandleToFuturesStream,
                     HandleStreamChecksum,
                 ]>,
             BytesToHex:

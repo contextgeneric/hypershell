@@ -4,15 +4,13 @@ use hypershell_components::dsl::{
     BytesToStream, ReadFile, SimpleExec, StreamToBytes, StreamToStdout, StreamToString,
     StreamingExec, WriteFile,
 };
-use hypershell_components::providers::ReturnInput;
 
 use crate::dsl::{CoreExec, ToTokioAsyncRead};
 use crate::providers::{
-    FuturesToTokioAsyncRead, HandleBytesToTokioAsyncRead, HandleCoreExec, HandleReadFile,
-    HandleSimpleExec, HandleStreamToStdout, HandleStreamingExec, HandleTokioAsyncReadToBytes,
+    HandleBytesToTokioAsyncRead, HandleCoreExec, HandleReadFile, HandleSimpleExec,
+    HandleStreamToStdout, HandleStreamingExec, HandleToTokioAsyncRead, HandleTokioAsyncReadToBytes,
     HandleTokioAsyncReadToString, HandleWriteFile, WrapTokioAsyncRead,
 };
-use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
 cgp_namespace! {
     new TokioHandlerImpls {
@@ -20,7 +18,7 @@ cgp_namespace! {
             HandleSimpleExec,
         <Path, Args> StreamingExec<Path, Args>:
             PipeHandlers<Product![
-                UseInputDelegate<ToTokioAsyncReadHandlers>,
+                UseInputDelegate<HandleToTokioAsyncRead>,
                 HandleStreamingExec,
                 WrapTokioAsyncRead,
             ]>,
@@ -31,7 +29,7 @@ cgp_namespace! {
             ]>,
         <Path> WriteFile<Path>:
             PipeHandlers<Product![
-                UseInputDelegate<ToTokioAsyncReadHandlers>,
+                UseInputDelegate<HandleToTokioAsyncRead>,
                 HandleWriteFile,
             ]>,
         StreamToBytes:
@@ -42,26 +40,12 @@ cgp_namespace! {
             HandleBytesToTokioAsyncRead,
         StreamToStdout:
             PipeHandlers<Product![
-                UseInputDelegate<ToTokioAsyncReadHandlers>,
+                UseInputDelegate<HandleToTokioAsyncRead>,
                 HandleStreamToStdout,
             ]>,
         ToTokioAsyncRead:
-            UseInputDelegate<ToTokioAsyncReadHandlers>,
+            UseInputDelegate<HandleToTokioAsyncRead>,
         <Path, Args> CoreExec<Path, Args>:
             HandleCoreExec,
-    }
-}
-
-delegate_components! {
-    new ToTokioAsyncReadHandlers {
-        <S> FuturesAsyncReadStream<S>:
-            FuturesToTokioAsyncRead,
-        <S> TokioAsyncReadStream<S>:
-            ReturnInput,
-        [
-            Vec<u8>,
-            String,
-        ]:
-            HandleBytesToTokioAsyncRead,
     }
 }

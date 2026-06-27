@@ -12,6 +12,7 @@ pub trait HasHttpMethodType {
     provider: MethodArgExtractor,
     derive_delegate: UseDelegate<Arg>,
 }]
+#[prefix(@hypershell.core in DefaultNamespace)]
 pub trait CanExtractMethodArg<Arg>: HasHttpMethodType {
     fn extract_method_arg(&self, _phantom: PhantomData<Arg>) -> Self::HttpMethod;
 }

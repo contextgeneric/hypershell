@@ -1,5 +1,7 @@
+mod async_read;
 mod core_exec;
 mod file;
+mod futures_stream;
 mod join_args;
 mod line;
 mod out;
@@ -8,8 +10,10 @@ mod stream;
 mod streaming_exec;
 mod update_command;
 
+pub use async_read::*;
 pub use core_exec::*;
 pub use file::*;
+pub use futures_stream::*;
 pub use join_args::*;
 pub use line::*;
 pub use out::*;
