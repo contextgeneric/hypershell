@@ -1,2 +1,2 @@
-# [build]
-# rustflags = ["-Z", "next-solver=globally"]
+[build]
+rustflags = ["-Z", "next-solver=globally"]
