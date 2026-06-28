@@ -4,6 +4,7 @@ use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
 #[cgp_type]
+#[prefix(@hypershell.core in DefaultNamespace)]
 pub trait HasUrlType {
     type Url;
 }

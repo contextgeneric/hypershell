@@ -1,14 +1,16 @@
 use cgp::extra::handler::PipeHandlers;
 use cgp::prelude::*;
 use hypershell_components::components::{
-    CommandArgExtractorComponent, MethodArgExtractorComponent, StringArgExtractorComponent,
-    UrlArgExtractorComponent,
+    CommandArgExtractorComponent, HttpMethodTypeProviderComponent, MethodArgExtractorComponent,
+    StringArgExtractorComponent, UrlArgExtractorComponent, UrlTypeProviderComponent,
 };
 use hypershell_components::dsl::{
     GetMethod, Header, PostMethod, SimpleHttpRequest, StreamingHttpRequest, UrlEncodeArg,
     WithHeaders,
 };
 use hypershell_tokio_components::providers::{HandleToTokioAsyncRead, WrapFuturesAsyncRead};
+use reqwest::Method;
+use url::Url;
 
 use crate::components::RequestBuilderUpdaterComponent;
 use crate::dsl::CoreHttpRequest;
@@ -29,6 +31,12 @@ delegate_components! {
             RequestBuilderUpdaterComponent,
         };
 
+        HttpMethodTypeProviderComponent:
+            UseType<Method>,
+
+        UrlTypeProviderComponent:
+            UseType<Url>,
+
         @HandlerComponent.<Method, Url, Headers> SimpleHttpRequest<Method, Url, Headers>:
             HandleSimpleHttpRequest,
 
@@ -43,7 +51,7 @@ delegate_components! {
         @HandlerComponent.<Method, Url, Headers> CoreHttpRequest<Method, Url, Headers>:
             HandleCoreHttpRequest,
 
-        @UrlArgExtractorComponent.[
+        @MethodArgExtractorComponent.[
             GetMethod,
             PostMethod,
         ]:

@@ -5,7 +5,9 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWr
 use cgp::prelude::*;
 use cgp_error_anyhow::{DebugAnyhowError, Error, UseAnyhowError};
 use hypershell_components::components::{
-    CommandArgExtractorComponent, StringArgExtractorComponent, UrlArgExtractorComponent,
+    CommandArgExtractorComponent, CommandArgTypeProviderComponent, HttpMethodTypeProviderComponent,
+    MethodArgExtractorComponent, StringArgExtractorComponent, UrlArgExtractorComponent,
+    UrlTypeProviderComponent,
 };
 use hypershell_components::dsl::{
     BytesToStream, BytesToString, ConvertTo, DecodeJson, EncodeJson, FieldArg, FieldArgs,
@@ -50,6 +52,9 @@ cgp_namespace! {
 
         @cgp.core.error.ErrorWrapperComponent:
             DebugAnyhowError,
+
+        @hypershell.core.CommandArgTypeProviderComponent:
+            HypershellTokioProvider,
 
         @hypershell.reqwest.ReqwestClientGetterComponent:
             UseField<Symbol!("http_client")>,
@@ -121,10 +126,12 @@ cgp_namespace! {
 
         @hypershell.{
             core.{
+                HttpMethodTypeProviderComponent,
+                UrlTypeProviderComponent,
                 StringArgExtractorComponent.[
                     <Arg> UrlEncodeArg<Arg>,
                 ],
-                UrlArgExtractorComponent.[
+                MethodArgExtractorComponent.[
                     GetMethod,
                     PostMethod,
                 ],

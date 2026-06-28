@@ -14,9 +14,11 @@ delegate_components! {
     new HypershellErrorHandler {
         open {ErrorRaiserComponent};
 
-        Error: ReturnError,
-        Infallible: RaiseInfallible,
-        [
+        @ErrorRaiserComponent.Error: ReturnError,
+
+        @ErrorRaiserComponent.Infallible: RaiseInfallible,
+
+        @ErrorRaiserComponent.[
             std::io::Error,
             Utf8Error,
             reqwest::Error,
@@ -26,7 +28,8 @@ delegate_components! {
             serde_json::Error,
         ]:
             RaiseAnyhowError,
-        [
+
+        @ErrorRaiserComponent.[
             ExecOutputError,
             ErrorResponse,
         ]:
