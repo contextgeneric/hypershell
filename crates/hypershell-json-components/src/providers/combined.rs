@@ -7,10 +7,10 @@ delegate_components! {
     new HypershellJsonProvider {
         open {HandlerComponent};
 
-        @HandlerComponent.<Value> DecodeJson<Value>:
-            HandleDecodeJson,
-
         @HandlerComponent.EncodeJson:
             HandleEncodeJson,
+
+        @HandlerComponent.<Value> DecodeJson<Value>:
+            HandleDecodeJson,
     }
 }

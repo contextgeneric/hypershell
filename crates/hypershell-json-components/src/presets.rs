@@ -17,10 +17,10 @@ mod preset {
     cgp_preset! {
         #[wrap_provider(UseDelegate)]
         JsonHandlerPreset {
-            <Value> DecodeJson<Value>:
-                HandleDecodeJson,
             EncodeJson:
                 HandleEncodeJson,
+            <Value> DecodeJson<Value>:
+                HandleDecodeJson,
         }
     }
 }
