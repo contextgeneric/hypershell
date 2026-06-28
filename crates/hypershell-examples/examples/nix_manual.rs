@@ -24,8 +24,8 @@
 //
 // The `main` function initializes the `MyApp` context and runs the program.
 
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
-use hypershell::presets::HypershellPreset;
 use reqwest::Client;
 
 pub type Program = hypershell! {
@@ -51,11 +51,16 @@ pub type Program = hypershell! {
     | StreamToStdout
 };
 
-#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
     pub keyword: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
+    }
 }
 
 #[tokio::main]

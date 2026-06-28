@@ -25,8 +25,8 @@
 // The `main` function sets up the `MyApp` context with the required values,
 // executes the `Program` using `app.handle`, and prints the fetched issues.
 
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
-use hypershell::presets::HypershellPreset;
 use reqwest::Client;
 use serde::Deserialize;
 
@@ -44,20 +44,25 @@ pub type Program = hypershell! {
         WithHeaders [
             Header<
                 StaticArg<"User-Agent">,
-                StaticArg<"hypershell">,
+                StaticArg<"hypershells">,
             >
         ],
     >
     | DecodeJson<Vec<Issue>>
 };
 
-#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
     pub base_url: String,
     pub github_org: String,
     pub github_repo: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
+    }
 }
 
 #[derive(Debug, Deserialize)]

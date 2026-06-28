@@ -19,6 +19,7 @@
 // runs the program. A confirmation message is printed to the console upon
 // completion.
 
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
 use reqwest::Client;
 
@@ -31,12 +32,17 @@ pub type Program = hypershell! {
     |   WriteFile<FieldArg<"file_path">>
 };
 
-#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
     pub url: String,
     pub file_path: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
+    }
 }
 
 #[tokio::main]
