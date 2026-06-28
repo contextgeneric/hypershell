@@ -4,10 +4,8 @@ use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 use reqwest::RequestBuilder;
 
-#[cgp_component {
-    provider: RequestBuilderUpdater,
-    derive_delegate: UseDelegate<Args>,
-}]
+#[cgp_component(RequestBuilderUpdater)]
+#[derive_delegate(UseDelegate<Args>)]
 pub trait CanUpdateRequestBuilder<Args>: HasErrorType {
     fn update_request_builder(
         &self,

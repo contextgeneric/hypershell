@@ -1,12 +1,14 @@
-use cgp::prelude::{cgp_namespace, delegate_components};
+use cgp::prelude::{UseDelegate, cgp_namespace, delegate_components};
 use hypershell_components::dsl::{FieldArgs, WithArgs};
-use hypershell_components::namespaces::HypershellHandlers;
+use hypershell_components::namespaces::{HypershellHandlers, HypershellNamespace};
 
+use crate::components::CommandUpdaterComponent;
 use crate::dsl::{CoreExec, ToTokioAsyncRead};
 
 cgp_namespace! {
-    HypershellNamespace {
-
+    new TokioNamespace: HypershellNamespace {
+        @hypershell.tokio.CommandUpdaterComponent:
+            UseDelegate<HypershellCommandUpdaters>,
     }
 }
 
@@ -26,6 +28,6 @@ delegate_components! {
             <Args> WithArgs<Args>,
             <Tag> FieldArgs<Tag>,
         ] =>
-            @hypershell,
+            @hypershell.dsl.tokio.command.core,
     }
 }

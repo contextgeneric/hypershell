@@ -15,13 +15,13 @@ cgp_namespace! {
         @cgp.extra.HandlerComponent.<T: IsDelegateKeyIn<HypershellHandlers>> T:
             UseDelegate<HypershellHandlers>,
 
-        @cgp.extra.StringArgExtractorComponent.<T: IsDelegateKeyIn<HypershellStringArgExtractors>> T:
+        @hypershell.core.StringArgExtractorComponent.<T: IsDelegateKeyIn<HypershellStringArgExtractors>> T:
             UseDelegate<HypershellHandlers>,
 
-        @cgp.extra.CommandArgExtractorComponent.<T: IsDelegateKeyIn<HypershellCommandArgExtractors>> T:
+        @hypershell.core.CommandArgExtractorComponent.<T: IsDelegateKeyIn<HypershellCommandArgExtractors>> T:
             UseDelegate<HypershellHandlers>,
 
-        @cgp.extra.UrlArgExtractorComponent.<T: IsDelegateKeyIn<HypershellCommandArgExtractors>> T:
+        @hypershell.core.UrlArgExtractorComponent.<T: IsDelegateKeyIn<HypershellCommandArgExtractors>> T:
             UseDelegate<HypershellUrlArgExtractors>,
     }
 }
