@@ -30,9 +30,14 @@
 // An empty input stream is provided to `app.handle` as required by the
 // handler signature, although it is not used by the `WebSocket` handler.
 
+use cgp::core::error::ErrorRaiserComponent;
+use cgp_error_anyhow::RaiseAnyhowError;
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
 use hypershell_tokio_components::types::TokioAsyncReadStream;
+use hypershell_tungstenite_components::providers::HypershellTungsteniteProvider;
 use tokio::io::simplex;
+use tokio_tungstenite::tungstenite::Error as TungsteniteError;
 
 pub type Program = hypershell! {
         WebSocket<
@@ -46,43 +51,20 @@ pub type Program = hypershell! {
     |   StreamToStdout
 };
 
-#[cgp_inherit(MyAppPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub keyword: String,
 }
 
-#[cgp::re_export_imports]
-mod preset {
-    use cgp::prelude::*;
-    use cgp_error_anyhow::RaiseAnyhowError;
-    use hypershell::presets::{HypershellErrorHandlers, HypershellHandlerPreset, HypershellPreset};
-    use hypershell_tungstenite_components::presets::TungsteniteHandlerPreset;
-    use tokio_tungstenite::tungstenite::Error as TungsteniteError;
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
 
-    cgp_preset! {
-        MyAppPreset: HypershellPreset {
-            override ErrorRaiserComponent:
-                MyErrorHandlers::Provider,
-            override HandlerComponent:
-                MyHandlerPreset::Provider,
-        }
-    }
+        @cgp.core.error.ErrorRaiserComponent.TungsteniteError:
+            RaiseAnyhowError,
 
-    cgp_preset! {
-        #[wrap_provider(UseDelegate)]
-        MyErrorHandlers: HypershellErrorHandlers {
-            TungsteniteError: RaiseAnyhowError,
-        }
-    }
-
-    cgp_preset! {
-        #[wrap_provider(UseDelegate)]
-        MyHandlerPreset:
-            HypershellHandlerPreset
-            + TungsteniteHandlerPreset
-        {
-        }
+        @cgp.extra.handler.HandlerComponent.<Url, Params> WebSocket<Url, Params>:
+            HypershellTungsteniteProvider,
     }
 }
 

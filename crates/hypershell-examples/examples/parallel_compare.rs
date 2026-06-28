@@ -2,7 +2,7 @@
 
 use hypershell::prelude::*;
 use hypershell_examples::dsl::Compare;
-use hypershell_examples::presets::HypershellComparePreset;
+use hypershell_examples::namespaces::HypershellCompareNamespace;
 use hypershell_hash_components::dsl::{BytesToHex, Checksum};
 use reqwest::Client;
 use sha2::Sha256;
@@ -24,12 +24,17 @@ pub type Program = hypershell! {
     >
 };
 
-#[cgp_inherit(HypershellComparePreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
     pub url_a: String,
     pub url_b: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellCompareNamespace;
+    }
 }
 
 #[tokio::main]

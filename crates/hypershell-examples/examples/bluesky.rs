@@ -27,8 +27,8 @@
 
 #![recursion_limit = "256"]
 
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
-use hypershell::presets::HypershellPreset;
 
 pub type Program = hypershell! {
         StreamingExec<
@@ -47,10 +47,15 @@ pub type Program = hypershell! {
     |   StreamToStdout
 };
 
-#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub keyword: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
+    }
 }
 
 #[tokio::main]
