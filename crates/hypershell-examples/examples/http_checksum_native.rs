@@ -31,7 +31,7 @@
 #![recursion_limit = "256"]
 
 use hypershell::prelude::*;
-use hypershell_examples::presets::HypershellChecksumPreset;
+use hypershell_examples::namespaces::HypershellChecksumNamespace;
 use hypershell_hash_components::dsl::{BytesToHex, Checksum};
 use reqwest::Client;
 use sha2::Sha256;
@@ -47,11 +47,16 @@ pub type Program = hypershell! {
     | StreamToStdout
 };
 
-#[cgp_inherit(HypershellChecksumPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
     pub url: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellChecksumNamespace;
+    }
 }
 
 #[tokio::main]
