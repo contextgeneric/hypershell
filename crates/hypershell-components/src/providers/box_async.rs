@@ -6,7 +6,7 @@ use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 
 #[cgp_impl(new BoxHandler<InHandler>)]
-#[use_type(HasErrorType::Error)]
+#[use_type(HasErrorType.Error)]
 #[use_provider(InHandler: Handler<Code, Input>)]
 impl<Code, Input, InHandler> Handler<Code, Input>
 where

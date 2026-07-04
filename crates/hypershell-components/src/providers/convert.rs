@@ -22,7 +22,7 @@ where
 }
 
 #[cgp_impl(new DecodeUtf8Bytes)]
-#[use_type(HasErrorType::Error)]
+#[use_type(HasErrorType.Error)]
 impl<Code, Input> Handler<Code, Input>
 where
     Self: CanRaiseError<Utf8Error> + for<'a> CanWrapError<DecodeUtf8InputError<'a>>,
