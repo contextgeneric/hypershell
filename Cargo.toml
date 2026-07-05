@@ -23,8 +23,8 @@ authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp"]
 
 [workspace.dependencies]
-cgp                 = { version = "0.7.0" }
-cgp-error-anyhow    = { version = "0.7.0" }
+cgp                 = { version = "0.8.0-alpha" }
+cgp-error-anyhow    = { version = "0.8.0-alpha" }
 futures             = { version = "0.3.31" }
 hex                 = { version = "0.4.3" }
 itertools           = { version = "0.14.0" }
