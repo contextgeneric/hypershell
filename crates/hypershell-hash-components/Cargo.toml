@@ -10,8 +10,6 @@ keywords     = { workspace = true }
 description  = "Modular DSL for shellscripting in Rust"
 
 [dependencies]
-hypershell-components   = { workspace = true }
-
 cgp                     = { workspace = true }
 futures                 = { workspace = true }
 sha2                    = { workspace = true }

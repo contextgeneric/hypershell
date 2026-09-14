@@ -1,4 +1,3 @@
-use cgp::extra::handler::UseInputDelegate;
 use cgp::prelude::{HandlerComponent, delegate_components};
 use hypershell_components::providers::ReturnInput;
 
@@ -7,21 +6,21 @@ use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
 delegate_components! {
     new HandleToTokioAsyncRead {
-        HandlerComponent:
-            UseInputDelegate<ToTokioAsyncReadHandlers>,
-    }
-}
+        open HandlerComponent;
 
-delegate_components! {
-    new ToTokioAsyncReadHandlers {
-        <S> FuturesAsyncReadStream<S>:
-            FuturesToTokioAsyncRead,
-        <S> TokioAsyncReadStream<S>:
-            ReturnInput,
-        [
-            Vec<u8>,
-            String,
-        ]:
-            HandleBytesToTokioAsyncRead,
+        @HandlerComponent
+            .<Code> Code
+            .<S> FuturesAsyncReadStream<S>:
+                FuturesToTokioAsyncRead,
+        @HandlerComponent
+            .<Code> Code
+            .<S> TokioAsyncReadStream<S>:
+                ReturnInput,
+        @HandlerComponent
+            .<Code> Code.[
+                Vec<u8>,
+                String,
+            ]:
+                HandleBytesToTokioAsyncRead,
     }
 }

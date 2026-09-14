@@ -1,4 +1,4 @@
-use cgp::extra::handler::{PipeHandlers, UseInputDelegate};
+use cgp::extra::handler::PipeHandlers;
 use cgp::prelude::*;
 
 use crate::providers::{AsyncReadToStream, FuturesToTokioAsyncRead, HandleBytesToStream};
@@ -6,24 +6,25 @@ use crate::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 
 delegate_components! {
     new HandleToFuturesStream {
-        HandlerComponent:
-            UseInputDelegate<ToFuturesStreamHandlers>,
-    }
-}
+        open HandlerComponent;
 
-delegate_components! {
-    new ToFuturesStreamHandlers {
-        <S> FuturesAsyncReadStream<S>:
-            PipeHandlers<Product![
-                FuturesToTokioAsyncRead,
+        @HandlerComponent
+            .<Code> Code
+            .<S> FuturesAsyncReadStream<S>:
+                PipeHandlers<Product![
+                    FuturesToTokioAsyncRead,
+                    AsyncReadToStream,
+                ]>,
+        @HandlerComponent
+            .<Code> Code
+            .<S> TokioAsyncReadStream<S>:
                 AsyncReadToStream,
-            ]>,
-        <S> TokioAsyncReadStream<S>:
-            AsyncReadToStream,
-        [
-            Vec<u8>,
-            String,
-        ]:
-            HandleBytesToStream,
+        @HandlerComponent
+            .<Code> Code
+            .[
+                Vec<u8>,
+                String,
+            ]:
+                HandleBytesToStream,
     }
 }

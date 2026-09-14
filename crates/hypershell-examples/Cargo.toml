@@ -14,7 +14,6 @@ hypershell                          = { workspace = true }
 hypershell-components               = { workspace = true }
 hypershell-tokio-components         = { workspace = true }
 hypershell-hash-components          = { workspace = true }
-hypershell-tungstenite-components   = { workspace = true }
 
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
@@ -25,4 +24,7 @@ sha2                    = { workspace = true }
 serde                   = { workspace = true, features = [ "derive" ] }
 tokio                   = { workspace = true, features = [ "macros", "rt", "io-std", "rt-multi-thread" ] }
 tokio-util              = { workspace = true, features = [ "compat" ] }
-tokio-tungstenite       = { workspace = true }
+
+[dev-dependencies]
+hypershell-tungstenite-components   = { workspace = true }
+tokio-tungstenite                   = { workspace = true }
