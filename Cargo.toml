@@ -18,7 +18,7 @@ members = [
 rust-version    = "1.90"
 edition         = "2024"
 license         = "MIT"
-repository      = "https://github.com/contextgeneric/cgp"
+repository      = "https://github.com/contextgeneric/hypershell"
 authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp"]
 
