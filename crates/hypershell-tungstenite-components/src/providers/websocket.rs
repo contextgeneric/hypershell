@@ -34,7 +34,7 @@ where
             .into_client_request()
             .map_err(Context::raise_error)?;
 
-        let (websocket, _) = connect_async(url).await.unwrap();
+        let (websocket, _) = connect_async(url).await.map_err(Context::raise_error)?;
         let (writer, reader) = websocket.split();
 
         spawn(async move {

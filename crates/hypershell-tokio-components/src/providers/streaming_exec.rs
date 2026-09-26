@@ -3,12 +3,11 @@ use core::marker::PhantomData;
 use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
 use hypershell_components::dsl::StreamingExec;
-use tokio::io::{AsyncRead, Empty, copy, empty};
-use tokio::process::{Child, ChildStdout};
-use tokio::spawn;
-use tokio_util::either::Either;
+use tokio::io::AsyncRead;
+use tokio::process::Child;
 
 use crate::dsl::CoreExec;
+use crate::types::ChildOutputStream;
 
 #[cgp_impl(new HandleStreamingExec)]
 impl<Context, CommandPath, Args, Input> Handler<StreamingExec<CommandPath, Args>, Input> for Context
@@ -17,26 +16,17 @@ where
         CanHandle<CoreExec<CommandPath, Args>, (), Output = Child> + CanRaiseError<std::io::Error>,
     Input: Send + Unpin + AsyncRead + 'static,
 {
-    type Output = Either<ChildStdout, Empty>;
+    type Output = ChildOutputStream;
 
     async fn handle(
         context: &Context,
         _tag: PhantomData<StreamingExec<CommandPath, Args>>,
-        mut input: Input,
-    ) -> Result<Either<ChildStdout, Empty>, Context::Error> {
-        let mut child = context.handle(PhantomData, ()).await?;
+        input: Input,
+    ) -> Result<ChildOutputStream, Context::Error> {
+        let child = context.handle(PhantomData, ()).await?;
 
-        if let Some(mut stdin) = child.stdin.take() {
-            spawn(async move {
-                let _ = copy(&mut input, &mut stdin).await;
-            });
-        }
-
-        let output = match child.stdout.take() {
-            Some(stdout) => Either::Left(stdout),
-            None => Either::Right(empty()),
-        };
-
-        Ok(output)
+        // The stream ends with an error when reading the input failed or the child exits with a
+        // non-success status, carrying the child's stderr.
+        Ok(ChildOutputStream::new(child, input))
     }
 }
