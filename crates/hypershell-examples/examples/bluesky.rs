@@ -19,8 +19,8 @@
 //    on the console.
 //
 // The `MyApp` struct defines the context for the program, providing the
-// `keyword` for `grep`. It inherits from `HypershellPreset` to get the
-// necessary components for running CLI commands.
+// `keyword` for `grep`. Its wiring joins `HypershellNamespace` to get the
+// providers for running CLI commands.
 //
 // The `main` function initializes the `MyApp` context with a keyword and
 // runs the program.

@@ -18,13 +18,10 @@
 //
 // 4. The final hex string is piped to `StreamToStdout`.
 //
-// Since `Checksum` and `BytesToHex` are not part of the default preset, a
-// custom `MyAppPreset` is defined to extend `HypershellPreset`. This new
-// preset overrides the `HandlerComponent` to include the providers for the
-// new handlers (`HandleStreamChecksum` and `HandleBytesToHex`).
-//
-// The `MyApp` context is configured to use `MyAppPreset`, enabling it to
-// execute the program with the new native handlers.
+// `HypershellNamespace` does not route `Checksum` and `BytesToHex`, so the
+// `MyApp` context joins `HypershellChecksumNamespace` instead. That namespace
+// inherits `HypershellNamespace` and routes the two new syntaxes to
+// `HypershellChecksumProvider`, the bundle holding their providers.
 //
 // The `main` function initializes the `MyApp` context and executes the program.
 

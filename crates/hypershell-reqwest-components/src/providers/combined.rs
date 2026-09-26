@@ -5,10 +5,11 @@ use hypershell_components::components::{
     StringArgExtractorComponent, UrlArgExtractorComponent, UrlTypeProviderComponent,
 };
 use hypershell_components::dsl::{
-    GetMethod, Header, PostMethod, SimpleHttpRequest, StreamingHttpRequest, UrlEncodeArg,
-    WithHeaders,
+    DeleteMethod, GetMethod, Header, PostMethod, PutMethod, SimpleHttpRequest,
+    StreamingHttpRequest, UrlEncodeArg, WithHeaders,
 };
 use hypershell_tokio_components::providers::{HandleToTokioAsyncRead, WrapFuturesAsyncRead};
+use hypershell_tokio_components::types::{FuturesAsyncReadStream, TokioAsyncReadStream};
 use reqwest::Method;
 use url::Url;
 
@@ -40,7 +41,19 @@ delegate_components! {
         @HandlerComponent.<Method, Url, Headers> SimpleHttpRequest<Method, Url, Headers>:
             HandleSimpleHttpRequest,
 
-        @HandlerComponent.<Method, Url, Headers> StreamingHttpRequest<Method, Url, Headers>:
+        // A byte buffer is sent as a buffered body, which `reqwest` can resend when it follows a
+        // redirect. A streamed body cannot be resent, so a reader input does not follow one.
+        @HandlerComponent
+            .<Method, Url, Headers> StreamingHttpRequest<Method, Url, Headers>
+            .[Vec<u8>, String]:
+            PipeHandlers<Product![
+                HandleStreamingHttpRequest,
+                WrapFuturesAsyncRead,
+            ]>,
+
+        @HandlerComponent
+            .<Method, Url, Headers> StreamingHttpRequest<Method, Url, Headers>
+            .[<S> TokioAsyncReadStream<S>, <S> FuturesAsyncReadStream<S>]:
             PipeHandlers<Product![
                 HandleToTokioAsyncRead,
                 StreamToBody,
@@ -54,6 +67,8 @@ delegate_components! {
         @MethodArgExtractorComponent.[
             GetMethod,
             PostMethod,
+            PutMethod,
+            DeleteMethod,
         ]:
             ExtractReqwestMethod,
 

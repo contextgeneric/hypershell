@@ -18,9 +18,9 @@
 //    the JSON byte stream into a `Vec<Issue>`.
 //
 // The `MyApp` struct defines the context for running the Hypershell program.
-// It uses `#[cgp_inherit]` to inherit the necessary components from
-// `HypershellPreset` for executing the program. It also uses `#[derive(HasField)]`
-// to expose its fields to be used by `FieldArg` within the program definition.
+// Its wiring joins `HypershellNamespace`, which routes the HTTP and JSON syntax
+// the program uses. It also uses `#[derive(HasField)]` to expose its fields to be
+// used by `FieldArg` within the program definition.
 //
 // The `main` function sets up the `MyApp` context with the required values,
 // executes the `Program` using `app.handle`, and prints the fetched issues.

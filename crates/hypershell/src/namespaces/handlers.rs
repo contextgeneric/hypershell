@@ -10,10 +10,10 @@ use hypershell_components::components::{
     UrlTypeProviderComponent,
 };
 use hypershell_components::dsl::{
-    BytesToStream, BytesToString, ConvertTo, DecodeJson, EncodeJson, FieldArg, FieldArgs,
-    GetMethod, Header, JoinArgs, Pipe, PostMethod, ReadFile, SimpleExec, SimpleHttpRequest,
-    StaticArg, StreamToBytes, StreamToStdout, StreamToString, StreamingExec, StreamingHttpRequest,
-    UrlEncodeArg, Use, WithArgs, WithHeaders, WriteFile,
+    BytesToStream, BytesToString, ConvertTo, DecodeJson, DeleteMethod, EncodeJson, FieldArg,
+    FieldArgs, GetMethod, Header, JoinArgs, Pipe, PostMethod, PutMethod, ReadFile, SimpleExec,
+    SimpleHttpRequest, StaticArg, StreamToBytes, StreamToStdout, StreamToString, StreamingExec,
+    StreamingHttpRequest, UrlEncodeArg, Use, WithArgs, WithHeaders, WriteFile,
 };
 use hypershell_components::providers::HypershellBaseProvider;
 use hypershell_json_components::providers::HypershellJsonProvider;
@@ -134,6 +134,8 @@ cgp_namespace! {
                 MethodArgExtractorComponent.[
                     GetMethod,
                     PostMethod,
+                    PutMethod,
+                    DeleteMethod,
                 ],
             },
             reqwest.RequestBuilderUpdaterComponent.[

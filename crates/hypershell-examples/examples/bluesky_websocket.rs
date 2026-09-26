@@ -15,16 +15,12 @@
 // 3. The final filtered output is piped to `StreamToStdout` to be printed
 //    on the console.
 //
-// Since the `WebSocket` handler is not part of the default `HypershellPreset`,
-// a custom `MyAppPreset` is defined to extend Hypershell's functionality.
-//
-// The `MyAppPreset` inherits from `HypershellPreset` and overrides the
-// `HandlerComponent` to include handlers from `TungsteniteHandlerPreset`,
-// which provides the `WebSocket` handler implementation. It also overrides
-// `ErrorRaiserComponent` to handle potential `TungsteniteError`s.
-//
-// The `MyApp` context is configured to use this custom `MyAppPreset`,
-// enabling it to execute the program with the extended capabilities.
+// `HypershellNamespace` does not route the `WebSocket` syntax, so the `MyApp`
+// context adds two entries beside joining it. One routes `WebSocket` to
+// `HypershellTungsteniteProvider`, the bundle from the
+// `hypershell-tungstenite-components` extension crate that implements it. The
+// other routes `TungsteniteError` to an error raiser, which the WebSocket
+// provider requires.
 //
 // The `main` function initializes `MyApp` with a keyword and runs the program.
 // An empty input stream is provided to `app.handle` as required by the

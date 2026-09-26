@@ -1,6 +1,6 @@
 use alloc::boxed::Box;
 
-use cgp::extra::handler::Promote;
+use cgp::extra::handler::{Promote, PromoteAsync};
 use cgp::prelude::{HandlerComponent, delegate_components};
 
 use crate::components::{
@@ -23,8 +23,10 @@ delegate_components! {
 
         @HandlerComponent.BytesToString:
             DecodeUtf8Bytes,
+        // `HandleConvert` is a synchronous `Computer`: `PromoteAsync` lifts it to an
+        // `AsyncComputer`, which `Promote` lifts to a `Handler`.
         @HandlerComponent.<T> ConvertTo<T>:
-            Promote<HandleConvert>,
+            Promote<PromoteAsync<HandleConvert>>,
         @HandlerComponent.<Handlers> Pipe<Handlers>:
             HandlePipe,
         @HandlerComponent.<Provider, Code> Use<Provider, Code>:
