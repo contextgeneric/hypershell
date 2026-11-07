@@ -4,6 +4,7 @@ use core::marker::PhantomData;
 use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 
+/// Extracts a string argument from the context.
 #[cgp_component(StringArgExtractor)]
 #[prefix(@hypershell.core in DefaultNamespace)]
 #[derive_delegate(UseDelegate<Arg>)]
