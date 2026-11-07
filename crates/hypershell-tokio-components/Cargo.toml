@@ -4,10 +4,12 @@ version      =  "0.1.0"
 edition      = { workspace = true }
 license      = { workspace = true }
 repository   = { workspace = true }
+homepage     = { workspace = true }
+categories   = { workspace = true }
 authors      = { workspace = true }
 rust-version = { workspace = true }
 keywords     = { workspace = true }
-description  = "Modular DSL for shellscripting in Rust"
+description  = "Tokio-based handlers for executing commands and handling file I/O in Hypershell."
 
 [dependencies]
 hypershell-components   = { workspace = true }

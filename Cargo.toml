@@ -19,6 +19,8 @@ rust-version    = "1.90"
 edition         = "2024"
 license         = "MIT"
 repository      = "https://github.com/contextgeneric/hypershell"
+homepage        = "https://contextgeneric.dev/docs/projects/hypershell/"
+categories      = ["command-line-interface", "rust-patterns"]
 authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp"]
 
