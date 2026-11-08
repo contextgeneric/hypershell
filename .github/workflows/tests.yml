@@ -1,0 +1,50 @@
+name: Tests
+
+on:
+  push:
+  pull_request: {}
+
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: short
+  CARGO_NET_RETRY: 10
+  RUSTUP_MAX_RETRIES: 10
+
+# Cancel in-progress runs when a new commit is pushed to the same PR, branch, or tag.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# To minimize supply-chain exposure this workflow uses only GitHub's own
+# first-party actions. Each job runs a command the README's Building section
+# lists, on the nightly `rust-toolchain.toml` pins.
+#
+# The workspace patches `cgp` to the repository's `main` branch by git URL, and
+# the lockfile pins the resolved commit, so the jobs fetch that commit and need
+# network access.
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the pinned nightly
+        run: rustup toolchain install
+      - name: Build the workspace and its examples
+        run: cargo build --workspace --all-targets
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the pinned nightly
+        run: rustup toolchain install
+      - name: Test the workspace
+        run: cargo test --workspace

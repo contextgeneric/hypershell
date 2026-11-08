@@ -67,6 +67,18 @@ The workspace builds against the `cgp` repository's `main` branch through its `[
 section, because it tracks unreleased CGP code. To build against a local `cgp` checkout, switch those
 entries to the commented-out paths into `../cgp`.
 
+## Building
+
+These are the commands CI runs:
+
+```sh
+cargo build --workspace --all-targets
+cargo test --workspace
+```
+
+The workspace pins `nightly-2026-11-07` in `rust-toolchain.toml`, because `.cargo/config.toml` turns
+on the next-generation trait solver with `-Z next-solver=globally`, so `cargo` selects that nightly.
+
 ## Examples
 
 The [`hypershell-examples`](./crates/hypershell-examples/examples) crate holds runnable programs, one
