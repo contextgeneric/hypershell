@@ -5,6 +5,8 @@ use cgp::prelude::*;
 use crate::components::{HasHttpMethodType, MethodArgExtractor, MethodArgExtractorComponent};
 use crate::dsl::FieldArg;
 
+/// Reads the HTTP method from the context field named `Tag`. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new ExtractMethodFieldArg)]
 impl<Context, Tag> MethodArgExtractor<FieldArg<Tag>> for Context
 where

@@ -4,6 +4,7 @@ use cgp::core::component::UseDelegate;
 use cgp::prelude::*;
 use reqwest::RequestBuilder;
 
+/// Applies a request-parameter syntax to a `reqwest::RequestBuilder`.
 #[cgp_component(RequestBuilderUpdater)]
 #[derive_delegate(UseDelegate<Args>)]
 #[prefix(@hypershell.reqwest in DefaultNamespace)]

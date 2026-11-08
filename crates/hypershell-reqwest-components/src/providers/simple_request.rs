@@ -7,11 +7,14 @@ use reqwest::Response;
 
 use crate::dsl::CoreHttpRequest;
 
+/// The error raised for a response whose status is not a success.
 #[derive(Debug)]
 pub struct ErrorResponse {
     pub response: Response,
 }
 
+/// Sends one request with the input as its body and returns the whole response body. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleSimpleHttpRequest)]
 impl<Context, MethodArg, UrlArg, Headers, Input>
     Handler<SimpleHttpRequest<MethodArg, UrlArg, Headers>, Input> for Context

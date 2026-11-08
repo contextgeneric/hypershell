@@ -8,6 +8,8 @@ use hypershell_components::dsl::{ReadFile, WriteFile};
 use tokio::fs::File;
 use tokio::io::AsyncRead;
 
+/// Opens a file as a Tokio reader. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new HandleReadFile)]
 impl<Context, PathArg> Handler<ReadFile<PathArg>, ()> for Context
 where
@@ -31,6 +33,8 @@ where
     }
 }
 
+/// Creates or truncates a file and copies its input into it. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new HandleWriteFile)]
 impl<Context, PathArg, Input> Handler<WriteFile<PathArg>, Input> for Context
 where

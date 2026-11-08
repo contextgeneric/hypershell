@@ -5,6 +5,8 @@ use core::pin::Pin;
 use cgp::extra::handler::{Handler, HandlerComponent};
 use cgp::prelude::*;
 
+/// Runs a handler with its future boxed, erasing the future's type. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new BoxHandler<InHandler>)]
 #[use_type(HasErrorType.Error)]
 #[use_provider(InHandler: Handler<Code, Input>)]

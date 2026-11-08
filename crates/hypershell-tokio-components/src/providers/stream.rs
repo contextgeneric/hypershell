@@ -13,6 +13,8 @@ use tokio_util::io::ReaderStream;
 
 use crate::types::{FuturesAsyncReadStream, FuturesStream, TokioAsyncReadStream};
 
+/// Reads a Tokio reader to the end as bytes. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new HandleTokioAsyncReadToBytes)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where
@@ -37,6 +39,8 @@ where
     }
 }
 
+/// Reads a Tokio reader to the end as a UTF-8 string. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new HandleTokioAsyncReadToString)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where
@@ -61,6 +65,8 @@ where
     }
 }
 
+/// Wraps byte input as a Tokio reader. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new HandleBytesToTokioAsyncRead)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where
@@ -78,6 +84,8 @@ where
     }
 }
 
+/// Wraps byte input as a futures stream of one chunk. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new HandleBytesToStream)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where
@@ -95,6 +103,8 @@ where
     }
 }
 
+/// Adapts a futures reader to a Tokio reader. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new FuturesToTokioAsyncRead)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where
@@ -112,6 +122,8 @@ where
     }
 }
 
+/// Adapts a Tokio reader to a futures reader. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new TokioToFuturesAsyncRead)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where
@@ -129,6 +141,8 @@ where
     }
 }
 
+/// Tags a Tokio reader with its wrapper type. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new WrapTokioAsyncRead)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where
@@ -146,6 +160,8 @@ where
     }
 }
 
+/// Tags a futures reader with its wrapper type. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new WrapFuturesAsyncRead)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where
@@ -163,6 +179,8 @@ where
     }
 }
 
+/// Reads a Tokio reader as a futures stream of chunks. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new AsyncReadToStream)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where

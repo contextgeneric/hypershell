@@ -14,6 +14,8 @@ use tokio_tungstenite::{connect_async, tungstenite};
 use tokio_util::bytes::Bytes;
 use tokio_util::io::ReaderStream;
 
+/// Connects to a WebSocket server, sends its input as binary messages, and returns the replies. See
+/// [the WebSocket example](https://contextgeneric.dev/docs/projects/hypershell/examples/bluesky-websocket).
 #[cgp_impl(new HandleWebsocket)]
 impl<Context, UrlArg, Headers, Input> Handler<WebSocket<UrlArg, Headers>, Input> for Context
 where

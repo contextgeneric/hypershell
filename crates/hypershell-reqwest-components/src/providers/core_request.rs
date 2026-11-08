@@ -8,6 +8,8 @@ use reqwest::{Body, Method, Response, Url};
 use crate::components::{CanUpdateRequestBuilder, HasReqwestClient};
 use crate::dsl::CoreHttpRequest;
 
+/// Builds a request from the method, URL, and header syntax, attaches the body, and sends it. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleCoreHttpRequest)]
 impl<Context, MethodArg, UrlArg, Headers, Input>
     Handler<CoreHttpRequest<MethodArg, UrlArg, Headers>, Input> for Context

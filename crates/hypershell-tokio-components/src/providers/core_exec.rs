@@ -13,6 +13,8 @@ use tokio::process::{Child, Command};
 use crate::components::CanUpdateCommand;
 use crate::dsl::CoreExec;
 
+/// Builds a Tokio `Command` from the path and arguments and spawns it with all three streams piped. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleCoreExec)]
 impl<Context, CommandPath, Args> Handler<CoreExec<CommandPath, Args>, ()> for Context
 where
@@ -59,10 +61,12 @@ where
     }
 }
 
+/// The detail that formats a failed spawn with the command's program and arguments.
 pub struct SpawnCommandFailure<'a> {
     pub command: &'a Command,
 }
 
+/// The detail that names the program a failed spawn could not find.
 pub struct CommandNotFound<'a> {
     pub command: &'a Command,
 }

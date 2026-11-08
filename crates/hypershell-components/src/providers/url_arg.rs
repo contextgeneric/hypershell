@@ -8,6 +8,8 @@ use crate::components::{
 };
 use crate::dsl::FieldArg;
 
+/// Parses the argument's string form into the context's URL type. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new ExtractStringUrlArg)]
 impl<Context, Arg> UrlArgExtractor<Arg> for Context
 where
@@ -23,6 +25,8 @@ where
     }
 }
 
+/// Reads a pre-parsed URL from the context field named `Tag`. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new ExtractUrlFieldArg)]
 impl<Context, Tag> UrlArgExtractor<FieldArg<Tag>> for Context
 where

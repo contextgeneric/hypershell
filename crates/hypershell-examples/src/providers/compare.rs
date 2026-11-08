@@ -6,6 +6,7 @@ use hypershell::prelude::CanHandle;
 
 use crate::dsl::Compare;
 
+/// Runs two sub-programs on their inputs and reports whether their outputs are equal.
 #[cgp_impl(new HandleCompare)]
 impl<Context, CodeA, CodeB, InputA, InputB, Output> Handler<Compare<CodeA, CodeB>, (InputA, InputB)>
     for Context

@@ -8,6 +8,8 @@ use tokio::process::Command;
 
 use crate::components::{CommandUpdater, CommandUpdaterComponent};
 
+/// Appends each argument of a `WithArgs` list to the command, in order. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 pub struct ExtractArgs;
 
 #[cgp_impl(ExtractArgs)]
@@ -39,6 +41,8 @@ impl<Context> CommandUpdater<WithArgs<Nil>> for Context {
     }
 }
 
+/// Appends every item of the context field named `Tag` to the command. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new ExtractFieldArgs)]
 impl<Context, Tag> CommandUpdater<FieldArgs<Tag>> for Context
 where

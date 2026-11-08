@@ -10,6 +10,8 @@ use crate::components::{
     CanUpdateRequestBuilder, RequestBuilderUpdater, RequestBuilderUpdaterComponent,
 };
 
+/// Sets one header on the request builder from the extracted key and value. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new UpdateRequestHeader)]
 impl<Context, Key, Value> RequestBuilderUpdater<Header<Key, Value>> for Context
 where
@@ -34,6 +36,8 @@ where
     }
 }
 
+/// Applies each `Header` of a `WithHeaders` list to the request builder in turn. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 pub struct UpdateRequestHeaders;
 
 #[cgp_impl(UpdateRequestHeaders)]

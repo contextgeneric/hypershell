@@ -6,6 +6,7 @@ use hypershell::prelude::CanHandle;
 
 use crate::dsl::If;
 
+/// Runs one of two sub-programs on the branch input, chosen by a condition sub-program.
 #[cgp_impl(new HandleIf)]
 impl<Context, CodeCond, CodeThen, CodeElse, InputCond, InputBranch, Output>
     Handler<If<CodeCond, CodeThen, CodeElse>, (InputCond, InputBranch)> for Context

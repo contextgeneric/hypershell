@@ -8,6 +8,8 @@ use sha2::digest::generic_array::GenericArray;
 
 use crate::dsl::Checksum;
 
+/// Folds a stream of byte chunks into a digest with the chosen `sha2` hasher. See
+/// [the native checksum example](https://contextgeneric.dev/docs/projects/hypershell/examples/http-checksum-native).
 #[cgp_impl(new HandleStreamChecksum)]
 impl<Context, Input, Hasher> Handler<Checksum<Hasher>, Input> for Context
 where

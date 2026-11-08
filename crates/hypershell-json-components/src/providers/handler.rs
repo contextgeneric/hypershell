@@ -7,6 +7,8 @@ use hypershell_components::dsl::DecodeJson;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 
+/// Deserializes byte input into `Output` with `serde_json`. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleDecodeJson)]
 impl<Context, Input, Output> Handler<DecodeJson<Output>, Input> for Context
 where
@@ -26,6 +28,8 @@ where
     }
 }
 
+/// Serializes its input to JSON bytes with `serde_json`. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleEncodeJson)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where

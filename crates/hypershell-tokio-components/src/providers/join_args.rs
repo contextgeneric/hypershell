@@ -7,6 +7,8 @@ use hypershell_components::components::{
 };
 use hypershell_components::dsl::JoinArgs;
 
+/// Joins a `JoinArgs` list into one path with `PathBuf::join`, skipping an empty tail. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 pub struct JoinExtractArgs;
 
 #[cgp_impl(JoinExtractArgs)]

@@ -12,6 +12,8 @@ use crate::components::{
 };
 use crate::dsl::{FieldArg, JoinArgs, StaticArg};
 
+/// Extracts a command argument by converting the argument's string form with `From<String>`. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new ExtractStringCommandArg)]
 impl<Context, Arg> CommandArgExtractor<Arg> for Context
 where
@@ -23,6 +25,8 @@ where
     }
 }
 
+/// Extracts a literal argument by formatting its type's default value with `Display`. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new ExtractStaticArg)]
 impl<Context, Arg> StringArgExtractor<StaticArg<Arg>> for Context
 where
@@ -36,6 +40,8 @@ where
     }
 }
 
+/// Extracts the context field named `Tag`, formatted with `Display`. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new ExtractFieldArg)]
 impl<Context, Tag> StringArgExtractor<FieldArg<Tag>> for Context
 where
@@ -46,8 +52,11 @@ where
     }
 }
 
+/// Concatenates a `JoinArgs` list into one string, with no separator. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 pub struct JoinStringArgs;
 
+/// Extracts the first element of a `JoinArgs` list and appends the rest.
 #[cgp_impl(JoinStringArgs)]
 impl<Context, Arg, Args> StringArgExtractor<JoinArgs<Cons<Arg, Args>>> for Context
 where
@@ -69,6 +78,7 @@ where
     }
 }
 
+/// Extracts the empty tail of a `JoinArgs` list as an empty string.
 #[cgp_impl(JoinStringArgs)]
 impl<Context> StringArgExtractor<JoinArgs<Nil>> for Context {
     fn extract_string_arg(

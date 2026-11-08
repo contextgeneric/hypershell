@@ -3,6 +3,7 @@ use core::marker::PhantomData;
 use cgp::extra::handler::{CanHandle, Handler, HandlerComponent};
 use cgp::prelude::*;
 
+/// Answers for any syntax by handling `InCode` on the context.
 #[cgp_impl(new Call<InCode>)]
 impl<OutCode, InCode, Input, Output> Handler<OutCode, Input>
 where

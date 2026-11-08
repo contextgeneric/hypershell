@@ -10,6 +10,8 @@ use reqwest::Response;
 use crate::dsl::CoreHttpRequest;
 use crate::providers::ErrorResponse;
 
+/// Sends one request with the input as its body and returns the response body as a stream. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleStreamingHttpRequest)]
 impl<Context, MethodArg, UrlArg, Headers, Input>
     Handler<StreamingHttpRequest<MethodArg, UrlArg, Headers>, Input> for Context

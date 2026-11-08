@@ -9,6 +9,8 @@ use tokio::process::Child;
 use crate::dsl::CoreExec;
 use crate::types::ChildOutputStream;
 
+/// Spawns a command and returns its standard output as a stream while its input is copied in. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleStreamingExec)]
 impl<Context, CommandPath, Args, Input> Handler<StreamingExec<CommandPath, Args>, Input> for Context
 where
