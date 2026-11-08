@@ -1,2 +1,5 @@
+# Pinned to a dated nightly because `.cargo/config.toml` turns on the next-generation
+# trait solver with `-Z next-solver=globally`, which only a nightly accepts. Bump this
+# deliberately, and run the suite afterwards.
 [toolchain]
-channel = "nightly"
+channel = "nightly-2026-11-07"
