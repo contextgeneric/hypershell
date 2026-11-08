@@ -1,6 +1,7 @@
 ![Crates.io](https://img.shields.io/crates/v/hypershell.svg)
 [![Docs.rs](https://docs.rs/hypershell/badge.svg)](https://docs.rs/hypershell)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/contextgeneric/hypershell/blob/main/LICENSE)
+[![Tests](https://github.com/contextgeneric/hypershell/actions/workflows/tests.yml/badge.svg)](https://github.com/contextgeneric/hypershell/actions/workflows/tests.yml)
 
 # Hypershell: a type-level DSL for shell scripting in Rust
 
