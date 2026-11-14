@@ -1,4 +1,4 @@
-use cgp::extra::handler::PipeHandlers;
+use cgp::extra::handler::{HandlerComponent, PipeHandlers};
 use cgp::prelude::*;
 use hypershell_hash_components::dsl::{BytesToHex, Checksum};
 use hypershell_hash_components::providers::{HandleBytesToHex, HandleStreamChecksum};

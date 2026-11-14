@@ -1,4 +1,5 @@
-use cgp::prelude::{HandlerComponent, cgp_namespace};
+use cgp::extra::handler::HandlerComponent;
+use cgp::prelude::cgp_namespace;
 use hypershell_components::providers::BoxHandler;
 
 use crate::dsl::{Compare, If};

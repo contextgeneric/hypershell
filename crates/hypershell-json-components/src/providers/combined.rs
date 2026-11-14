@@ -1,4 +1,5 @@
-use cgp::prelude::{HandlerComponent, delegate_components};
+use cgp::extra::handler::HandlerComponent;
+use cgp::prelude::delegate_components;
 use hypershell_components::dsl::{DecodeJson, EncodeJson};
 
 use crate::providers::{HandleDecodeJson, HandleEncodeJson};

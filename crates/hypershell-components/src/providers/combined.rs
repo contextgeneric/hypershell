@@ -1,7 +1,7 @@
 use alloc::boxed::Box;
 
-use cgp::extra::handler::{Promote, PromoteAsync};
-use cgp::prelude::{HandlerComponent, delegate_components};
+use cgp::extra::handler::{HandlerComponent, Promote, PromoteAsync};
+use cgp::prelude::delegate_components;
 
 use crate::components::{
     CommandArgExtractorComponent, StringArgExtractorComponent, UrlArgExtractorComponent,

@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use cgp::extra::handler::PipeHandlers;
+use cgp::extra::handler::{HandlerComponent, PipeHandlers};
 use cgp::prelude::*;
 use hypershell_components::components::{
     CommandArgExtractorComponent, CommandArgTypeProviderComponent, StringArgExtractorComponent,

@@ -1,4 +1,4 @@
-use cgp::extra::handler::PipeHandlers;
+use cgp::extra::handler::{HandlerComponent, PipeHandlers};
 use cgp::prelude::*;
 use hypershell_components::dsl::{BytesToStream, WebSocket};
 use hypershell_components::providers::Call;
