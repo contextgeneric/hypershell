@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 use core::str::FromStr;
 
+use cgp::core::field::traits::HasField;
 use cgp::prelude::*;
 
 use crate::components::{

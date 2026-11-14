@@ -4,6 +4,8 @@ use alloc::string::{String, ToString};
 use core::fmt::Display;
 use core::marker::PhantomData;
 
+use cgp::core::field::traits::HasField;
+use cgp::core::field::types::{Cons, Nil};
 use cgp::prelude::*;
 
 use crate::components::{

@@ -1,6 +1,8 @@
 use core::marker::PhantomData;
 use std::ffi::OsStr;
 
+use cgp::core::field::traits::HasField;
+use cgp::core::field::types::{Cons, Nil};
 use cgp::prelude::*;
 use hypershell_components::components::CanExtractCommandArg;
 use hypershell_components::dsl::{FieldArgs, WithArgs};

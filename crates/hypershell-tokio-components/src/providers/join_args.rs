@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 use std::path::PathBuf;
 
+use cgp::core::field::types::{Cons, Nil};
 use cgp::prelude::*;
 use hypershell_components::components::{
     CanExtractCommandArg, CommandArgExtractor, CommandArgExtractorComponent, HasCommandArgType,

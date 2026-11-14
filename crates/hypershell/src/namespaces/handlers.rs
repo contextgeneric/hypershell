@@ -2,6 +2,7 @@ use core::convert::Infallible;
 use core::str::Utf8Error;
 
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent, ErrorWrapperComponent};
+use cgp::core::field::impls::UseField;
 use cgp::extra::handler::HandlerComponent;
 use cgp::prelude::*;
 use cgp_error_anyhow::{DebugAnyhowError, Error, UseAnyhowError};

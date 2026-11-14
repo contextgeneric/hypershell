@@ -1,4 +1,4 @@
-use cgp::prelude::*;
+use cgp::core::field::types::{Cons, Nil};
 
 use crate::dsl::StaticArg;
 

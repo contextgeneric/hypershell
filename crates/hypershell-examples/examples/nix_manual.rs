@@ -24,6 +24,7 @@
 //
 // The `main` function initializes the `MyApp` context and runs the program.
 
+use cgp::core::field::types::Nil;
 use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
 use reqwest::Client;

@@ -1,5 +1,6 @@
 use core::marker::PhantomData;
 
+use cgp::core::field::types::{Cons, Nil};
 use cgp::prelude::*;
 use hypershell_components::components::CanExtractStringArg;
 use hypershell_components::dsl::{Header, WithHeaders};
