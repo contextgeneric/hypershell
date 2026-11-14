@@ -80,6 +80,8 @@ cargo test --workspace
 The workspace pins `nightly-2026-11-07` in `rust-toolchain.toml`, because `.cargo/config.toml` turns
 on the next-generation trait solver with `-Z next-solver=globally`, so `cargo` selects that nightly.
 
+Contributors and agents start from [AGENTS.md](AGENTS.md), which names these checks.
+
 ## Examples
 
 The [`hypershell-examples`](./crates/hypershell-examples/examples) crate holds runnable programs, one

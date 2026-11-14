@@ -24,12 +24,14 @@ holds their canonical wording: read it first, and change a rule there before upd
 
 ## Task guides
 
-The knowledge base documents this project, so a change to what it describes starts from its section.
-Read it before the task:
+The knowledge base documents this project and the website explains it, so a change to what either
+describes starts from the document that holds it. Read it before the task:
 
 - **Changing code the knowledge base describes:** the project's section,
   [projects/hypershell/](https://github.com/contextgeneric/cgp-knowledge-base/blob/main/projects/hypershell/README.md),
   and the section's [writing guide](https://github.com/contextgeneric/cgp-knowledge-base/blob/main/projects/writing-guide.md).
+- **Changing code a website page explains:** the record of the site's section on it,
+  [website/projects/hypershell.md](https://github.com/contextgeneric/cgp-knowledge-base/blob/main/website/projects/hypershell.md).
 
 ## Checks before committing
 
