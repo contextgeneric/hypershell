@@ -21,7 +21,7 @@ holds their canonical wording: read it first, and change a rule there before upd
 - Keep every view of the same truth in sync in the same change.
 - Ask the user when a decision is ambiguous.
 - Apply point-first writing to internal prose, and natural writing to public-facing documents
-  such as READMEs.
+  such as READMEs, using the optional `/point-first-writing` skill when it is available.
 
 ## Task guides
 
