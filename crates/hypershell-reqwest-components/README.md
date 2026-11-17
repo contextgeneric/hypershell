@@ -3,7 +3,9 @@
 
 # hypershell-reqwest-components: HTTP requests on reqwest
 
-`hypershell-reqwest-components` interprets the HTTP syntax of [Hypershell](https://docs.rs/hypershell), a small language for shell-script-like programs in Rust built with [Context-Generic Programming (CGP)](https://contextgeneric.dev/), on
+`hypershell-reqwest-components` interprets the HTTP syntax of
+[Hypershell](https://docs.rs/hypershell), a small language for shell-script-like programs in Rust
+built with [Context-Generic Programming (CGP)](https://contextgeneric.dev/), on
 [`reqwest`](https://docs.rs/reqwest). It sends simple and streaming requests with the method, URL,
 and headers a program names, and reports a failed response as an error.
 
@@ -18,7 +20,6 @@ Its items sit in three modules:
   for a streamed request body, and the `ErrorResponse` error, collected in the
   `HypershellReqwestProvider` bundle.
 
-The crate builds on
-[`hypershell-tokio-components`](https://docs.rs/hypershell-tokio-components) for its stream
-types. `HypershellNamespace` routes its syntax, and the `HypershellHttp` context supplies the
-client.
+The crate builds on [`hypershell-tokio-components`](https://docs.rs/hypershell-tokio-components) for
+its stream types. `HypershellNamespace` routes its syntax, and the `HypershellHttp` context supplies
+the client.
