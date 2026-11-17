@@ -778,6 +778,7 @@ dependencies = [
  "hypershell-tokio-components",
  "reqwest",
  "serde_json",
+ "tokio",
  "url",
 ]
 
