@@ -22,11 +22,11 @@ repository      = "https://github.com/contextgeneric/hypershell"
 homepage        = "https://contextgeneric.dev/docs/projects/hypershell/"
 categories      = ["command-line-interface", "rust-patterns"]
 authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
-keywords        = ["cgp"]
+keywords        = ["cgp", "dsl", "shell", "type-level"]
 
 [workspace.dependencies]
-cgp                 = { version = "0.8.0-alpha" }
-cgp-error-anyhow    = { version = "0.8.0-alpha" }
+cgp                 = { version = "0.8.0-prerelease" }
+cgp-error-anyhow    = { version = "0.8.0-prerelease" }
 futures             = { version = "0.3.31" }
 hex                 = { version = "0.4.3" }
 itertools           = { version = "0.14.0" }
@@ -41,17 +41,11 @@ tokio-tungstenite   = { version = "0.26.2" }
 tokio-util          = { version = "0.7.15" }
 url                 = { version = "2.5.4" }
 
-hypershell                          = { version =  "0.1.0", path = "./crates/hypershell" }
-hypershell-components               = { version =  "0.1.0", path = "./crates/hypershell-components" }
-hypershell-json-components          = { version =  "0.1.0", path = "./crates/hypershell-json-components" }
-hypershell-reqwest-components       = { version =  "0.1.0", path = "./crates/hypershell-reqwest-components" }
-hypershell-tokio-components         = { version =  "0.1.0", path = "./crates/hypershell-tokio-components" }
-hypershell-tungstenite-components   = { version =  "0.1.0", path = "./crates/hypershell-tungstenite-components" }
-hypershell-hash-components          = { version =  "0.1.0", path = "./crates/hypershell-hash-components" }
-hypershell-macro                    = { version =  "0.1.0", path = "./crates/hypershell-macro" }
-
-[patch.crates-io]
-# cgp                           = { path = "../cgp/crates/main/cgp" }
-# cgp-error-anyhow              = { path = "../cgp/crates/standalone/error/cgp-error-anyhow" }
-cgp                           = { git = "https://github.com/contextgeneric/cgp.git", branch = "main" }
-cgp-error-anyhow              = { git = "https://github.com/contextgeneric/cgp.git", branch = "main" }
+hypershell                          = { version =  "0.2.0-prerelease", path = "./crates/hypershell" }
+hypershell-components               = { version =  "0.2.0-prerelease", path = "./crates/hypershell-components" }
+hypershell-json-components          = { version =  "0.2.0-prerelease", path = "./crates/hypershell-json-components" }
+hypershell-reqwest-components       = { version =  "0.2.0-prerelease", path = "./crates/hypershell-reqwest-components" }
+hypershell-tokio-components         = { version =  "0.2.0-prerelease", path = "./crates/hypershell-tokio-components" }
+hypershell-tungstenite-components   = { version =  "0.2.0-prerelease", path = "./crates/hypershell-tungstenite-components" }
+hypershell-hash-components          = { version =  "0.2.0-prerelease", path = "./crates/hypershell-hash-components" }
+hypershell-macro                    = { version =  "0.2.0-prerelease", path = "./crates/hypershell-macro" }

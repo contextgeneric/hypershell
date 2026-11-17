@@ -22,10 +22,6 @@ permissions:
 # To minimize supply-chain exposure this workflow uses only GitHub's own
 # first-party actions. Each job runs a command the README's Building section
 # lists, on the nightly `rust-toolchain.toml` pins.
-#
-# The workspace patches `cgp` to the repository's `main` branch by git URL, and
-# the lockfile pins the resolved commit, so the jobs fetch that commit and need
-# network access.
 jobs:
   build:
     name: Build

@@ -64,10 +64,6 @@ reqwest = "0.12"
 anyhow = "1.0"
 ```
 
-The workspace builds against the `cgp` repository's `main` branch through its `[patch.crates-io]`
-section, because it tracks unreleased CGP code. To build against a local `cgp` checkout, switch those
-entries to the commented-out paths into `../cgp`.
-
 ## Building
 
 These are the commands CI runs:

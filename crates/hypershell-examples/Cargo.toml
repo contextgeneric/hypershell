@@ -1,6 +1,6 @@
 [package]
 name         = "hypershell-examples"
-version      =  "0.1.0"
+version      =  "0.2.0-prerelease"
 edition      = { workspace = true }
 license      = { workspace = true }
 repository   = { workspace = true }
@@ -10,6 +10,7 @@ authors      = { workspace = true }
 rust-version = { workspace = true }
 keywords     = { workspace = true }
 description  = "Runnable examples of the Hypershell DSL."
+publish      = false
 
 [dependencies]
 hypershell                          = { workspace = true }
