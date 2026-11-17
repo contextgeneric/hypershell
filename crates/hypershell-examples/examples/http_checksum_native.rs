@@ -18,20 +18,17 @@
 //
 // 4. The final hex string is piped to `StreamToStdout`.
 //
-// Since `Checksum` and `BytesToHex` are not part of the default preset, a
-// custom `MyAppPreset` is defined to extend `HypershellPreset`. This new
-// preset overrides the `HandlerComponent` to include the providers for the
-// new handlers (`HandleStreamChecksum` and `HandleBytesToHex`).
-//
-// The `MyApp` context is configured to use `MyAppPreset`, enabling it to
-// execute the program with the new native handlers.
+// `HypershellNamespace` does not route `Checksum` and `BytesToHex`, so the
+// `MyApp` context joins `HypershellChecksumNamespace` instead. That namespace
+// inherits `HypershellNamespace` and routes the two new syntaxes to
+// `HypershellChecksumProvider`, the bundle holding their providers.
 //
 // The `main` function initializes the `MyApp` context and executes the program.
 
 #![recursion_limit = "256"]
 
 use hypershell::prelude::*;
-use hypershell_examples::presets::HypershellChecksumPreset;
+use hypershell_examples::namespaces::HypershellChecksumNamespace;
 use hypershell_hash_components::dsl::{BytesToHex, Checksum};
 use reqwest::Client;
 use sha2::Sha256;
@@ -47,11 +44,16 @@ pub type Program = hypershell! {
     | StreamToStdout
 };
 
-#[cgp_inherit(HypershellChecksumPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
     pub url: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellChecksumNamespace;
+    }
 }
 
 #[tokio::main]

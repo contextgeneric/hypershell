@@ -18,13 +18,14 @@
 // 5. The output is piped to `StreamToStdout`.
 //
 // To provide the dynamic `name` argument, a custom `MyApp` context is defined
-// with a `name` field. The `#[cgp_inherit]` macro wires it up with the
-// `HypershellPreset`, and `#[derive(HasField)]` makes its fields accessible
+// with a `name` field. Its wiring joins `HypershellNamespace`, which routes
+// every built-in syntax, and `#[derive(HasField)]` makes its fields accessible
 // to `FieldArg`.
 //
 // The `main` function creates an instance of `MyApp`, sets the `name`, and
 // executes the program.
 
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
 
 pub type Program = hypershell! {
@@ -38,10 +39,15 @@ pub type Program = hypershell! {
     |   StreamToStdout
 };
 
-#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub name: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
+    }
 }
 
 #[tokio::main]

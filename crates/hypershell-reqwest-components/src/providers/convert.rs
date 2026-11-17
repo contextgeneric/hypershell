@@ -6,6 +6,7 @@ use reqwest::Body;
 use tokio::io::AsyncRead;
 use tokio_util::io::ReaderStream;
 
+/// Converts an async reader into a `reqwest::Body` streamed as it is read.
 #[cgp_impl(new StreamToBody)]
 impl<Context, Code, Input> Handler<Code, Input> for Context
 where

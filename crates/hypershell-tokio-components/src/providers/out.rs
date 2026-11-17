@@ -5,6 +5,8 @@ use cgp::prelude::*;
 use hypershell_components::dsl::StreamToStdout;
 use tokio::io::{AsyncRead, copy};
 
+/// Copies its input to the program's standard output. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new HandleStreamToStdout)]
 impl<Context, Input> Handler<StreamToStdout, Input> for Context
 where

@@ -8,6 +8,8 @@ use hypershell_components::components::{
 use hypershell_components::dsl::UrlEncodeArg;
 use url::form_urlencoded;
 
+/// Percent-encodes the argument's string form for use in a URL query. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new UrlEncodeStringArg)]
 impl<Context, Arg> StringArgExtractor<UrlEncodeArg<Arg>> for Context
 where

@@ -1,6 +1,11 @@
 use cgp::prelude::*;
 
-use crate::presets::HypershellPreset;
+use crate::namespaces::HypershellNamespace;
 
-#[cgp_inherit(HypershellPreset)]
 pub struct HypershellCli;
+
+delegate_components! {
+    HypershellCli {
+        namespace HypershellNamespace;
+    }
+}

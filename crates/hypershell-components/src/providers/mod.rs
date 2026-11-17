@@ -1,5 +1,6 @@
 mod box_async;
 mod call;
+mod combined;
 mod convert;
 mod method_arg;
 mod pipe;
@@ -10,6 +11,7 @@ mod r#use;
 
 pub use box_async::*;
 pub use call::*;
+pub use combined::*;
 pub use convert::*;
 pub use method_arg::*;
 pub use pipe::*;

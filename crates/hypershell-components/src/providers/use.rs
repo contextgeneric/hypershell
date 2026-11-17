@@ -5,6 +5,8 @@ use cgp::prelude::*;
 
 use crate::dsl::Use;
 
+/// Runs the named provider inline instead of the context's wiring for the stage. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleUseProvider)]
 impl<Context, Provider, Code, Input> Handler<Use<Provider, Code>, Input> for Context
 where

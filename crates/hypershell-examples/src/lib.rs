@@ -1,3 +1,3 @@
 pub mod dsl;
-pub mod presets;
+pub mod namespaces;
 pub mod providers;

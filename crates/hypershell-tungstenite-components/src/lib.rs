@@ -1,2 +1,2 @@
-pub mod presets;
+#![doc = include_str!("../README.md")]
 pub mod providers;

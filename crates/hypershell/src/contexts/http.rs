@@ -1,10 +1,15 @@
 use cgp::prelude::*;
 use reqwest::Client;
 
-use crate::presets::HypershellPreset;
+use crate::namespaces::HypershellNamespace;
 
-#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct HypershellHttp {
     pub http_client: Client,
+}
+
+delegate_components! {
+    HypershellHttp {
+        namespace HypershellNamespace;
+    }
 }

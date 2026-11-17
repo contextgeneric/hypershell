@@ -15,24 +15,25 @@
 // 3. The final filtered output is piped to `StreamToStdout` to be printed
 //    on the console.
 //
-// Since the `WebSocket` handler is not part of the default `HypershellPreset`,
-// a custom `MyAppPreset` is defined to extend Hypershell's functionality.
-//
-// The `MyAppPreset` inherits from `HypershellPreset` and overrides the
-// `HandlerComponent` to include handlers from `TungsteniteHandlerPreset`,
-// which provides the `WebSocket` handler implementation. It also overrides
-// `ErrorRaiserComponent` to handle potential `TungsteniteError`s.
-//
-// The `MyApp` context is configured to use this custom `MyAppPreset`,
-// enabling it to execute the program with the extended capabilities.
+// `HypershellNamespace` does not route the `WebSocket` syntax, so the `MyApp`
+// context adds two entries beside joining it. One routes `WebSocket` to
+// `HypershellTungsteniteProvider`, the bundle from the
+// `hypershell-tungstenite-components` extension crate that implements it. The
+// other routes `TungsteniteError` to an error raiser, which the WebSocket
+// provider requires.
 //
 // The `main` function initializes `MyApp` with a keyword and runs the program.
 // An empty input stream is provided to `app.handle` as required by the
 // handler signature, although it is not used by the `WebSocket` handler.
 
+use cgp::core::error::ErrorRaiserComponent;
+use cgp_error_anyhow::RaiseAnyhowError;
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
 use hypershell_tokio_components::types::TokioAsyncReadStream;
+use hypershell_tungstenite_components::providers::HypershellTungsteniteProvider;
 use tokio::io::simplex;
+use tokio_tungstenite::tungstenite::Error as TungsteniteError;
 
 pub type Program = hypershell! {
         WebSocket<
@@ -46,43 +47,20 @@ pub type Program = hypershell! {
     |   StreamToStdout
 };
 
-#[cgp_inherit(MyAppPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub keyword: String,
 }
 
-#[cgp::re_export_imports]
-mod preset {
-    use cgp::prelude::*;
-    use cgp_error_anyhow::RaiseAnyhowError;
-    use hypershell::presets::{HypershellErrorHandlers, HypershellHandlerPreset, HypershellPreset};
-    use hypershell_tungstenite_components::presets::TungsteniteHandlerPreset;
-    use tokio_tungstenite::tungstenite::Error as TungsteniteError;
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
 
-    cgp_preset! {
-        MyAppPreset: HypershellPreset {
-            override ErrorRaiserComponent:
-                MyErrorHandlers::Provider,
-            override HandlerComponent:
-                MyHandlerPreset::Provider,
-        }
-    }
+        @cgp.core.error.ErrorRaiserComponent.TungsteniteError:
+            RaiseAnyhowError,
 
-    cgp_preset! {
-        #[wrap_provider(UseDelegate)]
-        MyErrorHandlers: HypershellErrorHandlers {
-            TungsteniteError: RaiseAnyhowError,
-        }
-    }
-
-    cgp_preset! {
-        #[wrap_provider(UseDelegate)]
-        MyHandlerPreset:
-            HypershellHandlerPreset
-            + TungsteniteHandlerPreset
-        {
-        }
+        @cgp.extra.handler.HandlerComponent.<Url, Params> WebSocket<Url, Params>:
+            HypershellTungsteniteProvider,
     }
 }
 

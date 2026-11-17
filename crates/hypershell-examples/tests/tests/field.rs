@@ -1,12 +1,17 @@
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
-use hypershell::presets::HypershellPreset;
 
 #[tokio::test]
 async fn test_join_fields() -> Result<(), Error> {
-    #[cgp_inherit(HypershellPreset)]
     #[derive(HasField)]
     pub struct TestApp {
         pub base_dir: String,
+    }
+
+    delegate_components! {
+        TestApp {
+            namespace HypershellNamespace;
+        }
     }
 
     pub type Program = hypershell! {
@@ -36,10 +41,15 @@ async fn test_join_fields() -> Result<(), Error> {
 
 #[tokio::test]
 async fn test_field_args() -> Result<(), Error> {
-    #[cgp_inherit(HypershellPreset)]
     #[derive(HasField)]
     pub struct TestApp<'a> {
         pub args: Vec<&'a str>,
+    }
+
+    delegate_components! {
+        <'a> TestApp<'a> {
+            namespace HypershellNamespace;
+        }
     }
 
     pub type Program = SimpleExec<StaticArg<Symbol!("echo")>, FieldArgs<Symbol!("args")>>;

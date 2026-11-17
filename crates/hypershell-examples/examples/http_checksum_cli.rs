@@ -26,6 +26,7 @@
 //
 // The `main` function initializes `MyApp` with a URL and executes the program.
 
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
 
 pub type Program = hypershell! {
@@ -51,10 +52,15 @@ pub type Program = hypershell! {
     | StreamToStdout
 };
 
-#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub url: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
+    }
 }
 
 #[tokio::main]

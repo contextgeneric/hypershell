@@ -7,6 +7,8 @@ use hypershell_components::components::{
 use hypershell_components::dsl::{DeleteMethod, GetMethod, PostMethod, PutMethod};
 use reqwest::Method;
 
+/// Maps an HTTP method marker to the matching `reqwest::Method` constant. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 pub struct ExtractReqwestMethod;
 
 #[cgp_impl(ExtractReqwestMethod)]

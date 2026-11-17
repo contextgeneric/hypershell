@@ -9,6 +9,8 @@ use cgp::prelude::*;
 
 use crate::dsl::ConvertTo;
 
+/// Converts its input into the output type with `Into`. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleConvert)]
 impl<Input, Output> Computer<ConvertTo<Output>, Input>
 where
@@ -21,8 +23,10 @@ where
     }
 }
 
+/// Decodes byte input as a UTF-8 string, wrapping the failure with the raw bytes. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new DecodeUtf8Bytes)]
-#[use_type(HasErrorType::Error)]
+#[use_type(HasErrorType.Error)]
 impl<Code, Input> Handler<Code, Input>
 where
     Self: CanRaiseError<Utf8Error> + for<'a> CanWrapError<DecodeUtf8InputError<'a>>,
@@ -41,6 +45,7 @@ where
     }
 }
 
+/// The detail that records the raw bytes of an input that is not valid UTF-8.
 pub struct DecodeUtf8InputError<'a> {
     pub raw_input: &'a [u8],
 }

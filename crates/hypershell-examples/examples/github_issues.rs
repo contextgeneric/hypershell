@@ -18,15 +18,15 @@
 //    the JSON byte stream into a `Vec<Issue>`.
 //
 // The `MyApp` struct defines the context for running the Hypershell program.
-// It uses `#[cgp_inherit]` to inherit the necessary components from
-// `HypershellPreset` for executing the program. It also uses `#[derive(HasField)]`
-// to expose its fields to be used by `FieldArg` within the program definition.
+// Its wiring joins `HypershellNamespace`, which routes the HTTP and JSON syntax
+// the program uses. It also uses `#[derive(HasField)]` to expose its fields to be
+// used by `FieldArg` within the program definition.
 //
 // The `main` function sets up the `MyApp` context with the required values,
 // executes the `Program` using `app.handle`, and prints the fetched issues.
 
+use hypershell::namespaces::HypershellNamespace;
 use hypershell::prelude::*;
-use hypershell::presets::HypershellPreset;
 use reqwest::Client;
 use serde::Deserialize;
 
@@ -44,20 +44,25 @@ pub type Program = hypershell! {
         WithHeaders [
             Header<
                 StaticArg<"User-Agent">,
-                StaticArg<"hypershell">,
+                StaticArg<"hypershells">,
             >
         ],
     >
     | DecodeJson<Vec<Issue>>
 };
 
-#[cgp_inherit(HypershellPreset)]
 #[derive(HasField)]
 pub struct MyApp {
     pub http_client: Client,
     pub base_url: String,
     pub github_org: String,
     pub github_repo: String,
+}
+
+delegate_components! {
+    MyApp {
+        namespace HypershellNamespace;
+    }
 }
 
 #[derive(Debug, Deserialize)]

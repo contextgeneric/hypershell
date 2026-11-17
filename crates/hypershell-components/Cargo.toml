@@ -1,13 +1,15 @@
 [package]
 name         = "hypershell-components"
-version      =  "0.1.0"
+version      =  "0.2.0-prerelease"
 edition      = { workspace = true }
 license      = { workspace = true }
 repository   = { workspace = true }
+homepage     = { workspace = true }
+categories   = { workspace = true }
 authors      = { workspace = true }
 rust-version = { workspace = true }
 keywords     = { workspace = true }
-description  = "Modular DSL for shellscripting in Rust"
+description  = "The core abstract syntax and CGP components of the Hypershell DSL."
 
 [dependencies]
 cgp     = { workspace = true }

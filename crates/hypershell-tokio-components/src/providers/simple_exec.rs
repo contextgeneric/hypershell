@@ -10,10 +10,13 @@ use tokio::process::Child;
 
 use crate::dsl::CoreExec;
 
+/// The error raised for a command that exits with a non-success status.
 pub struct ExecOutputError {
     pub output: Output,
 }
 
+/// Runs a command to completion, writing its input to standard input and returning standard output. See
+/// [the abstract syntax page](https://contextgeneric.dev/docs/projects/hypershell/architecture/abstract-syntax).
 #[cgp_impl(new HandleSimpleExec)]
 impl<Context, CommandPath, Args, Input> Handler<SimpleExec<CommandPath, Args>, Input> for Context
 where
@@ -59,6 +62,7 @@ where
     }
 }
 
+/// The detail that marks a failed write to a child's standard input.
 pub struct StdinPipeError;
 
 impl Debug for StdinPipeError {
@@ -67,6 +71,7 @@ impl Debug for StdinPipeError {
     }
 }
 
+/// The detail that marks a failed wait for a child's output.
 pub struct WaitWithOutputError;
 
 impl Debug for WaitWithOutputError {

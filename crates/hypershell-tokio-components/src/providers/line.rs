@@ -7,6 +7,8 @@ use hypershell_components::dsl::StreamToLines;
 use tokio::io::AsyncRead;
 use tokio_util::codec::{FramedRead, LinesCodec, LinesCodecError};
 
+/// Reads an async reader as a stream of lines. See
+/// [the streams and input dispatch page](https://contextgeneric.dev/docs/projects/hypershell/architecture/streams-and-input-dispatch).
 #[cgp_impl(new HandleStreamToLines)]
 impl<Context, Input> Handler<StreamToLines, Input> for Context
 where

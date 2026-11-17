@@ -1,20 +1,22 @@
 [package]
 name         = "hypershell-examples"
-version      =  "0.1.0"
+version      =  "0.2.0-prerelease"
 edition      = { workspace = true }
 license      = { workspace = true }
 repository   = { workspace = true }
+homepage     = { workspace = true }
+categories   = { workspace = true }
 authors      = { workspace = true }
 rust-version = { workspace = true }
 keywords     = { workspace = true }
-description  = "Modular DSL for shellscripting in Rust"
+description  = "Runnable examples of the Hypershell DSL."
+publish      = false
 
 [dependencies]
 hypershell                          = { workspace = true }
 hypershell-components               = { workspace = true }
 hypershell-tokio-components         = { workspace = true }
 hypershell-hash-components          = { workspace = true }
-hypershell-tungstenite-components   = { workspace = true }
 
 cgp                     = { workspace = true }
 cgp-error-anyhow        = { workspace = true }
@@ -25,4 +27,7 @@ sha2                    = { workspace = true }
 serde                   = { workspace = true, features = [ "derive" ] }
 tokio                   = { workspace = true, features = [ "macros", "rt", "io-std", "rt-multi-thread" ] }
 tokio-util              = { workspace = true, features = [ "compat" ] }
-tokio-tungstenite       = { workspace = true }
+
+[dev-dependencies]
+hypershell-tungstenite-components   = { workspace = true }
+tokio-tungstenite                   = { workspace = true }
