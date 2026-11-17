@@ -1,68 +1,169 @@
-![Crates.io](https://img.shields.io/crates/v/hypershell.svg)
+[![Crates.io](https://img.shields.io/crates/v/hypershell.svg)](https://crates.io/crates/hypershell)
 [![Docs.rs](https://docs.rs/hypershell/badge.svg)](https://docs.rs/hypershell)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/contextgeneric/hypershell/blob/main/LICENSE)
 [![Tests](https://github.com/contextgeneric/hypershell/actions/workflows/tests.yml/badge.svg)](https://github.com/contextgeneric/hypershell/actions/workflows/tests.yml)
 
-# Hypershell: a type-level DSL for shell scripting in Rust
+# Hypershell
 
-**A modular, type-level domain-specific language for writing shell-script-like programs in Rust,
-powered by [Context-Generic Programming (CGP)](https://contextgeneric.dev/).**
+Hypershell is a small language for writing shell-script-like programs in Rust, built with
+[Context-Generic Programming (CGP)](https://contextgeneric.dev/), a language extension for Rust
+with pluggable trait implementations at compile-time. A Hypershell program is a Rust *type*, and the
+context that runs it is its interpreter: a type whose wiring chooses how each piece of the program
+behaves. So both the language's syntax and its meaning can be extended without editing the crates
+that define them.
 
-CGP makes it possible to extend or modify both the language's syntax and its semantics, so a program
-can mix external commands with native Rust handlers and still be checked by the compiler.
+Hypershell is an **experimental** proof of concept. It shows how CGP builds a modular language in
+Rust, and it is not meant to replace a shell.
 
-**[Website](https://contextgeneric.dev/) · [Project page](https://contextgeneric.dev/docs/projects/hypershell/) · [CGP quickstart](https://contextgeneric.dev/docs/quickstart) · [Introduction post](https://contextgeneric.dev/blog/hypershell-release/)**
+**[Project page](https://contextgeneric.dev/docs/projects/hypershell/) · [Examples](https://contextgeneric.dev/docs/projects/hypershell/examples/) · [CGP quickstart](https://contextgeneric.dev/docs/quickstart) · [Introduction post](https://contextgeneric.dev/blog/hypershell-release/)**
 
-## What it does
+## A program that is a type
 
-Hypershell lets you define command pipelines, similar to shell scripts, directly in Rust's type
-system. That arrangement brings four properties:
+This is the smallest Hypershell program. It runs `echo hello world!` and prints the output:
 
-- **Type safety.** The compiler checks your shell-like programs.
-- **Performance.** A DSL program is interpreted at compile time into native Rust code, with no runtime
-  interpretation.
-- **Extensibility.** Native Rust functions, such as HTTP requests or JSON parsing, compose with
-  external CLI commands in the same pipeline.
-- **Modularity.** The language itself is designed to be extended: you can add syntax and handlers
-  without modifying the core library.
+```rust
+use hypershell::prelude::*;
 
-## Crate organization
+pub type Program = hypershell! {
+        SimpleExec<
+            StaticArg<"echo">,
+            WithStaticArgs["hello", "world!"],
+        >
+    |   StreamToStdout
+};
 
-Hypershell is organized into several crates, each with one purpose, so the language is easy to
-extend.
+#[tokio::main]
+async fn main() -> Result<(), Error> {
+    HypershellCli
+        .handle(PhantomData::<Program>, Vec::new())
+        .await?;
 
-- [`hypershell`](./crates/hypershell): the main crate, which re-exports the components a program
-  needs and defines the default namespace and contexts for running Hypershell programs.
-- [`hypershell-macro`](./crates/hypershell-macro): the `hypershell!` procedural macro, which provides
-  the shell-like syntax.
-- [`hypershell-components`](./crates/hypershell-components): the core abstract syntax, such as
-  `SimpleExec` and `StreamingExec`, and the CGP components and traits the DSL builds on.
-- [`hypershell-tokio-components`](./crates/hypershell-tokio-components): Tokio-based implementations
-  for executing external CLI commands and handling file I/O.
-- [`hypershell-reqwest-components`](./crates/hypershell-reqwest-components): native HTTP handlers,
-  such as `SimpleHttpRequest` and `StreamingHttpRequest`, built on `reqwest`.
-- [`hypershell-json-components`](./crates/hypershell-json-components): handlers for JSON
-  serialization (`EncodeJson`) and deserialization (`DecodeJson`).
-- [`hypershell-hash-components`](./crates/hypershell-hash-components): an extension crate with native
-  handlers for checksumming (`Checksum`) and hex encoding (`BytesToHex`).
-- [`hypershell-tungstenite-components`](./crates/hypershell-tungstenite-components): an extension
-  crate that adds native WebSocket support.
-- [`hypershell-examples`](./crates/hypershell-examples): the examples below.
+    Ok(())
+}
+```
 
-## Getting started
+`Program` is a type alias, not a value. Each piece of it, such as `SimpleExec` or `StreamToStdout`,
+is an empty struct that says nothing about how it runs, and the `hypershell!` macro only rewrites
+the shell-like surface into that type: the `|` becomes a pipeline, the brackets a type-level list,
+and each string a type-level string.
 
-Add `hypershell` and `cgp` to your `Cargo.toml`:
+Running the program is one `handle` call on a context. `HypershellCli` is the context here, and this
+is its entire definition:
+
+```rust
+pub struct HypershellCli;
+
+delegate_components! {
+    HypershellCli {
+        namespace HypershellNamespace;
+    }
+}
+```
+
+The one line joins `HypershellNamespace`, which routes each piece of syntax to the implementation,
+or **provider**, that interprets it. The compiler resolves every choice while it type-checks the
+program, so the call compiles to direct calls to those providers, with no interpreter running at run
+time. A context of your own can join the same namespace, add fields that a program reads, such as a
+URL, or join a namespace that extends the language with new syntax.
+
+## Installation
+
+Add `hypershell`, `cgp`, and an async runtime to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-cgp         = { version = "0.8.0" }
-hypershell  = { version = "0.1.0" }
-
-# The examples also need an async runtime and an HTTP client:
-tokio = { version = "1", features = ["full"] }
-reqwest = "0.12"
-anyhow = "1.0"
+cgp = "0.8.0"
+hypershell = "0.2.0"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
+
+The `hypershell!` macro expects `hypershell::prelude::*` in scope, and its expansion names the `cgp`
+crate, so a program's crate depends on both.
+
+The library crates build on stable Rust, and so does a small program such as the one above. Large
+programs can need nightly Rust with the next-generation trait solver. On stable Rust 1.98.1, the
+repository's two compare examples, which nest whole programs inside others, grew `rustc` to about
+7 GB while type-checking and were stopped; on nightly with `-Z next-solver=globally`, a fresh check
+of one of them took about 9 seconds and 460 MB. A crate with programs of that size can copy the
+repository's `rust-toolchain.toml` and `.cargo/config.toml`, which select a dated nightly and turn
+the solver on.
+
+## The crates
+
+Hypershell is split into crates by backend, so a program compiles only the libraries it uses:
+
+- [`hypershell`](./crates/hypershell): the main crate, with `HypershellNamespace`, the error wiring,
+  the `HypershellCli` and `HypershellHttp` contexts, and the prelude a program imports.
+- [`hypershell-macro`](./crates/hypershell-macro): the `hypershell!` macro, which provides the
+  shell-like syntax.
+- [`hypershell-components`](./crates/hypershell-components): the syntax, such as `SimpleExec` and
+  `StreamingExec`, and the CGP components and traits the language builds on.
+- [`hypershell-tokio-components`](./crates/hypershell-tokio-components): running external commands,
+  files, and streams, on Tokio.
+- [`hypershell-reqwest-components`](./crates/hypershell-reqwest-components): HTTP requests, such as
+  `SimpleHttpRequest` and `StreamingHttpRequest`, on `reqwest`.
+- [`hypershell-json-components`](./crates/hypershell-json-components): JSON encoding with
+  `EncodeJson` and decoding with `DecodeJson`.
+- [`hypershell-hash-components`](./crates/hypershell-hash-components): an extension with native
+  checksums (`Checksum`) and hex encoding (`BytesToHex`).
+- [`hypershell-tungstenite-components`](./crates/hypershell-tungstenite-components): an extension
+  with native WebSockets.
+
+The two extensions are not part of `HypershellNamespace`, so a program that uses them joins an
+extended namespace or wires them on its context, as the examples show. The unpublished
+[`hypershell-examples`](./crates/hypershell-examples) crate holds the examples below.
+
+## Examples
+
+Each example is a runnable program, run from the repository's root with
+`cargo run -p hypershell-examples --example <name>`. Most need the network and a few common
+command-line tools.
+
+- [`hello.rs`](./crates/hypershell-examples/examples/hello.rs): runs `echo hello world!` through
+  `SimpleExec`.
+- [`hello_name.rs`](./crates/hypershell-examples/examples/hello_name.rs): passes a value from a field
+  of the context to a shell command with `FieldArg`.
+- [`http_checksum_cli.rs`](./crates/hypershell-examples/examples/http_checksum_cli.rs): fetches a URL
+  with `curl` and pipes the output to `sha256sum` and `cut` as streaming commands.
+- [`http_checksum_client.rs`](./crates/hypershell-examples/examples/http_checksum_client.rs): fetches
+  the URL with the native HTTP client, then pipes the response through the same commands.
+- [`http_checksum_native.rs`](./crates/hypershell-examples/examples/http_checksum_native.rs): the same
+  checksum in native stages, from a language extended with `Checksum`.
+- [`nix_manual.rs`](./crates/hypershell-examples/examples/nix_manual.rs): combines a native HTTP
+  request with external command-line tools.
+- [`save_webpage.rs`](./crates/hypershell-examples/examples/save_webpage.rs): downloads a webpage as a
+  stream and writes it to a file.
+- [`github_issues.rs`](./crates/hypershell-examples/examples/github_issues.rs): calls a JSON web API
+  and decodes the result into a Rust type.
+- [`rust_playground.rs`](./crates/hypershell-examples/examples/rust_playground.rs): sends a Rust
+  snippet to the Rust Playground API as JSON and decodes the response.
+- [`bluesky.rs`](./crates/hypershell-examples/examples/bluesky.rs): connects to the Bluesky firehose
+  through `nix-shell` and `websocat`, then filters the stream with `grep`.
+- [`bluesky_websocket.rs`](./crates/hypershell-examples/examples/bluesky_websocket.rs): the same
+  firehose, with native WebSockets added to the language.
+- [`compare_and_branch.rs`](./crates/hypershell-examples/examples/compare_and_branch.rs) and
+  [`parallel_compare.rs`](./crates/hypershell-examples/examples/parallel_compare.rs): compare the
+  outputs of pipelines and branch on the result, with syntax the examples crate adds.
+
+## Status and costs
+
+Hypershell is a demonstration, and these are the costs to weigh first:
+
+- **Large programs need nightly.** As [Installation](#installation) describes, the library and small
+  programs build on stable Rust, and programs that nest others deeply can need nightly with the new
+  trait solver.
+- **Programs are fixed at compile time.** A program is a type, so it cannot be loaded or changed
+  while the application runs. Values a program needs at run time, such as a URL, come from fields of
+  its context.
+- **Error messages are long.** A mistake in a program is a compile error, and the compiler's raw
+  message lists every step it took before it failed. Checking the program with `check_components!`
+  and reading the error with
+  [`cargo cgp check`](https://contextgeneric.dev/docs/tooling/cargo-cgp/check) helps:
+  `cargo cgp check` leads with the root cause for the classes it recognizes, and the tool does not
+  yet reshape every class.
+- **It is lightly tested.** Its value is as a worked example rather than a tool for production, and
+  the [limitations page](https://contextgeneric.dev/docs/projects/hypershell/limitations) describes
+  where the design stops and when a shell script or plain Rust fits better.
 
 ## Building
 
@@ -74,56 +175,18 @@ cargo test --workspace
 ```
 
 The workspace pins `nightly-2026-11-16` in `rust-toolchain.toml`, because `.cargo/config.toml` turns
-on the next-generation trait solver with `-Z next-solver=globally`, so `cargo` selects that nightly.
+on the next-generation trait solver with `-Z next-solver=globally`, so `cargo` selects that nightly
+in the repository. Contributors and agents start from [AGENTS.md](AGENTS.md), which names these
+checks.
 
-Contributors and agents start from [AGENTS.md](AGENTS.md), which names these checks.
+## Learn more
 
-## Examples
-
-The [`hypershell-examples`](./crates/hypershell-examples/examples) crate holds runnable programs, one
-per feature. Run one with `cargo run -p hypershell-examples --example <name>`.
-
-- [`hello.rs`](./crates/hypershell-examples/examples/hello.rs): executes `echo hello world!` through
-  `SimpleExec`.
-- [`hello_name.rs`](./crates/hypershell-examples/examples/hello_name.rs): passes dynamic values to a
-  shell command with variable parameters (`FieldArg`).
-- [`http_checksum_cli.rs`](./crates/hypershell-examples/examples/http_checksum_cli.rs): fetches a URL
-  with `curl` and pipes the output to `sha256sum` and `cut` through streaming execution.
-- [`http_checksum_client.rs`](./crates/hypershell-examples/examples/http_checksum_client.rs): fetches
-  the URL with Hypershell's native HTTP client, then pipes the response through the same commands.
-- [`http_checksum_native.rs`](./crates/hypershell-examples/examples/http_checksum_native.rs): the same
-  checksum, using the native HTTP client and an extended DSL that adds `Checksum` to the syntax.
-- [`rust_playground.rs`](./crates/hypershell-examples/examples/rust_playground.rs): encodes and
-  decodes JSON, sending a Rust snippet to the Rust Playground API and parsing the response.
-- [`github_issues.rs`](./crates/hypershell-examples/examples/github_issues.rs): reads a JSON web API
-  and processes the result.
-- [`nix_manual.rs`](./crates/hypershell-examples/examples/nix_manual.rs): combines a native HTTP
-  request with external CLI tools.
-- [`bluesky.rs`](./crates/hypershell-examples/examples/bluesky.rs): connects to the Bluesky firehose
-  through `nix-shell` and `websocat`, then filters the stream with `grep`.
-- [`bluesky_websocket.rs`](./crates/hypershell-examples/examples/bluesky_websocket.rs): the same
-  firehose, using native WebSocket handling added to the DSL.
-- [`compare_and_branch.rs`](./crates/hypershell-examples/examples/compare_and_branch.rs) and
-  [`parallel_compare.rs`](./crates/hypershell-examples/examples/parallel_compare.rs): branch and
-  compare pipelines, using the compare namespace.
-
-## Learn CGP
-
-The website is the main documentation for CGP: the
-[quickstart](https://contextgeneric.dev/docs/quickstart), the
-[tutorials](https://contextgeneric.dev/docs/tutorials/hello), the
+The [project page](https://contextgeneric.dev/docs/projects/hypershell/) explains Hypershell: its
+examples as short tutorials, the design one idea at a time, and guides to writing and debugging a
+program. For CGP itself, start with the [quickstart](https://contextgeneric.dev/docs/quickstart),
+then the [tutorials](https://contextgeneric.dev/docs/tutorials/hello) and the
 [concepts](https://contextgeneric.dev/docs/concepts/), and the
-[construct reference](https://contextgeneric.dev/docs/reference/). The
-[project page](https://contextgeneric.dev/docs/projects/hypershell/) explains this repository, and
-the [CGP knowledge base](https://github.com/contextgeneric/cgp-knowledge-base) records it in depth for
-contributors and agents.
-
-## Disclaimer
-
-Hypershell is an **experimental** proof of concept that shows what CGP can do. Its purpose is to
-demonstrate how CGP builds highly modular DSLs in Rust, not to be a production-ready shell
-replacement.
-
-## License
-
-Licensed under the MIT license.
+[type-level DSLs](https://contextgeneric.dev/docs/concepts/type-level-dsls) page explains the
+technique behind Hypershell with a smaller language. The
+[CGP knowledge base](https://github.com/contextgeneric/cgp-knowledge-base) records the project in
+depth for contributors and agents.
