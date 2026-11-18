@@ -25,8 +25,8 @@ authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp", "dsl", "shell", "type-level"]
 
 [workspace.dependencies]
-cgp                 = { version = "0.8.0-prerelease" }
-cgp-error-anyhow    = { version = "0.8.0-prerelease" }
+cgp                 = { version = "0.8.0" }
+cgp-error-anyhow    = { version = "0.8.0" }
 futures             = { version = "0.3.34" }
 hex                 = { version = "0.4.3" }
 itertools           = { version = "0.14.0" }
@@ -41,11 +41,11 @@ tokio-tungstenite   = { version = "0.26.2" }
 tokio-util          = { version = "0.7.20" }
 url                 = { version = "2.5.8" }
 
-hypershell                          = { version =  "0.2.0-prerelease", path = "./crates/hypershell" }
-hypershell-components               = { version =  "0.2.0-prerelease", path = "./crates/hypershell-components" }
-hypershell-json-components          = { version =  "0.2.0-prerelease", path = "./crates/hypershell-json-components" }
-hypershell-reqwest-components       = { version =  "0.2.0-prerelease", path = "./crates/hypershell-reqwest-components" }
-hypershell-tokio-components         = { version =  "0.2.0-prerelease", path = "./crates/hypershell-tokio-components" }
-hypershell-tungstenite-components   = { version =  "0.2.0-prerelease", path = "./crates/hypershell-tungstenite-components" }
-hypershell-hash-components          = { version =  "0.2.0-prerelease", path = "./crates/hypershell-hash-components" }
-hypershell-macro                    = { version =  "0.2.0-prerelease", path = "./crates/hypershell-macro" }
+hypershell                          = { version =  "0.2.0", path = "./crates/hypershell" }
+hypershell-components               = { version =  "0.2.0", path = "./crates/hypershell-components" }
+hypershell-json-components          = { version =  "0.2.0", path = "./crates/hypershell-json-components" }
+hypershell-reqwest-components       = { version =  "0.2.0", path = "./crates/hypershell-reqwest-components" }
+hypershell-tokio-components         = { version =  "0.2.0", path = "./crates/hypershell-tokio-components" }
+hypershell-tungstenite-components   = { version =  "0.2.0", path = "./crates/hypershell-tungstenite-components" }
+hypershell-hash-components          = { version =  "0.2.0", path = "./crates/hypershell-hash-components" }
+hypershell-macro                    = { version =  "0.2.0", path = "./crates/hypershell-macro" }
